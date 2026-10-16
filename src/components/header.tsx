@@ -29,7 +29,7 @@ export function Header() {
           <Image src="/brand/logo-hoa-thanhnha.webp" alt={site.name} width={500} height={157} priority className="h-10 w-auto sm:h-14" />
         </Link>
 
-        <form action="/tim-kiem" className="relative mx-auto hidden w-full max-w-md md:block" role="search">
+        <form action="/tim-kiem/" className="relative mx-auto hidden w-full max-w-md md:block" role="search">
           <label htmlFor="q" className="sr-only">
             Tìm kiếm sản phẩm
           </label>
@@ -53,7 +53,7 @@ export function Header() {
               <span className="block font-semibold text-brand-strong">{site.phoneDisplay}</span>
             </span>
           </a>
-          <Link href="/tim-kiem" className="grid size-11 place-items-center rounded-full text-foreground hover:bg-surface-muted md:hidden" aria-label="Tìm kiếm">
+          <Link href="/tim-kiem/" className="grid size-11 place-items-center rounded-full text-foreground hover:bg-surface-muted md:hidden" aria-label="Tìm kiếm">
             <Search className="size-5" aria-hidden />
           </Link>
           <CartButton />
@@ -65,7 +65,7 @@ export function Header() {
           {mainMenu.map((group) => (
             <li key={group.slug} className="group relative">
               <Link
-                href={`/${group.slug}`}
+                href={`/${group.slug}/`}
                 className="flex h-12 items-center px-2 text-[13px] font-semibold uppercase tracking-wider text-foreground transition-colors hover:text-brand-strong xl:px-3"
               >
                 {group.label}
@@ -74,7 +74,7 @@ export function Header() {
                 <ul className="max-h-[70vh] overflow-auto">
                   {group.children.map((item) => (
                     <li key={item.slug}>
-                      <Link href={`/${item.slug}`} className="block rounded-lg px-3 py-2 text-sm text-foreground hover:bg-brand-soft hover:text-brand-strong">
+                      <Link href={`/${item.slug}/`} className="block rounded-lg px-3 py-2 text-sm text-foreground hover:bg-brand-soft hover:text-brand-strong">
                         {item.label}
                       </Link>
                     </li>

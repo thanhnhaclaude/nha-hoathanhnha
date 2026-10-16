@@ -4,6 +4,7 @@
  *   npm run import                     # giữ link ảnh gốc trên hoathanhnha.com
  *   npm run import -- --download-images  # tải ảnh về public/uploads (nên chạy trước khi chuyển tên miền)
  *   npm run import -- --content-only     # chỉ nhập trang, bài viết và đoạn SEO trang chủ
+ *   npm run import -- --seo-only         # chỉ chép tiêu đề/mô tả/robots/lastmod SEO từ website cũ
  *
  * Chạy lại nhiều lần an toàn: dữ liệu được cập nhật theo slug.
  */
@@ -19,6 +20,7 @@ import { HOME_SEO_SLUG } from "../src/lib/constants";
 const SOURCE = process.env.IMPORT_SOURCE || "https://hoathanhnha.com";
 const DOWNLOAD = process.argv.includes("--download-images");
 const CONTENT_ONLY = process.argv.includes("--content-only");
+const SEO_ONLY = process.argv.includes("--seo-only");
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
 
 type WooCategory = { id: number; name: string; slug: string; parent: number; description: string; image: { src: string } | null };
@@ -81,6 +83,12 @@ async function main() {
   const db = drizzle(pool, { schema, mode: "default" });
 
   console.log(`Nguồn: ${SOURCE}`);
+  if (SEO_ONLY) {
+    await importSeo(db);
+    console.log("Hoàn tất!");
+    await pool.end();
+    return;
+  }
   if (CONTENT_ONLY) {
     await importWordpressContent(db);
     console.log("Hoàn tất!");
@@ -157,6 +165,9 @@ async function main() {
   // 5) Trang thông tin (footer) + toàn bộ bài viết tin tức từ WordPress
   await importWordpressContent(db);
 
+  // 6) SEO (tiêu đề, mô tả, robots, lastmod) giữ nguyên như website cũ
+  await importSeo(db);
+
   console.log("Hoàn tất!");
   await pool.end();
 }
@@ -202,8 +213,11 @@ type WpItem = {
   title: { rendered: string };
   content: { rendered: string };
   excerpt: { rendered: string };
+  categories?: number[];
   _embedded?: { "wp:featuredmedia"?: { source_url?: string }[] };
 };
+
+type WpCategory = { id: number; slug: string; name: string; description: string };
 
 /** Bỏ shortcode WordPress còn sót (vd. [ux_image id="1"]). */
 const stripShortcodes = (html: string) => html.replace(/\[\/?[a-z_][\w-]*(?:\s[^\]]*)?\]/gi, "");
@@ -225,6 +239,17 @@ async function importWordpressContent(db: MySql2Database<typeof schema>) {
   const wpPosts = await fetchWp("posts?orderby=date&order=asc");
   console.log(`Tìm thấy ${wpPages.length} trang, ${wpPosts.length} bài viết`);
 
+  // Danh mục bài viết
+  const catRes = await fetch(`${SOURCE}/wp-json/wp/v2/categories?per_page=100`, { headers: { "User-Agent": "hoathanhnha-migrator" } });
+  const wpCats = (await catRes.json()) as WpCategory[];
+  const postCatIdByWp = new Map<number, number>();
+  for (const c of wpCats) {
+    const values = { slug: c.slug, name: decode(c.name), description: c.description || null, wpId: c.id };
+    await db.insert(schema.postCategories).values(values).onDuplicateKeyUpdate({ set: values });
+    const [row] = await db.select({ id: schema.postCategories.id }).from(schema.postCategories).where(eq(schema.postCategories.slug, c.slug));
+    postCatIdByWp.set(c.id, row.id);
+  }
+
   const items = [...wpPages.map((p) => ({ p, type: "page" as const })), ...wpPosts.map((p) => ({ p, type: "post" as const }))];
   let done = 0;
   for (const { p, type } of items) {
@@ -240,11 +265,102 @@ async function importWordpressContent(db: MySql2Database<typeof schema>) {
       publishedAt: new Date(p.date),
     };
     await db.insert(schema.pages).values(values).onDuplicateKeyUpdate({ set: values });
+    if (type === "post") {
+      const [row] = await db.select({ id: schema.pages.id }).from(schema.pages).where(eq(schema.pages.slug, p.slug));
+      await db.delete(schema.pageCategories).where(eq(schema.pageCategories.pageId, row.id));
+      const links = (p.categories ?? [])
+        .map((id) => postCatIdByWp.get(id))
+        .filter((id): id is number => id != null)
+        .map((categoryId) => ({ pageId: row.id, categoryId }));
+      if (links.length) await db.insert(schema.pageCategories).ignore().values(links);
+    }
     done++;
     if (done % 25 === 0 || done === items.length) process.stdout.write(`\r  Đã nhập ${done}/${items.length} trang & bài viết`);
   }
   process.stdout.write("\n");
   await importHomeSeo(db);
+}
+
+const SITEMAPS = ["post", "page", "product", "category"] as const;
+
+const decodeEntities = (s: string) =>
+  decode(s)
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&#039;|&#39;/g, "'")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&#x([0-9a-f]+);/gi, (_, h) => String.fromCharCode(parseInt(h, 16)))
+    .trim();
+
+/** Chạy tác vụ bất đồng bộ với số luồng giới hạn. */
+async function pool<T>(items: T[], size: number, fn: (item: T) => Promise<void>) {
+  let i = 0;
+  await Promise.all(
+    Array.from({ length: size }, async () => {
+      while (i < items.length) await fn(items[i++]);
+    }),
+  );
+}
+
+/**
+ * Chép nguyên SEO của website cũ: vị trí + lastmod trong sitemap Rank Math, và
+ * title / meta description / robots trong <head> của từng URL (kể cả danh mục sản phẩm).
+ */
+async function importSeo(db: MySql2Database<typeof schema>) {
+  type Entry = { path: string; sitemap: string | null; position: number | null; lastmod: Date | null };
+  const entries = new Map<string, Entry>();
+  for (const name of SITEMAPS) {
+    const xml = await (await fetch(`${SOURCE}/${name}-sitemap.xml`, { headers: { "User-Agent": "Mozilla/5.0" } })).text();
+    const urls = [...xml.matchAll(/<url>\s*<loc>([^<]+)<\/loc>(?:\s*<lastmod>([^<]+)<\/lastmod>)?/g)];
+    urls.forEach((m, position) => {
+      const path = new URL(m[1]).pathname;
+      // Một URL có thể nằm ở 2 sitemap (vd. /cua-hang/ ở page và product) -> giữ vị trí ở sitemap đầu tiên
+      if (!entries.has(path)) entries.set(path, { path, sitemap: name, position, lastmod: m[2] ? new Date(m[2]) : null });
+    });
+    console.log(`  ${name}-sitemap.xml: ${urls.length} URL`);
+  }
+  // Danh mục sản phẩm không nằm trong sitemap cũ nhưng vẫn được Google index -> lấy SEO luôn
+  const cats = await db.select({ slug: schema.categories.slug }).from(schema.categories);
+  for (const c of cats) {
+    const path = `/${c.slug}/`;
+    if (!entries.has(path)) entries.set(path, { path, sitemap: null, position: null, lastmod: null });
+  }
+
+  const list = [...entries.values()];
+  let done = 0;
+  let missing = 0;
+  await pool(list, 8, async (e) => {
+    let title: string | null = null;
+    let description: string | null = null;
+    let robots: string | null = null;
+    try {
+      const res = await fetch(`${SOURCE}${e.path}`, { headers: { "User-Agent": "Mozilla/5.0" } });
+      if (res.ok) {
+        const html = await res.text();
+        const head = html.slice(0, html.indexOf("</head>") > 0 ? html.indexOf("</head>") : 60000);
+        const get = (re: RegExp) => head.match(re)?.[1];
+        title = get(/<title>([^<]*)<\/title>/) ?? null;
+        description = get(/<meta name="description" content="([^"]*)"/) ?? null;
+        robots = get(/<meta name="robots" content="([^"]*)"/) ?? null;
+      } else missing++;
+    } catch {
+      missing++;
+    }
+    const values = {
+      title: title ? decodeEntities(title) : null,
+      // Bỏ mô tả rác do shortcode sinh ra (vd. [block id="goi-ngay"])
+      description: description && !/\[[a-z_]+/i.test(decodeEntities(description)) ? decodeEntities(description) : null,
+      robots,
+      sitemap: e.sitemap,
+      position: e.position,
+      lastmod: e.lastmod,
+    };
+    await db.insert(schema.seoMeta).values({ path: e.path, ...values }).onDuplicateKeyUpdate({ set: values });
+    done++;
+    if (done % 50 === 0 || done === list.length) process.stdout.write(`\r  Đã lấy SEO ${done}/${list.length} URL`);
+  });
+  process.stdout.write("\n");
+  if (missing) console.warn(`  ${missing} URL không tải được (giữ SEO mặc định)`);
 }
 
 main().catch((e) => {

@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
+import { seoMetadata } from "@/lib/seo";
 import { shippingConfig } from "@/lib/site";
 import { CheckoutForm } from "./checkout-form";
 
-export const metadata: Metadata = { title: "Đặt hoa", robots: { index: false } };
+export function generateMetadata(): Promise<Metadata> {
+  return seoMetadata("/thanh-toan/", { title: "Thanh toán", noindex: true });
+}
 export const dynamic = "force-dynamic";
 
 export default function CheckoutPage() {

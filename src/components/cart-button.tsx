@@ -8,7 +8,7 @@ export function CartButton() {
   const { count, ready } = useCart();
   return (
     <Link
-      href="/gio-hang"
+      href="/gio-hang/"
       className="relative grid size-11 place-items-center rounded-full bg-brand text-white transition-colors hover:bg-brand-strong"
       aria-label={`Giỏ hàng (${count} sản phẩm)`}
     >

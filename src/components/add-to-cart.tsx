@@ -38,7 +38,7 @@ export function AddToCart({ product }: { product: Omit<CartLine, "quantity"> }) 
         type="button"
         onClick={() => {
           add(product, qty);
-          router.push("/thanh-toan");
+          router.push("/thanh-toan/");
         }}
         className="btn-primary h-12 flex-1"
       >

@@ -66,6 +66,24 @@ Dán dòng `ADMIN_PASSWORD_HASH="..."` vào `.env` (hoặc biến môi trường
 - Chạy `npm run import -- --download-images` để tải toàn bộ ảnh về `public/uploads/` rồi commit; **hoặc**
 - Giữ WordPress cũ ở tên miền phụ (vd. `old.hoathanhnha.com`), đặt `IMPORT_SOURCE=https://old.hoathanhnha.com`, chạy lại `npm run import` và thêm tên miền phụ vào `images.remotePatterns` trong `next.config.ts`.
 
+## Giữ nguyên SEO khi chuyển từ WordPress
+
+- Mọi URL giữ nguyên như WordPress cũ, **có dấu `/` cuối** (`trailingSlash: true`).
+- Sitemap giống cấu trúc Rank Math: `/sitemap_index.xml` → `post-`, `page-`, `product-`, `category-sitemap.xml` (cùng thứ tự, cùng lastmod). `/sitemap.xml` chuyển hướng về `/sitemap_index.xml`.
+- Tiêu đề, meta description, robots (noindex) của từng URL được chép từ site cũ vào bảng `seo_meta`.
+- Chuyển hướng 308: `/blocks/*` → trang chủ, `/<slug>/page/N/` → `/<slug>/?page=N`.
+- Bài viết trùng slug với danh mục sản phẩm (vd. `/shop-hoa-tuoi-quan-10/`) hiển thị danh mục, như WordPress cũ.
+
+Chạy lại khi website cũ vẫn còn online (trước khi chuyển tên miền):
+
+```bash
+npm run import                      # sản phẩm + danh mục + trang + bài viết + SEO
+npm run import -- --content-only    # chỉ trang & bài viết
+npm run import -- --seo-only        # chỉ tiêu đề/mô tả/robots/lastmod
+```
+
+Sau khi chuyển tên miền: gửi lại `https://hoathanhnha.com/sitemap_index.xml` trong Google Search Console.
+
 ## Cấu trúc thư mục
 
 ```

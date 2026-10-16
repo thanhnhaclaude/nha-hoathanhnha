@@ -10,7 +10,7 @@ export default function NotFound() {
         <Link href="/" className="btn-primary">
           Về trang chủ
         </Link>
-        <Link href="/tim-kiem" className="btn-outline">
+        <Link href="/tim-kiem/" className="btn-outline">
           Tìm kiếm
         </Link>
       </div>

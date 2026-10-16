@@ -1,7 +1,7 @@
 import "server-only";
 import { and, desc, eq, inArray, like, or, sql, count } from "drizzle-orm";
 import { HOME_SEO_SLUG } from "./constants";
-import { db, categories, pages, products, productCategories, type Category } from "./db";
+import { db, categories, pageCategories, pages, postCategories, products, productCategories, type Category } from "./db";
 
 export type ProductCardData = {
   id: number;
@@ -188,6 +188,57 @@ export async function getPosts({ page = 1, perPage = 12 } = {}) {
     db.select({ total: count() }).from(pages).where(where),
   ]);
   return { items: rows, total, pages: Math.max(1, Math.ceil(total / perPage)) };
+}
+
+export async function getPostCategoryBySlug(slug: string) {
+  const [row] = await db.select().from(postCategories).where(eq(postCategories.slug, slug)).limit(1);
+  return row ?? null;
+}
+
+/** Danh mục đầu tiên của bài viết (dùng cho breadcrumb). */
+export async function getPrimaryPostCategory(pageId: number) {
+  const [row] = await db
+    .select({ id: postCategories.id, slug: postCategories.slug, name: postCategories.name })
+    .from(pageCategories)
+    .innerJoin(postCategories, eq(postCategories.id, pageCategories.categoryId))
+    .where(eq(pageCategories.pageId, pageId))
+    .orderBy(postCategories.id)
+    .limit(1);
+  return row ?? null;
+}
+
+export async function getPostsInCategory(categoryId: number, { page = 1, perPage = 12 } = {}) {
+  const where = and(
+    eq(pages.type, "post"),
+    eq(pages.isPublished, true),
+    inArray(pages.id, db.select({ id: pageCategories.pageId }).from(pageCategories).where(eq(pageCategories.categoryId, categoryId))),
+  );
+  const [rows, [{ total }]] = await Promise.all([
+    db
+      .select({ id: pages.id, slug: pages.slug, title: pages.title, excerpt: pages.excerpt, image: pages.image, publishedAt: pages.publishedAt })
+      .from(pages)
+      .where(where)
+      .orderBy(desc(pages.publishedAt))
+      .limit(perPage)
+      .offset((page - 1) * perPage),
+    db.select({ total: count() }).from(pages).where(where),
+  ]);
+  return { items: rows, total, pages: Math.max(1, Math.ceil(total / perPage)) };
+}
+
+export async function getAllProducts({ page = 1, perPage = 24, sort = "newest" as SortKey } = {}) {
+  const where = eq(products.isActive, true);
+  const [rows, [{ total }]] = await Promise.all([
+    db
+      .select(cardColumns)
+      .from(products)
+      .where(where)
+      .orderBy(...orderFor(sort))
+      .limit(perPage)
+      .offset((page - 1) * perPage),
+    db.select({ total: count() }).from(products).where(where),
+  ]);
+  return { items: rows.map(toCard), total, pages: Math.max(1, Math.ceil(total / perPage)) };
 }
 
 export async function getRecentPosts(excludeId: number, limit = 3) {

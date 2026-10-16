@@ -11,8 +11,22 @@ import { infoPages, type InfoPage } from "@/lib/info-pages";
 import { mainMenu } from "@/lib/menu";
 import { PostCard } from "@/components/post-card";
 import { ReadMore } from "@/components/read-more";
-import type { Page } from "@/lib/db/schema";
-import { getCategoryBySlug, getPageBySlug, getProductBySlug, getProductCardsBySlugs, getProductsInCategory, getRecentPosts, getRelatedProducts } from "@/lib/queries";
+import { WishlistButton } from "@/components/wishlist";
+import Link from "next/link";
+import type { Page, PostCategory } from "@/lib/db/schema";
+import {
+  getCategoryBySlug,
+  getPageBySlug,
+  getPostCategoryBySlug,
+  getPostsInCategory,
+  getPrimaryPostCategory,
+  getProductBySlug,
+  getProductCardsBySlugs,
+  getProductsInCategory,
+  getRecentPosts,
+  getRelatedProducts,
+} from "@/lib/queries";
+import { canonicalPath, seoMetadata } from "@/lib/seo";
 import { cleanHtml, plainText, splitProductBlocks } from "@/lib/sanitize";
 import { site } from "@/lib/site";
 
@@ -32,34 +46,36 @@ async function getVisibleCms(slug: string) {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  const path = canonicalPath(slug);
   const cms = await getVisibleCms(slug);
   if (cms) {
-    return {
+    return seoMetadata(path, {
       title: cms.title,
       description: plainText(cms.excerpt || cms.content) || site.description,
-      alternates: { canonical: `/${cms.slug}` },
       openGraph: cms.image ? { type: cms.type === "post" ? "article" : "website", images: [cms.image] } : undefined,
-    };
+    });
   }
   const info = infoPages[slug];
-  if (info) return { title: info.title, description: info.description, alternates: { canonical: `/${slug}` } };
+  if (info) return seoMetadata(path, { title: info.title, description: info.description });
   const found = await getProductBySlug(slug);
   if (found) {
     const { product } = found;
-    return {
+    return seoMetadata(path, {
       title: product.name,
       description: plainText(product.shortDescription || product.description) || site.description,
-      alternates: { canonical: `/${product.slug}` },
       openGraph: { images: product.images.slice(0, 1) },
-    };
+    });
   }
   const category = await getCategoryBySlug(slug);
-  if (!category) return {};
-  return {
-    title: `${category.name} – mẫu đẹp, giao nhanh`,
-    description: plainText(category.description) || `${category.name} tại Shop hoa tươi Thanh Nhã. Giao hoa hỏa tốc, miễn phí thiệp & băng rôn.`,
-    alternates: { canonical: `/${category.slug}` },
-  };
+  if (category) {
+    return seoMetadata(path, {
+      title: category.name,
+      description: plainText(category.description) || `${category.name} tại Shop hoa tươi Thanh Nhã. Giao hoa hỏa tốc, miễn phí thiệp & băng rôn.`,
+    });
+  }
+  const postCategory = await getPostCategoryBySlug(slug);
+  if (postCategory) return seoMetadata(path, { title: postCategory.name, description: plainText(postCategory.description) || undefined });
+  return {};
 }
 
 export default async function SlugPage({ params, searchParams }: Props) {
@@ -72,16 +88,20 @@ export default async function SlugPage({ params, searchParams }: Props) {
   if (found) return <ProductView data={found} />;
 
   const category = await getCategoryBySlug(slug);
-  if (!category) notFound();
+  if (!category) {
+    const postCategory = await getPostCategoryBySlug(slug);
+    if (!postCategory) notFound();
+    return <PostArchiveView category={postCategory} page={parseListingParams(await searchParams).page} />;
+  }
 
   const { page, sort } = parseListingParams(await searchParams);
   const { items, total, pages } = await getProductsInCategory(category, { page, sort });
   const group = mainMenu.find((g) => g.slug === slug || g.children.some((c) => c.slug === slug));
-  const base = `/${category.slug}`;
+  const base = `/${category.slug}/`;
 
   return (
     <div className="container-x py-8">
-      <Breadcrumbs items={[...(group && group.slug !== slug ? [{ label: group.label, href: `/${group.slug}` }] : []), { label: category.name }]} />
+      <Breadcrumbs items={[...(group && group.slug !== slug ? [{ label: group.label, href: `/${group.slug}/` }] : []), { label: category.name }]} />
       <header className="mt-6 max-w-3xl">
         <h1 className="heading-display text-4xl sm:text-5xl">{category.name}</h1>
         {category.description && <p className="mt-3 text-muted">{plainText(category.description, 300)}</p>}
@@ -92,7 +112,7 @@ export default async function SlugPage({ params, searchParams }: Props) {
             {group.children.map((c) => (
               <li key={c.slug} className="shrink-0">
                 <a
-                  href={`/${c.slug}`}
+                  href={`/${c.slug}/`}
                   aria-current={c.slug === slug ? "page" : undefined}
                   className={`block rounded-full px-4 py-2 text-sm ${c.slug === slug ? "bg-brand text-white" : "bg-surface ring-1 ring-border hover:ring-brand"}`}
                 >
@@ -125,10 +145,52 @@ export default async function SlugPage({ params, searchParams }: Props) {
   );
 }
 
+async function PostArchiveView({ category, page }: { category: PostCategory; page: number }) {
+  const { items, pages } = await getPostsInCategory(category.id, { page });
+  const base = canonicalPath(category.slug);
+  const link = (n: number) => (n === 1 ? base : `${base}?page=${n}`);
+  return (
+    <div className="container-x py-10">
+      <Breadcrumbs items={[{ label: category.name }]} />
+      <h1 className="heading-display mt-6 text-4xl sm:text-5xl">{category.name}</h1>
+      {category.description && <p className="mt-3 max-w-3xl text-muted">{plainText(category.description, 300)}</p>}
+      {items.length === 0 ? (
+        <p className="mt-8 rounded-2xl bg-surface p-10 text-center text-muted">Chưa có bài viết.</p>
+      ) : (
+        <ul className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {items.map((p) => (
+            <li key={p.id}>
+              <PostCard post={{ ...p, excerptText: plainText(p.excerpt, 150) }} />
+            </li>
+          ))}
+        </ul>
+      )}
+      {pages > 1 && (
+        <nav aria-label="Phân trang" className="mt-10 flex items-center justify-center gap-3 text-sm">
+          {page > 1 && (
+            <Link href={link(page - 1)} className="btn-outline h-11">
+              Bài mới hơn
+            </Link>
+          )}
+          <span className="text-muted">
+            Trang {page}/{pages}
+          </span>
+          {page < pages && (
+            <Link href={link(page + 1)} className="btn-outline h-11">
+              Bài cũ hơn
+            </Link>
+          )}
+        </nav>
+      )}
+    </div>
+  );
+}
+
 async function CmsView({ page }: { page: Page }) {
   const isPost = page.type === "post";
-  const [recent, segments] = await Promise.all([
+  const [recent, postCategory, segments] = await Promise.all([
     isPost ? getRecentPosts(page.id) : Promise.resolve([]),
+    isPost ? getPrimaryPostCategory(page.id) : Promise.resolve(null),
     Promise.all(
       splitProductBlocks(page.content).map(async (seg) =>
         seg.type === "html" ? seg : { type: "products" as const, products: await getProductCardsBySlugs(seg.slugs) },
@@ -149,7 +211,7 @@ async function CmsView({ page }: { page: Page }) {
   return (
     <div className="container-x max-w-3xl py-10">
       {jsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />}
-      <Breadcrumbs items={isPost ? [{ label: "Tin tức", href: "/tin-tuc" }, { label: page.title }] : [{ label: page.title }]} />
+      <Breadcrumbs items={[...(postCategory ? [{ label: postCategory.name, href: canonicalPath(postCategory.slug) }] : []), { label: page.title }]} />
       <h1 className="heading-display mt-6 text-4xl leading-tight sm:text-5xl">{page.title}</h1>
       {isPost && (
         <p className="mt-3 text-sm text-muted">
@@ -225,14 +287,14 @@ async function ProductView({ data }: { data: NonNullable<Awaited<ReturnType<type
     brand: { "@type": "Brand", name: site.name },
     offers:
       price > 0
-        ? { "@type": "Offer", priceCurrency: "VND", price, availability: "https://schema.org/InStock", url: `${site.url}/${product.slug}` }
+        ? { "@type": "Offer", priceCurrency: "VND", price, availability: "https://schema.org/InStock", url: `${site.url}/${product.slug}/` }
         : undefined,
   };
 
   return (
     <div className="container-x py-8">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
-      <Breadcrumbs items={[...(primaryCat ? [{ label: primaryCat.name, href: `/${primaryCat.slug}` }] : []), { label: product.name }]} />
+      <Breadcrumbs items={[...(primaryCat ? [{ label: primaryCat.name, href: `/${primaryCat.slug}/` }] : []), { label: product.name }]} />
 
       <div className="mt-6 grid gap-8 lg:grid-cols-2 lg:gap-14">
         <ProductGallery images={product.images} name={product.name} />
@@ -260,6 +322,7 @@ async function ProductView({ data }: { data: NonNullable<Awaited<ReturnType<type
           {price > 0 ? (
             <AddToCart product={{ id: product.id, slug: product.slug, name: product.name, image: product.images[0] ?? null, price }} />
           ) : null}
+          <WishlistButton item={{ id: product.id, slug: product.slug, name: product.name, image: product.images[0] ?? null, price }} />
 
           <div className="grid gap-3 sm:grid-cols-2">
             <a href={`tel:${site.phone}`} className="btn-leaf h-12">

@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
+import { seoMetadata } from "@/lib/seo";
 import { CartView } from "./cart-view";
 
-export const metadata: Metadata = { title: "Giỏ hàng", robots: { index: false } };
+export function generateMetadata(): Promise<Metadata> {
+  return seoMetadata("/gio-hang/", { title: "Giỏ hàng", noindex: true });
+}
 
 export default function CartPage() {
   return (

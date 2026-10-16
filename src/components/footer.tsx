@@ -8,23 +8,23 @@ const columns = [
   {
     title: "Hướng dẫn",
     links: [
-      { label: "Câu hỏi thường gặp", href: "/cau-hoi-thuong-gap" },
-      { label: "Chính sách đổi/trả", href: "/huong-dan-doi-tra" },
-      { label: "Hướng dẫn đặt hàng", href: "/huong-dan-dat-hang" },
-      { label: "Hướng dẫn thanh toán", href: "/huong-dan-thanh-toan" },
-      { label: "Chính sách bảo mật", href: "/chinh-sach-bao-mat" },
-      { label: "Liên hệ", href: "/lien-he" },
+      { label: "Câu hỏi thường gặp", href: "/cau-hoi-thuong-gap/" },
+      { label: "Chính sách đổi/trả", href: "/huong-dan-doi-tra/" },
+      { label: "Hướng dẫn đặt hàng", href: "/huong-dan-dat-hang/" },
+      { label: "Hướng dẫn thanh toán", href: "/huong-dan-thanh-toan/" },
+      { label: "Chính sách bảo mật", href: "/chinh-sach-bao-mat/" },
+      { label: "Liên hệ", href: "/lien-he/" },
     ],
   },
   {
     title: "Chăm sóc khách hàng",
     links: [
-      { label: "Quy định chuyển phát", href: "/quy-dinh-chuyen-phat" },
-      { label: "Quy trình điện hoa", href: "/quy-trinh-dien-hoa" },
-      { label: "Khiếu nại - Phản hồi", href: "/gop-y-khieu-nai-phan-hoi" },
-      { label: "Khách hàng & đối tác", href: "/khach-hang-doi-tac" },
-      { label: "Tin tức", href: "/tin-tuc" },
-      { label: "Giới thiệu", href: "/gioi-thieu" },
+      { label: "Quy định chuyển phát", href: "/quy-dinh-chuyen-phat/" },
+      { label: "Quy trình điện hoa", href: "/quy-trinh-dien-hoa/" },
+      { label: "Khiếu nại - Phản hồi", href: "/gop-y-khieu-nai-phan-hoi/" },
+      { label: "Khách hàng & đối tác", href: "/khach-hang-doi-tac/" },
+      { label: "Tin tức", href: "/tin-tuc/" },
+      { label: "Giới thiệu", href: "/gioi-thieu/" },
     ],
   },
 ];
@@ -55,7 +55,7 @@ export function Footer() {
               </a>
             </li>
             <li>
-              <Link href="/tra-cuu-don-hang" className="inline-flex items-center gap-2 hover:text-white">
+              <Link href="/tra-cuu-don-hang/" className="inline-flex items-center gap-2 hover:text-white">
                 <Search className="size-4 text-[#fc9cc4]" aria-hidden /> Tra cứu đơn hàng
               </Link>
             </li>

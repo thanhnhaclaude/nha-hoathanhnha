@@ -1,4 +1,6 @@
+import type { Metadata } from "next";
 import Image from "next/image";
+import { seoMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { ArrowRight, BadgeCheck, Camera, Gift, HandCoins, Flower2, Truck, Users, Wallet, Zap } from "lucide-react";
 import { HeroSlider } from "@/components/hero-slider";
@@ -10,6 +12,10 @@ import { cleanHtml } from "@/lib/sanitize";
 import { site } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
+
+export function generateMetadata(): Promise<Metadata> {
+  return seoMetadata("/", { title: site.title, description: site.description });
+}
 
 const perks = [
   { icon: Zap, title: "Giao hoa hỏa tốc", text: "60 phút nội thành, 90 phút ngoại thành" },
@@ -97,7 +103,7 @@ export default async function HomePage() {
                   {s.title}
                 </h2>
               </div>
-              <Link href={`/${s.slug}`} className="btn-outline hidden shrink-0 sm:inline-flex">
+              <Link href={`/${s.slug}/`} className="btn-outline hidden shrink-0 sm:inline-flex">
                 Xem tất cả <ArrowRight className="size-4" aria-hidden />
               </Link>
             </div>
@@ -107,7 +113,7 @@ export default async function HomePage() {
               ))}
             </div>
             <div className="mt-6 text-center sm:hidden">
-              <Link href={`/${s.slug}`} className="btn-outline">
+              <Link href={`/${s.slug}/`} className="btn-outline">
                 Xem tất cả {s.title.toLowerCase()} <ArrowRight className="size-4" aria-hidden />
               </Link>
             </div>

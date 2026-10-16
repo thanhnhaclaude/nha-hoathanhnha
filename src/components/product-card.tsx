@@ -9,7 +9,7 @@ export function ProductCard({ product, priority = false }: { product: ProductCar
   const discount = onSale ? Math.round((1 - price / product.price) * 100) : 0;
   return (
     <Link
-      href={`/${product.slug}`}
+      href={`/${product.slug}/`}
       className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-surface transition-shadow duration-300 hover:shadow-[0_12px_32px_-12px_rgba(60,30,10,0.25)]"
     >
       <div className="relative aspect-[4/5] overflow-hidden bg-surface-muted">

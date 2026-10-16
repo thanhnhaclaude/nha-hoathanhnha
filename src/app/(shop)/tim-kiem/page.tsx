@@ -16,7 +16,7 @@ export default async function SearchPage({ searchParams }: PageProps<"/tim-kiem"
   return (
     <div className="container-x py-10">
       <h1 className="heading-display text-4xl sm:text-5xl">{q ? `Kết quả cho “${q}”` : "Tìm kiếm"}</h1>
-      <form action="/tim-kiem" role="search" className="relative mt-6 max-w-xl">
+      <form action="/tim-kiem/" role="search" className="relative mt-6 max-w-xl">
         <label htmlFor="search-q" className="sr-only">
           Từ khóa
         </label>
@@ -28,7 +28,7 @@ export default async function SearchPage({ searchParams }: PageProps<"/tim-kiem"
       {result && (
         <>
           <div className="mt-8">
-            <SortBar base="/tim-kiem" sort={sort} total={result.total} extra={{ q }} />
+            <SortBar base="/tim-kiem/" sort={sort} total={result.total} extra={{ q }} />
           </div>
           <div className="mt-6">
             {result.items.length ? (
@@ -37,7 +37,7 @@ export default async function SearchPage({ searchParams }: PageProps<"/tim-kiem"
               <p className="rounded-2xl bg-surface p-10 text-center text-muted">Không tìm thấy mẫu hoa phù hợp. Thử từ khóa khác như “hoa hồng”, “khai trương”, “HB0”.</p>
             )}
           </div>
-          <Pagination base="/tim-kiem" page={page} pages={result.pages} sort={sort} extra={{ q }} />
+          <Pagination base="/tim-kiem/" page={page} pages={result.pages} sort={sort} extra={{ q }} />
         </>
       )}
     </div>

@@ -10,8 +10,8 @@ async function lookup(formData: FormData) {
   const code = String(formData.get("code") ?? "");
   const phone = String(formData.get("phone") ?? "");
   const order = code && phone ? await findOrderByCodeAndPhone(code, phone) : null;
-  if (!order) redirect("/tra-cuu-don-hang?err=1");
-  redirect(`/don-hang/${order.code}?t=${order.accessToken}`);
+  if (!order) redirect("/tra-cuu-don-hang/?err=1");
+  redirect(`/don-hang/${order.code}/?t=${order.accessToken}`);
 }
 
 export default async function LookupPage({ searchParams }: PageProps<"/tra-cuu-don-hang">) {

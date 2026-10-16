@@ -54,7 +54,7 @@ export function MobileMenu({ menu }: { menu: MenuGroup[] }) {
             return (
               <div key={g.slug} className="border-b border-border/70 last:border-0">
                 <div className="flex items-center">
-                  <Link href={`/${g.slug}`} className="flex-1 px-3 py-3 text-sm font-semibold uppercase tracking-wider">
+                  <Link href={`/${g.slug}/`} className="flex-1 px-3 py-3 text-sm font-semibold uppercase tracking-wider">
                     {g.label}
                   </Link>
                   <button
@@ -71,7 +71,7 @@ export function MobileMenu({ menu }: { menu: MenuGroup[] }) {
                   <ul className="pb-2 pl-3">
                     {g.children.map((c) => (
                       <li key={c.slug}>
-                        <Link href={`/${c.slug}`} className="block rounded-lg px-3 py-2.5 text-sm text-muted hover:bg-brand-soft hover:text-brand-strong">
+                        <Link href={`/${c.slug}/`} className="block rounded-lg px-3 py-2.5 text-sm text-muted hover:bg-brand-soft hover:text-brand-strong">
                           {c.label}
                         </Link>
                       </li>

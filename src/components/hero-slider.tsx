@@ -6,9 +6,9 @@ import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const slides = [
-  { src: "/brand/banner2.webp", alt: "Bộ sưu tập hoa tươi Thanh Nhã", href: "/mau-hoa-moi", w: 2306, h: 833 },
-  { src: "/brand/banner3.webp", alt: "Hoa khai trương sang trọng", href: "/hoa-khai-truong", w: 2306, h: 833 },
-  { src: "/brand/banner1.webp", alt: "Sắc hoa giản đơn – mua ngay", href: "/hoa-bo", w: 1153, h: 417 },
+  { src: "/brand/banner2.webp", alt: "Bộ sưu tập hoa tươi Thanh Nhã", href: "/mau-hoa-moi/", w: 2306, h: 833 },
+  { src: "/brand/banner3.webp", alt: "Hoa khai trương sang trọng", href: "/hoa-khai-truong/", w: 2306, h: 833 },
+  { src: "/brand/banner1.webp", alt: "Sắc hoa giản đơn – mua ngay", href: "/hoa-bo/", w: 1153, h: 417 },
 ];
 
 export function HeroSlider() {

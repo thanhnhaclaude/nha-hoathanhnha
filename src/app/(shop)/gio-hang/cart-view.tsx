@@ -28,12 +28,12 @@ export function CartView() {
       <ul className="divide-y divide-border rounded-3xl border border-border bg-surface">
         {lines.map((l) => (
           <li key={l.id} className="flex gap-4 p-4 sm:p-5">
-            <Link href={`/${l.slug}`} className="relative size-24 shrink-0 overflow-hidden rounded-2xl bg-surface-muted sm:size-28">
+            <Link href={`/${l.slug}/`} className="relative size-24 shrink-0 overflow-hidden rounded-2xl bg-surface-muted sm:size-28">
               {l.image && <Image src={l.image} alt={l.name} fill sizes="112px" className="object-cover" />}
             </Link>
             <div className="flex flex-1 flex-col gap-2">
               <div className="flex items-start justify-between gap-3">
-                <Link href={`/${l.slug}`} className="font-medium hover:text-brand-strong">
+                <Link href={`/${l.slug}/`} className="font-medium hover:text-brand-strong">
                   {l.name}
                 </Link>
                 <button type="button" onClick={() => remove(l.id)} className="grid size-11 shrink-0 cursor-pointer place-items-center rounded-full text-muted hover:bg-surface-muted hover:text-danger" aria-label={`Xóa ${l.name}`}>
@@ -70,7 +70,7 @@ export function CartView() {
             <dd>Tính ở bước tiếp theo</dd>
           </div>
         </dl>
-        <Link href="/thanh-toan" className="btn-primary mt-6 h-12 w-full">
+        <Link href="/thanh-toan/" className="btn-primary mt-6 h-12 w-full">
           Tiến hành đặt hoa
         </Link>
         <Link href="/" className="mt-3 block text-center text-sm text-muted hover:text-brand-strong">

@@ -91,6 +91,48 @@ export const pages = mysqlTable(
 
 export type Page = typeof pages.$inferSelect;
 
+/** Danh mục bài viết (WordPress category): dia-diem, tin-tuc, da-nang, tp-ho-chi-minh… */
+export const postCategories = mysqlTable(
+  "post_categories",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    slug: varchar("slug", { length: 191 }).notNull(),
+    name: varchar("name", { length: 191 }).notNull(),
+    description: text("description"),
+    wpId: int("wp_id"),
+  },
+  (t) => [uniqueIndex("post_categories_slug_uq").on(t.slug)],
+);
+
+export const pageCategories = mysqlTable(
+  "page_categories",
+  {
+    pageId: int("page_id").notNull(),
+    categoryId: int("category_id").notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.pageId, t.categoryId] }), index("page_categories_cat_idx").on(t.categoryId)],
+);
+
+export type PostCategory = typeof postCategories.$inferSelect;
+
+/**
+ * Thông tin SEO lấy nguyên từ website cũ (Rank Math) theo đường dẫn, vd. "/hoa-bo/".
+ * Dùng để giữ nguyên tiêu đề, mô tả, robots và lastmod trong sitemap.
+ */
+export const seoMeta = mysqlTable("seo_meta", {
+  path: varchar("path", { length: 191 }).primaryKey(),
+  title: varchar("title", { length: 255 }),
+  description: text("description"),
+  robots: varchar("robots", { length: 191 }),
+  /** Tên sitemap cũ chứa URL này: post | page | product | category */
+  sitemap: varchar("sitemap", { length: 20 }),
+  /** Thứ tự trong sitemap cũ */
+  position: int("position"),
+  lastmod: datetime("lastmod"),
+});
+
+export type SeoMeta = typeof seoMeta.$inferSelect;
+
 export const ORDER_STATUSES = ["pending", "confirmed", "delivering", "completed", "cancelled"] as const;
 export const PAYMENT_METHODS = ["vietqr", "cod"] as const;
 export const PAYMENT_STATUSES = ["unpaid", "paid", "refunded"] as const;

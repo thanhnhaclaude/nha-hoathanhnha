@@ -63,7 +63,7 @@ export function CheckoutForm({ shipping, today }: { shipping: { fee: number; fre
       const res = await placeOrder({ ...data, paymentMethod: payment, items: lines.map((l) => ({ id: l.id, quantity: l.quantity })) });
       if (res.ok) {
         clear();
-        router.push(`/don-hang/${res.code}?t=${res.accessToken}`);
+        router.push(`/don-hang/${res.code}/?t=${res.accessToken}`);
       } else {
         setErrors(res.errors);
         setMessage(res.message);
