@@ -38,7 +38,7 @@ Dán dòng `ADMIN_PASSWORD_HASH="..."` vào `.env` (hoặc biến môi trường
 | Biến | Ý nghĩa |
 |---|---|
 | `DATABASE_URL` | `mysql://USER:PASS@HOST:3306/DBNAME` |
-| `NEXT_PUBLIC_SITE_URL` | `https://hoathanhnha.com` |
+| `NEXT_PUBLIC_SITE_URL` | `https://shophoathanhnha.com` |
 | `ADMIN_USERNAME` | Tên đăng nhập `/admin` |
 | `ADMIN_PASSWORD_HASH` | Tạo bằng `npm run hash-password` |
 | `AUTH_SECRET` | Chuỗi ngẫu nhiên ≥ 32 ký tự |

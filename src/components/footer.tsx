@@ -108,7 +108,7 @@ export function Footer() {
 
       <div className="border-t border-white/10">
         <p className="container-x py-5 text-center text-xs text-white/60">
-          © {new Date().getFullYear()} hoathanhnha.com – Bản quyền thuộc về Hoa Tươi Thanh Nhã.
+          © {new Date().getFullYear()} {new URL(site.url).host} – Bản quyền thuộc về Hoa Tươi Thanh Nhã.
         </p>
       </div>
     </footer>
