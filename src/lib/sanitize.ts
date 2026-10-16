@@ -20,6 +20,30 @@ function localizeHref(href: string) {
   return m ? m[1] : href;
 }
 
+/** So sánh tiêu đề: bỏ thẻ, emoji/ký hiệu, khoảng trắng, không phân biệt hoa thường. */
+function titleKey(s: string) {
+  return sanitizeHtml(s, { allowedTags: [], allowedAttributes: {} })
+    .replace(/&[a-z#0-9]+;/gi, " ")
+    .toLocaleLowerCase("vi")
+    .replace(/[^\p{L}\p{N}]+/gu, "");
+}
+
+/**
+ * Bỏ tiêu đề đầu tiên của nội dung nếu nó trùng với tiêu đề trang (H1),
+ * vd. trang "Câu hỏi thường gặp" mở đầu bằng "🔆 CÂU HỎI THƯỜNG GẶP". Tránh lặp tiêu đề (tốt cho SEO).
+ */
+export function removeDuplicateTitleHeading(html: string | null | undefined, title: string) {
+  if (!html) return "";
+  const m = html.match(/<h([1-6])\b[^>]*>([\s\S]*?)<\/h\1>/i);
+  if (!m || m.index === undefined) return html;
+  // Chỉ xét tiêu đề nằm ở đầu nội dung (trước đó không có chữ)
+  const before = sanitizeHtml(preClean(html.slice(0, m.index)), { allowedTags: [], allowedAttributes: {} }).trim();
+  if (before) return html;
+  const key = titleKey(m[2]);
+  if (!key || key !== titleKey(title)) return html;
+  return html.slice(0, m.index) + html.slice(m.index + m[0].length);
+}
+
 /**
  * Chuẩn SEO: trang đã có 1 thẻ H1 (tiêu đề), nên tiêu đề trong nội dung phải bắt đầu từ H2
  * và không nhảy cấp. Dời toàn bộ cấp tiêu đề sao cho cấp cao nhất trong nội dung là H2

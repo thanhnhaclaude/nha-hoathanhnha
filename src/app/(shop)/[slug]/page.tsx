@@ -28,7 +28,7 @@ import {
   getRelatedProducts,
 } from "@/lib/queries";
 import { canonicalPath, seoMetadata } from "@/lib/seo";
-import { cleanHtml, normalizeHeadings, plainText, splitProductBlocks } from "@/lib/sanitize";
+import { cleanHtml, normalizeHeadings, plainText, removeDuplicateTitleHeading, splitProductBlocks } from "@/lib/sanitize";
 import { site } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
@@ -139,7 +139,7 @@ export default async function SlugPage({ params, searchParams }: Props) {
       <Pagination base={base} page={page} pages={pages} sort={sort} />
       {category.description && plainText(category.description, 10000).length > 300 && (
         <section aria-label={`Giới thiệu ${category.name}`} className="mx-auto mt-16 max-w-3xl border-t border-border pt-10">
-          <ReadMore html={cleanHtml(category.description)} />
+          <ReadMore html={cleanHtml(removeDuplicateTitleHeading(category.description, category.name))} />
         </section>
       )}
     </div>
@@ -211,7 +211,7 @@ async function CmsView({ page }: { page: Page }) {
     isPost ? getRecentPosts(page.id) : Promise.resolve([]),
     isPost ? getPrimaryPostCategory(page.id) : Promise.resolve(null),
     Promise.all(
-      splitProductBlocks(normalizeHeadings(page.content ?? "")).map(async (seg) =>
+      splitProductBlocks(normalizeHeadings(removeDuplicateTitleHeading(page.content, page.title))).map(async (seg) =>
         seg.type === "html" ? seg : { type: "products" as const, products: await getProductCardsBySlugs(seg.slugs) },
       ),
     ),
@@ -374,7 +374,7 @@ async function ProductView({ data }: { data: NonNullable<Awaited<ReturnType<type
           <h2 id="desc-h" className="heading-display text-3xl">
             Mô tả sản phẩm
           </h2>
-          <div className="prose-shop mt-6" dangerouslySetInnerHTML={{ __html: cleanHtml(product.description) }} />
+          <div className="prose-shop mt-6" dangerouslySetInnerHTML={{ __html: cleanHtml(removeDuplicateTitleHeading(product.description, product.name)) }} />
         </section>
       )}
 
