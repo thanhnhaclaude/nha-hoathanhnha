@@ -112,7 +112,6 @@ export function ProductForm({ product, categories, selected }: { product?: Produ
             <ul className="flex flex-wrap gap-3">
               {preview.map((src, i) => (
                 <li key={src + i} className="relative size-24 overflow-hidden rounded-xl bg-surface-muted ring-1 ring-border">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={src} alt="" className="size-full object-cover" />
                   {i === 0 && <span className="absolute bottom-0 inset-x-0 bg-black/60 text-center text-[10px] text-white">Ảnh chính</span>}
                 </li>

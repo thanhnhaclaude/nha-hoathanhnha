@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { count } from "drizzle-orm";
 import { db, pages, products, seoMeta } from "@/lib/db";
+import { dbConnection } from "@/lib/db/config";
 
 export const dynamic = "force-dynamic";
 
@@ -12,6 +13,11 @@ export async function GET() {
   const env = Object.fromEntries(
     [
       "DATABASE_URL",
+      "DB_HOST",
+      "DB_PORT",
+      "DB_USER",
+      "DB_PASSWORD",
+      "DB_NAME",
       "NEXT_PUBLIC_SITE_URL",
       "ADMIN_USERNAME",
       "ADMIN_PASSWORD_HASH",
@@ -23,13 +29,24 @@ export async function GET() {
     ].map((k) => [k, Boolean(process.env[k]?.trim())]),
   );
 
-  let dbHost: string | null = null;
-  let urlValid = false;
+  // Cách khai báo CSDL đang dùng + host (không trả về user/mật khẩu)
+  let dbConfig: Record<string, unknown>;
   try {
-    const u = new URL(process.env.DATABASE_URL ?? "");
-    urlValid = u.protocol === "mysql:" && Boolean(u.username) && u.pathname.length > 1 && !/[<>]/.test(decodeURIComponent(u.href));
-    dbHost = `${u.hostname}:${u.port || "3306"}`;
-  } catch {}
+    const c = dbConnection();
+    if (c.mode === "parts") {
+      dbConfig = { mode: "DB_HOST/DB_USER/DB_PASSWORD/DB_NAME", valid: true, host: `${c.host}:${c.port}`, hasPassword: Boolean(c.password) };
+    } else {
+      try {
+        const u = new URL(c.uri);
+        const ok = u.protocol === "mysql:" && Boolean(u.username) && u.pathname.length > 1 && !/[<>]/.test(decodeURIComponent(u.href));
+        dbConfig = { mode: "DATABASE_URL", valid: ok, host: `${u.hostname}:${u.port || "3306"}` };
+      } catch {
+        dbConfig = { mode: "DATABASE_URL", valid: false, host: null, hint: "Chuỗi không hợp lệ: thiếu mysql://, có dấu cách, hoặc mật khẩu có ký tự đặc biệt. Hãy dùng DB_HOST/DB_USER/DB_PASSWORD/DB_NAME." };
+      }
+    }
+  } catch (e) {
+    dbConfig = { mode: null, valid: false, error: (e as Error).message };
+  }
 
   let database: Record<string, unknown>;
   try {
@@ -45,7 +62,7 @@ export async function GET() {
   }
 
   return NextResponse.json(
-    { node: process.version, env, databaseUrl: { valid: urlValid, host: dbHost }, database },
+    { node: process.version, env, dbConfig, database },
     { headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex" } },
   );
 }

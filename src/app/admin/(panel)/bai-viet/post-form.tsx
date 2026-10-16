@@ -123,7 +123,6 @@ export function PostForm({
         <section className="space-y-3 rounded-2xl bg-surface p-6 ring-1 ring-border">
           <h2 className="text-lg font-semibold">Ảnh đại diện</h2>
           {image && (
-            // eslint-disable-next-line @next/next/no-img-element
             <img src={image} alt="" className="aspect-[16/10] w-full rounded-xl object-cover" />
           )}
           <label htmlFor="image" className="label">

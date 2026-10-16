@@ -36,13 +36,19 @@
     "dotenv": "^18.0.8",
     "drizzle-kit": "^0.31.11",
     "eslint": "^9",
-    "eslint-config-next": "16.4.2",
+    "eslint-plugin-react-hooks": "^7.1.1",
     "mysql-memory-server": "^1.17.0",
     "tailwindcss": "^4",
     "tsx": "^4.23.15",
-    "typescript": "^5"
+    "typescript": "^5",
+    "typescript-eslint": "^8.71.2"
   },
   "engines": {
     "node": ">=20.9"
+  },
+  "overrides": {
+    "@esbuild-kit/core-utils": {
+      "esbuild": "^0.25.12"
+    }
   }
 }

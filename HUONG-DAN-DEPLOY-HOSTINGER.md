@@ -16,10 +16,8 @@ Trên máy bạn, thư mục `deploy/` (không có trên GitHub) chứa sẵn:
 1. hPanel → **Databases → MySQL Databases**.
 2. Tạo database mới và user mới. Đặt mật khẩu **chỉ gồm chữ và số** để không phải mã hóa ký tự đặc biệt.
 3. Ghi lại *tên database*, *user*, *mật khẩu*.
-4. Mở `deploy/hostinger-env.txt` và điền vào dòng `DATABASE_URL`:
-   ```
-   DATABASE_URL=mysql://USER:MATKHAU@localhost:3306/TEN_DATABASE
-   ```
+4. Mở `deploy/hostinger.env` và điền 3 dòng `DB_USER`, `DB_PASSWORD`, `DB_NAME` (giữ `DB_HOST=localhost`, `DB_PORT=3306`). Không cần `DATABASE_URL`.
+   - Kiểm tra kết nối sau khi deploy: mở `https://shophoathanhnha.com/api/health/` → `"status":"ok"`.
 
 ## Bước 2: Nhập dữ liệu
 

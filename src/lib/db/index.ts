@@ -2,15 +2,19 @@ import "server-only";
 import mysql from "mysql2/promise";
 import { drizzle, type MySql2Database } from "drizzle-orm/mysql2";
 import * as schema from "./schema";
+import { dbConnection } from "./config";
 
 type Db = MySql2Database<typeof schema>;
 
 const globalForDb = globalThis as unknown as { pool?: mysql.Pool; db?: Db };
 
 function createPool() {
-  const url = process.env.DATABASE_URL;
-  if (!url) throw new Error("Thiếu biến môi trường DATABASE_URL");
-  const pool = mysql.createPool({ uri: url, connectionLimit: 5, timezone: "+07:00", dateStrings: ["DATE"] });
+  const conn = dbConnection();
+  const common = { connectionLimit: 5, timezone: "+07:00", dateStrings: ["DATE" as const] };
+  const pool =
+    conn.mode === "parts"
+      ? mysql.createPool({ ...common, host: conn.host, port: conn.port, user: conn.user, password: conn.password, database: conn.database })
+      : mysql.createPool({ ...common, uri: conn.uri });
   // Để CURRENT_TIMESTAMP / CURDATE() của MySQL dùng giờ Việt Nam, khớp với cách mysql2 đọc DATETIME
   pool.pool.on("connection", (conn) => {
     conn.query("SET time_zone = '+07:00'");
