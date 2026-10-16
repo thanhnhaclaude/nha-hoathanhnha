@@ -28,7 +28,7 @@ Trên máy bạn, thư mục `deploy/` (không có trên GitHub) chứa sẵn:
 ## Bước 3: Tạo ứng dụng Node.js từ GitHub
 
 1. hPanel → **Websites → Add website → Node.js Apps** (hoặc mở website hoathanhnha.com → **Node.js**).
-2. Chọn **Import Git repository** và đăng nhập GitHub khi được hỏi. Chọn repo `thanhnhaclaude/nha-shophoathanhnha`, nhánh `main`.
+2. Chọn **Import Git repository** và đăng nhập GitHub khi được hỏi. Chọn repo `<repo GitHub mới của hoathanhnha>`, nhánh `main`.
 3. Cấu hình:
    - **Node.js version:** 22.x (tối thiểu 20.9)
    - **Build command:** `npm run build`
@@ -64,7 +64,8 @@ Trong phần **Environment variables** của ứng dụng, thêm **từng dòng*
 2. **Webhooks → Thêm webhook**:
    - Sự kiện: *Có tiền vào* · URL: `https://hoathanhnha.com/api/sepay/webhook/` (**có dấu `/` cuối**)
    - Kiểu chứng thực: **API Key**. Tạo một chuỗi ngẫu nhiên, dán vào SePay và vào biến `SEPAY_API_KEY` trên Hostinger.
-3. Đặt thử một đơn VietQR nhỏ và chuyển khoản: trong vài giây trang đơn hàng tự chuyển sang **Đã thanh toán**, đơn trong admin sang **Đã xác nhận**.
+3. Mã đơn của website này bắt đầu bằng **HN** (`ORDER_CODE_PREFIX=HN`). Website khác dùng chung tài khoản VCB phải có tiền tố khác và webhook riêng, để không xác nhận nhầm đơn của nhau.
+4. Đặt thử một đơn VietQR nhỏ và chuyển khoản: trong vài giây trang đơn hàng tự chuyển sang **Đã thanh toán**, đơn trong admin sang **Đã xác nhận**.
    - Chuyển thiếu tiền: đơn giữ *Chưa thanh toán*, ghi chú admin ghi rõ số tiền đã nhận.
 
 ## Bước 8: Email báo đơn
@@ -74,11 +75,10 @@ Trong phần **Environment variables** của ứng dụng, thêm **từng dòng*
 3. Mỗi đơn mới: shop nhận email báo đơn, khách (nếu nhập email) nhận email xác nhận. Khi SePay báo tiền về, cả hai nhận thêm email “Đã thanh toán”.
 4. Kiểm tra `https://hoathanhnha.com/api/health/`: các mục `SMTP_*` và `SEPAY_API_KEY` phải là `true`.
 
-## Bước 9: Thay WordPress trên tên miền chính
+## Bước 9: Google
 
-1. **Sao lưu WordPress** trước: hPanel → *Backups* (hoặc tải thư mục `public_html` + export database).
-2. Đường dẫn của website mới giống hệt WordPress, nên Google không phải index lại. Không cần chuyển hướng 301 hay Change of Address.
-3. Sau khi trỏ tên miền: mở Google Search Console của **hoathanhnha.com**, gửi lại sitemap `https://hoathanhnha.com/sitemap_index.xml` và theo dõi mục *Pages* trong 1–2 tuần.
+1. Thêm **hoathanhnha.com** vào Google Search Console và gửi sitemap `https://hoathanhnha.com/sitemap_index.xml`.
+2. Lưu ý: hoathanhnha.com và shophoathanhnha.com có cùng sản phẩm và bài viết. Google thường chỉ xếp hạng một trong hai bản trùng nội dung, nên nên viết lại dần bài viết/mô tả cho một trong hai website.
 
 ---
 

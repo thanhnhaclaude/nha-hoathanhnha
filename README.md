@@ -46,6 +46,7 @@ Dán dòng `ADMIN_PASSWORD_HASH="..."` vào `.env` (hoặc biến môi trường
 | `VIETQR_BANK_ID` | Mã ngân hàng: `VCB`, `TCB`, `MB`, `ACB`… |
 | `VIETQR_ACCOUNT_NO` / `VIETQR_ACCOUNT_NAME` | Số và tên tài khoản nhận tiền |
 | `SHIPPING_FEE` / `FREE_SHIPPING_THRESHOLD` | Phí giao và ngưỡng miễn phí (VND) |
+| `ORDER_CODE_PREFIX` | Tiền tố mã đơn, website này dùng `HN`. Mỗi website chung tài khoản ngân hàng phải khác nhau |
 | `SEPAY_API_KEY` | Khóa webhook SePay, tự đánh dấu đơn đã thanh toán (`/api/sepay/webhook/`) |
 | `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASS` | Hộp thư gửi email báo đơn (Hostinger: `smtp.hostinger.com`, 465) |
 | `SHOP_EMAIL` | Hộp thư nhận thông báo đơn mới |
