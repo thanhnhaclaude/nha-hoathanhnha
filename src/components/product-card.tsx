@@ -30,15 +30,17 @@ export function ProductCard({ product, priority = false }: { product: ProductCar
         )}
       </div>
       <div className="flex flex-1 flex-col gap-1.5 p-3 sm:p-4">
-        <h3 className="line-clamp-2 text-sm font-medium leading-snug text-foreground sm:text-[15px]">{product.name}</h3>
-        <div className="mt-auto flex flex-wrap items-baseline gap-x-2">
+        {/* Luôn chiếm đủ 2 dòng để mọi thẻ cao bằng nhau, giá thẳng hàng */}
+        <h3 className="line-clamp-2 min-h-[2.75em] text-sm font-medium leading-snug text-foreground sm:text-[15px]">{product.name}</h3>
+        {/* Giá gốc nằm dòng riêng phía trên và luôn chừa chỗ, để thẻ có/không giảm giá cao bằng nhau */}
+        <div className="mt-auto flex flex-col">
+          <span className="min-h-4 text-xs leading-4 text-muted line-through" aria-hidden={!onSale || undefined}>
+            {onSale ? formatVND(product.price) : ""}
+          </span>
           {price > 0 ? (
-            <>
-              <span className="text-base font-semibold text-brand-strong">{formatVND(price)}</span>
-              {onSale && <span className="text-xs text-muted line-through">{formatVND(product.price)}</span>}
-            </>
+            <span className="text-base font-semibold leading-6 text-brand-strong">{formatVND(price)}</span>
           ) : (
-            <span className="text-sm font-semibold text-leaf">Liên hệ</span>
+            <span className="text-sm font-semibold leading-6 text-leaf">Liên hệ</span>
           )}
         </div>
       </div>

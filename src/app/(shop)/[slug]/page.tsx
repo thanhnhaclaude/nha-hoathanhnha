@@ -146,6 +146,11 @@ export default async function SlugPage({ params, searchParams }: Props) {
   );
 }
 
+/** Chọn số cột để hàng cuối không bị hụt (vd. 8 sản phẩm -> 4 cột, 6 hoặc 9 -> 3 cột). */
+function productGridCols(count: number) {
+  return count % 4 !== 0 && count % 3 === 0 ? "md:grid-cols-3" : "md:grid-cols-4";
+}
+
 async function PostArchiveView({ category, page }: { category: PostCategory; page: number }) {
   const [{ items, pages, total }, allCats] = await Promise.all([getPostsInCategory(category.id, { page }), getPostCategoriesWithCounts()]);
   const base = canonicalPath(category.slug);
@@ -242,7 +247,7 @@ async function CmsView({ page }: { page: Page }) {
           seg.type === "html" ? (
             <div key={i} className="prose-shop" dangerouslySetInnerHTML={{ __html: cleanHtml(seg.html, { normalize: false }) }} />
           ) : (
-            <div key={i} className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
+            <div key={i} className={`grid grid-cols-2 gap-3 sm:gap-4 lg:-mx-24 ${productGridCols(seg.products.length)}`}>
               {seg.products.map((p) => (
                 <ProductCard key={p.id} product={p} />
               ))}
