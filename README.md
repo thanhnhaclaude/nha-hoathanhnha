@@ -1,4 +1,4 @@
-# Shop Hoa Thanh Nhã — shophoathanhnha.com (Next.js + MySQL)
+# Shop Hoa Thanh Nhã — hoathanhnha.com (Next.js + MySQL)
 
 Website thương mại điện tử cho Shop hoa tươi Thanh Nhã, thay thế bản WordPress/WooCommerce hiện tại, giữ nguyên đường dẫn `/<slug>/` của danh mục và sản phẩm để không mất SEO.
 
@@ -8,7 +8,8 @@ Website thương mại điện tử cho Shop hoa tươi Thanh Nhã, thay thế b
 
 - Trang chủ, danh mục (lọc theo danh mục con, sắp xếp giá, phân trang), chi tiết sản phẩm, tìm kiếm
 - Giỏ hàng (lưu trên trình duyệt), đặt hàng với ngày/giờ giao, lời nhắn thiệp & băng rôn
-- Thanh toán **VietQR** (mã QR điền sẵn số tiền + mã đơn) hoặc **COD**
+- Thanh toán **VietQR** (mã QR điền sẵn số tiền + mã đơn), tự xác nhận tiền về qua **SePay**, hoặc **COD**
+- Email báo đơn mới / đã thanh toán cho shop và khách (SMTP Hostinger)
 - Trang xác nhận đơn và tra cứu đơn theo mã + số điện thoại
 - Trang quản trị `/admin`: tổng quan, quản lý đơn (trạng thái, thanh toán, ghi chú), quản lý sản phẩm (thêm/sửa/xóa, tải ảnh, gán danh mục)
 - SEO: metadata từng trang, `sitemap.xml`, `robots.txt`, dữ liệu có cấu trúc Product (JSON-LD)
@@ -38,13 +39,16 @@ Dán dòng `ADMIN_PASSWORD_HASH="..."` vào `.env` (hoặc biến môi trường
 | Biến | Ý nghĩa |
 |---|---|
 | `DATABASE_URL` | `mysql://USER:PASS@HOST:3306/DBNAME` |
-| `NEXT_PUBLIC_SITE_URL` | `https://shophoathanhnha.com` |
+| `NEXT_PUBLIC_SITE_URL` | `https://hoathanhnha.com` |
 | `ADMIN_USERNAME` | Tên đăng nhập `/admin` |
 | `ADMIN_PASSWORD_HASH` | Tạo bằng `npm run hash-password` |
 | `AUTH_SECRET` | Chuỗi ngẫu nhiên ≥ 32 ký tự |
 | `VIETQR_BANK_ID` | Mã ngân hàng: `VCB`, `TCB`, `MB`, `ACB`… |
 | `VIETQR_ACCOUNT_NO` / `VIETQR_ACCOUNT_NAME` | Số và tên tài khoản nhận tiền |
 | `SHIPPING_FEE` / `FREE_SHIPPING_THRESHOLD` | Phí giao và ngưỡng miễn phí (VND) |
+| `SEPAY_API_KEY` | Khóa webhook SePay, tự đánh dấu đơn đã thanh toán (`/api/sepay/webhook/`) |
+| `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASS` | Hộp thư gửi email báo đơn (Hostinger: `smtp.hostinger.com`, 465) |
+| `SHOP_EMAIL` | Hộp thư nhận thông báo đơn mới |
 | `UPLOAD_DIR` | Thư mục lưu ảnh tải lên từ admin — nên đặt **ngoài** thư mục code |
 
 ## Deploy lên Hostinger (gói Business / Cloud có Node.js)

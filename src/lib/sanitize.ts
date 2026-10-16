@@ -40,7 +40,9 @@ export function removeDuplicateTitleHeading(html: string | null | undefined, tit
   const before = sanitizeHtml(preClean(html.slice(0, m.index)), { allowedTags: [], allowedAttributes: {} }).trim();
   if (before) return html;
   const key = titleKey(m[2]);
-  if (!key || key !== titleKey(title)) return html;
+  const t = titleKey(title);
+  // Trùng hẳn, hoặc tiêu đề đầu chỉ là tiêu đề trang kèm phụ đề (vd. "Ý nghĩa của hoa Protea – Vẻ đẹp…")
+  if (!key || !t || (key !== t && !(t.length >= 8 && key.startsWith(t)))) return html;
   return html.slice(0, m.index) + html.slice(m.index + m[0].length);
 }
 

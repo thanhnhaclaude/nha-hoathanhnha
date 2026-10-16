@@ -6,6 +6,7 @@ import { CheckCircle2, Phone } from "lucide-react";
 import { formatVND } from "@/lib/format";
 import { getOrderForCustomer, orderStatusLabel, paymentStatusLabel, vietQrUrl } from "@/lib/orders";
 import { site } from "@/lib/site";
+import { PaymentWatcher } from "./payment-watcher";
 
 export const metadata: Metadata = { title: "Đơn hàng", robots: { index: false } };
 export const dynamic = "force-dynamic";
@@ -29,6 +30,13 @@ export default async function OrderPage({ params, searchParams }: PageProps<"/do
         </p>
       </div>
 
+      {order.paymentMethod === "vietqr" && order.paymentStatus === "paid" && (
+        <p role="status" className="mx-auto mt-8 flex max-w-xl items-center justify-center gap-2 rounded-2xl bg-leaf-soft p-4 text-center font-semibold text-leaf">
+          <CheckCircle2 className="size-5 shrink-0" aria-hidden /> Shop đã nhận được tiền chuyển khoản. Cảm ơn bạn!
+        </p>
+      )}
+
+      {qr && <PaymentWatcher />}
       {qr && (
         <section aria-labelledby="pay-h" className="mt-10 grid items-center gap-6 rounded-3xl border-2 border-brand bg-surface p-6 sm:grid-cols-[260px_1fr] sm:p-8">
           <Image src={qr} alt={`Mã VietQR thanh toán ${formatVND(order.total)} cho đơn ${order.code}`} width={260} height={300} unoptimized className="mx-auto rounded-2xl" />
@@ -51,7 +59,7 @@ export default async function OrderPage({ params, searchParams }: PageProps<"/do
                 <dd className="font-semibold">{process.env.VIETQR_ACCOUNT_NAME}</dd>
               </div>
             </dl>
-            <p className="mt-4 rounded-xl bg-leaf-soft p-3 text-sm text-leaf">Sau khi nhận được tiền, shop sẽ cập nhật trạng thái “Đã thanh toán” cho đơn của bạn.</p>
+            <p className="mt-4 rounded-xl bg-leaf-soft p-3 text-sm text-leaf">Trang này tự cập nhật “Đã thanh toán” trong vài giây sau khi tiền về tài khoản shop.</p>
           </div>
         </section>
       )}

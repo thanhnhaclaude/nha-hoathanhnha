@@ -26,6 +26,11 @@ export async function GET() {
       "VIETQR_ACCOUNT_NO",
       "VIETQR_ACCOUNT_NAME",
       "UPLOAD_DIR",
+      "SEPAY_API_KEY",
+      "SMTP_HOST",
+      "SMTP_USER",
+      "SMTP_PASS",
+      "SHOP_EMAIL",
     ].map((k) => [k, Boolean(process.env[k]?.trim())]),
   );
 

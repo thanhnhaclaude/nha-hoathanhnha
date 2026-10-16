@@ -1,5 +1,7 @@
 "use server";
 
+import { after } from "next/server";
+import { sendNewOrderEmails } from "@/lib/mailer";
 import { createOrder } from "@/lib/orders";
 
 export type PlaceOrderResult =
@@ -10,6 +12,7 @@ export async function placeOrder(input: unknown): Promise<PlaceOrderResult> {
   try {
     const res = await createOrder(input);
     if (!res.ok) return { ok: false, message: res.message, errors: res.errors };
+    after(() => sendNewOrderEmails(res.orderId));
     return { ok: true, code: res.code, accessToken: res.accessToken };
   } catch (e) {
     console.error("placeOrder", e);

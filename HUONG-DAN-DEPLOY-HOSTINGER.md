@@ -1,4 +1,4 @@
-# Hướng dẫn deploy shophoathanhnha.com lên Hostinger
+# Hướng dẫn deploy hoathanhnha.com lên Hostinger
 
 Áp dụng cho gói **Business / Cloud** có mục **Node.js** trong hPanel.
 
@@ -17,7 +17,7 @@ Trên máy bạn, thư mục `deploy/` (không có trên GitHub) chứa sẵn:
 2. Tạo database mới và user mới. Đặt mật khẩu **chỉ gồm chữ và số** để không phải mã hóa ký tự đặc biệt.
 3. Ghi lại *tên database*, *user*, *mật khẩu*.
 4. Mở `deploy/hostinger.env` và điền 3 dòng `DB_USER`, `DB_PASSWORD`, `DB_NAME` (giữ `DB_HOST=localhost`, `DB_PORT=3306`). Không cần `DATABASE_URL`.
-   - Kiểm tra kết nối sau khi deploy: mở `https://shophoathanhnha.com/api/health/` → `"status":"ok"`.
+   - Kiểm tra kết nối sau khi deploy: mở `https://hoathanhnha.com/api/health/` → `"status":"ok"`.
 
 ## Bước 2: Nhập dữ liệu
 
@@ -27,7 +27,7 @@ Trên máy bạn, thư mục `deploy/` (không có trên GitHub) chứa sẵn:
 
 ## Bước 3: Tạo ứng dụng Node.js từ GitHub
 
-1. hPanel → **Websites → Add website → Node.js Apps** (hoặc mở website shophoathanhnha.com → **Node.js**).
+1. hPanel → **Websites → Add website → Node.js Apps** (hoặc mở website hoathanhnha.com → **Node.js**).
 2. Chọn **Import Git repository** và đăng nhập GitHub khi được hỏi. Chọn repo `thanhnhaclaude/nha-shophoathanhnha`, nhánh `main`.
 3. Cấu hình:
    - **Node.js version:** 22.x (tối thiểu 20.9)
@@ -46,22 +46,39 @@ Trong phần **Environment variables** của ứng dụng, thêm **từng dòng*
 ## Bước 5: Deploy và gắn tên miền
 
 1. Bấm **Deploy**. Lần đầu mất vài phút, vì repo có khoảng 360 MB ảnh.
-2. Trỏ tên miền **shophoathanhnha.com** về ứng dụng này và bật **SSL** (hPanel → **Security → SSL**).
-3. Tạo thư mục ảnh tải lên (đúng giá trị `UPLOAD_DIR`) bằng **File Manager**, ví dụ `/home/<user>/uploads-shophoathanhnha`.
+2. Trỏ tên miền **hoathanhnha.com** về ứng dụng này và bật **SSL** (hPanel → **Security → SSL**).
+3. Tạo thư mục ảnh tải lên (đúng giá trị `UPLOAD_DIR`) bằng **File Manager**, ví dụ `/home/<user>/uploads-hoathanhnha`.
 
 ## Bước 6: Kiểm tra sau khi chạy
 
-- [ ] https://shophoathanhnha.com/ hiển thị trang chủ có ảnh
-- [ ] https://shophoathanhnha.com/hoa-bo/ hiển thị danh mục
-- [ ] https://shophoathanhnha.com/sitemap_index.xml có 4 sitemap
-- [ ] https://shophoathanhnha.com/admin/ đăng nhập được: user `admin`, mật khẩu ghi trong `deploy/hostinger-env.txt`
+- [ ] https://hoathanhnha.com/ hiển thị trang chủ có ảnh
+- [ ] https://hoathanhnha.com/hoa-bo/ hiển thị danh mục
+- [ ] https://hoathanhnha.com/sitemap_index.xml có 4 sitemap
+- [ ] https://hoathanhnha.com/admin/ đăng nhập được: user `admin`, mật khẩu ghi trong `deploy/hostinger-env.txt`
 - [ ] Đặt thử một đơn VietQR: mã QR hiện đúng số tài khoản
 - [ ] Trang quản trị → Sản phẩm → sửa một sản phẩm → **Tải ảnh lên** chạy được
 
-## Bước 7: Google
+## Bước 7: Tự xác nhận chuyển khoản (SePay)
 
-1. Thêm **shophoathanhnha.com** vào Google Search Console và gửi sitemap `https://shophoathanhnha.com/sitemap_index.xml`.
-2. Khi website mới đã ổn định: chuyển hướng 301 từng URL của **hoathanhnha.com** sang URL tương ứng của **shophoathanhnha.com**, rồi dùng công cụ **Change of Address** trong Search Console để chuyển thứ hạng sang tên miền mới. Đường dẫn hai bên giống hệt nhau nên chỉ cần một quy tắc chuyển hướng toàn bộ tên miền.
+1. Đăng ký tại https://my.sepay.vn, liên kết tài khoản **VCB 1066354898**.
+2. **Webhooks → Thêm webhook**:
+   - Sự kiện: *Có tiền vào* · URL: `https://hoathanhnha.com/api/sepay/webhook/` (**có dấu `/` cuối**)
+   - Kiểu chứng thực: **API Key**. Tạo một chuỗi ngẫu nhiên, dán vào SePay và vào biến `SEPAY_API_KEY` trên Hostinger.
+3. Đặt thử một đơn VietQR nhỏ và chuyển khoản: trong vài giây trang đơn hàng tự chuyển sang **Đã thanh toán**, đơn trong admin sang **Đã xác nhận**.
+   - Chuyển thiếu tiền: đơn giữ *Chưa thanh toán*, ghi chú admin ghi rõ số tiền đã nhận.
+
+## Bước 8: Email báo đơn
+
+1. hPanel → **Emails** → tạo hộp thư, ví dụ `donhang@hoathanhnha.com`.
+2. Khai báo `SMTP_HOST=smtp.hostinger.com`, `SMTP_PORT=465`, `SMTP_USER=donhang@hoathanhnha.com`, `SMTP_PASS=<mật khẩu hộp thư>`, `SHOP_EMAIL=<hộp thư nhận thông báo>`.
+3. Mỗi đơn mới: shop nhận email báo đơn, khách (nếu nhập email) nhận email xác nhận. Khi SePay báo tiền về, cả hai nhận thêm email “Đã thanh toán”.
+4. Kiểm tra `https://hoathanhnha.com/api/health/`: các mục `SMTP_*` và `SEPAY_API_KEY` phải là `true`.
+
+## Bước 9: Thay WordPress trên tên miền chính
+
+1. **Sao lưu WordPress** trước: hPanel → *Backups* (hoặc tải thư mục `public_html` + export database).
+2. Đường dẫn của website mới giống hệt WordPress, nên Google không phải index lại. Không cần chuyển hướng 301 hay Change of Address.
+3. Sau khi trỏ tên miền: mở Google Search Console của **hoathanhnha.com**, gửi lại sitemap `https://hoathanhnha.com/sitemap_index.xml` và theo dõi mục *Pages* trong 1–2 tuần.
 
 ---
 
