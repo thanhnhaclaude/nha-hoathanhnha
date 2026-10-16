@@ -47,9 +47,9 @@ Dán dòng `ADMIN_PASSWORD_HASH="..."` vào `.env` (hoặc biến môi trường
 | `SHIPPING_FEE` / `FREE_SHIPPING_THRESHOLD` | Phí giao và ngưỡng miễn phí (VND) |
 | `UPLOAD_DIR` | Thư mục lưu ảnh tải lên từ admin — nên đặt **ngoài** thư mục code |
 
-## Deploy lên Hostinger
+## Deploy lên Hostinger (gói Business / Cloud có Node.js)
 
-> Hướng dẫn chi tiết từng bước (kèm file dữ liệu và biến môi trường dựng sẵn): xem [HUONG-DAN-DEPLOY-HOSTINGER.md](HUONG-DAN-DEPLOY-HOSTINGER.md). (gói Business / Cloud có Node.js)
+> Hướng dẫn chi tiết từng bước (kèm file dữ liệu và biến môi trường dựng sẵn): xem [HUONG-DAN-DEPLOY-HOSTINGER.md](HUONG-DAN-DEPLOY-HOSTINGER.md).
 
 1. **Tạo database:** hPanel → *Databases → MySQL Databases* → tạo DB + user. Ghi lại tên DB, user, mật khẩu.
 2. **Tạo bảng:** chọn một trong hai cách
