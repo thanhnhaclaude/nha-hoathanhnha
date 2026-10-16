@@ -28,8 +28,10 @@ import {
   getRelatedProducts,
 } from "@/lib/queries";
 import { canonicalPath, paginated, seoMetadata } from "@/lib/seo";
-import { cleanHtml, normalizeHeadings, plainText, removeDuplicateTitleHeading, splitProductBlocks } from "@/lib/sanitize";
-import { site } from "@/lib/site";
+import { ChipScroller } from "@/components/chip-scroller";
+import { ViewItemTracker } from "@/components/view-item-tracker";
+import { cleanHtml, introText, normalizeHeadings, plainText, removeDuplicateTitleHeading, splitProductBlocks } from "@/lib/sanitize";
+import { shippingConfig, site } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -72,11 +74,11 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   if (category) {
     return paginated(await seoMetadata(path, {
       title: category.name,
-      description: plainText(category.description) || `${category.name} tại Shop hoa tươi Thanh Nhã. Giao hoa hỏa tốc, miễn phí thiệp & băng rôn.`,
+      description: introText(category.description, 160) || `${category.name} tại Shop hoa tươi Thanh Nhã. Giao hoa hỏa tốc, miễn phí thiệp & băng rôn.`,
     }), path, page);
   }
   const postCategory = await getPostCategoryBySlug(slug);
-  if (postCategory) return paginated(await seoMetadata(path, { title: postCategory.name, description: plainText(postCategory.description) || `${postCategory.name}: kinh nghiệm chọn hoa, ý nghĩa các loài hoa và địa chỉ shop hoa tươi Thanh Nhã giao hoa tận nơi.` }), path, page);
+  if (postCategory) return paginated(await seoMetadata(path, { title: postCategory.name, description: introText(postCategory.description, 160) || `${postCategory.name}: kinh nghiệm chọn hoa, ý nghĩa các loài hoa và địa chỉ shop hoa tươi Thanh Nhã giao hoa tận nơi.` }), path, page);
   return {};
 }
 
@@ -106,11 +108,11 @@ export default async function SlugPage({ params, searchParams }: Props) {
       <Breadcrumbs items={[...(group && group.slug !== slug ? [{ label: group.label, href: `/${group.slug}/` }] : []), { label: category.name }]} />
       <header className="mt-6 max-w-3xl">
         <h1 className="heading-display text-4xl sm:text-5xl">{category.name}</h1>
-        {category.description && <p className="mt-3 text-muted">{plainText(category.description, 300)}</p>}
+        {category.description && <p className="mt-3 text-muted">{introText(category.description)}</p>}
       </header>
       {group && (
-        <nav aria-label="Danh mục liên quan" className="-mx-4 mt-6 overflow-x-auto px-4">
-          <ul className="flex gap-2 pb-1">
+        <ChipScroller label="Danh mục liên quan">
+          <ul className="flex gap-2">
             {group.children.map((c) => (
               <li key={c.slug} className="shrink-0">
                 <a
@@ -123,7 +125,7 @@ export default async function SlugPage({ params, searchParams }: Props) {
               </li>
             ))}
           </ul>
-        </nav>
+        </ChipScroller>
       )}
       <div className="mt-8">
         <SortBar base={base} sort={sort} total={total} />
@@ -160,10 +162,10 @@ async function PostArchiveView({ category, page }: { category: PostCategory; pag
     <div className="container-x py-10">
       <Breadcrumbs items={[{ label: category.name }]} />
       <h1 className="heading-display mt-6 text-4xl sm:text-5xl">{category.name}</h1>
-      {category.description && <p className="mt-3 max-w-3xl text-muted">{plainText(category.description, 300)}</p>}
+      {category.description && <p className="mt-3 max-w-3xl text-muted">{introText(category.description)}</p>}
       {allCats.length > 1 && (
-        <nav aria-label="Danh mục bài viết" className="-mx-4 mt-6 overflow-x-auto px-4">
-          <ul className="flex gap-2 pb-1">
+        <ChipScroller label="Danh mục bài viết">
+          <ul className="flex gap-2">
             {allCats.map((c) => (
               <li key={c.slug} className="shrink-0">
                 <Link
@@ -176,7 +178,7 @@ async function PostArchiveView({ category, page }: { category: PostCategory; pag
               </li>
             ))}
           </ul>
-        </nav>
+        </ChipScroller>
       )}
       <p className="mt-6 text-sm text-muted">{total} bài viết</p>
       {items.length === 0 ? (
@@ -301,6 +303,7 @@ async function ProductView({ data }: { data: NonNullable<Awaited<ReturnType<type
   const onSale = price < product.price;
   const related = await getRelatedProducts(product.id, categories.map((c) => c.id));
   const primaryCat = categories.find((c) => c.parentId != null) ?? categories[0];
+  const shipping = shippingConfig();
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -312,13 +315,41 @@ async function ProductView({ data }: { data: NonNullable<Awaited<ReturnType<type
     brand: { "@type": "Brand", name: site.name },
     offers:
       price > 0
-        ? { "@type": "Offer", priceCurrency: "VND", price, availability: "https://schema.org/InStock", url: `${site.url}/${product.slug}/` }
+        ? {
+            "@type": "Offer",
+            priceCurrency: "VND",
+            price,
+            availability: "https://schema.org/InStock",
+            itemCondition: "https://schema.org/NewCondition",
+            url: `${site.url}/${product.slug}/`,
+            seller: { "@type": "Organization", name: site.name },
+            // Dữ liệu cho "Merchant listings" của Google: phí giao theo cấu hình, giao trong ngày
+            shippingDetails: {
+              "@type": "OfferShippingDetails",
+              shippingRate: { "@type": "MonetaryAmount", value: price >= shipping.freeThreshold ? 0 : shipping.fee, currency: "VND" },
+              shippingDestination: { "@type": "DefinedRegion", addressCountry: "VN" },
+              deliveryTime: {
+                "@type": "ShippingDeliveryTime",
+                handlingTime: { "@type": "QuantitativeValue", minValue: 0, maxValue: 0, unitCode: "DAY" },
+                transitTime: { "@type": "QuantitativeValue", minValue: 0, maxValue: 1, unitCode: "DAY" },
+              },
+            },
+            // Theo trang "Chính sách hoàn tiền và trả hàng": đổi trả trong 24 giờ
+            hasMerchantReturnPolicy: {
+              "@type": "MerchantReturnPolicy",
+              applicableCountry: "VN",
+              returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+              merchantReturnDays: 1,
+              merchantReturnLink: `${site.url}/chinh-sach-hoan-tien-va-tra-hang/`,
+            },
+          }
         : undefined,
   };
 
   return (
     <div className="container-x py-8">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+      {price > 0 && <ViewItemTracker id={product.id} name={product.name} price={price} />}
       <Breadcrumbs items={[...(primaryCat ? [{ label: primaryCat.name, href: `/${primaryCat.slug}/` }] : []), { label: product.name }]} />
 
       <div className="mt-6 grid gap-8 lg:grid-cols-2 lg:gap-14">

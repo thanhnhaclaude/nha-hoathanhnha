@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Be_Vietnam_Pro } from "next/font/google";
+import { GoogleTags } from "@/components/google-tags";
+import { googleVerification } from "@/lib/google";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -23,6 +25,8 @@ export const metadata: Metadata = {
   title: { default: site.title, template: `%s | ${site.name}` },
   description: site.description,
   openGraph: { type: "website", locale: "vi_VN", siteName: site.name, images: ["/brand/banner2.webp"] },
+  // Thẻ xác minh Search Console / Merchant Center chép từ website cũ, để không phải xác minh lại
+  verification: { google: googleVerification() },
 };
 
 export const viewport: Viewport = { themeColor: "#e8641b" };
@@ -30,7 +34,10 @@ export const viewport: Viewport = { themeColor: "#e8641b" };
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="vi" className={`${display.variable} ${body.variable} h-full`}>
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        <GoogleTags />
+        {children}
+      </body>
     </html>
   );
 }

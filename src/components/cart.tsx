@@ -1,5 +1,6 @@
 "use client";
 
+import { gaItem, trackEvent } from "@/lib/google";
 import { useMemo, useSyncExternalStore } from "react";
 
 export type CartLine = {
@@ -53,6 +54,7 @@ function subscribe(listener: () => void) {
 
 const actions = {
   add(line: Omit<CartLine, "quantity">, quantity = 1) {
+    trackEvent("add_to_cart", { value: line.price * quantity, items: [gaItem({ ...line, quantity })] });
     const prev = read();
     const existing = prev.find((l) => l.id === line.id);
     write(

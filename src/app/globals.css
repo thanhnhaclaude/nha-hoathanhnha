@@ -214,3 +214,11 @@ body {
   background: var(--surface-muted);
   font-weight: 600;
 }
+
+/* Ẩn thanh cuộn nhưng vẫn cuộn được (hàng nút danh mục) */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

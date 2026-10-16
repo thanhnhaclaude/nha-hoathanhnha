@@ -132,3 +132,15 @@ export function splitProductBlocks(html: string | null | undefined): ContentSegm
   segments.push({ type: "html", html: html.slice(cursor) });
   return segments.filter((s) => s.type === "products" || s.html.trim());
 }
+
+/**
+ * Đoạn giới thiệu ngắn dưới tiêu đề: bỏ các thẻ tiêu đề (H1–H6) trong nội dung để tiêu đề phụ
+ * không bị dính vào câu văn, cắt tại ranh giới từ.
+ */
+export function introText(html: string | null | undefined, max = 300) {
+  const text = plainText((html ?? "").replace(/<h[1-6]\b[^>]*>[\s\S]*?<\/h[1-6]>/gi, " "), 100_000);
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max - 1);
+  const i = cut.lastIndexOf(" ");
+  return `${(i > max * 0.6 ? cut.slice(0, i) : cut).replace(/[\s,.;:–-]+$/, "")}…`;
+}

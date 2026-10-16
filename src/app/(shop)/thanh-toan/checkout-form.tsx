@@ -2,11 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { Banknote, Loader2, QrCode } from "lucide-react";
 import { useCart } from "@/components/cart";
 import { formatVND } from "@/lib/format";
+import { gaItem, trackEvent } from "@/lib/google";
 import { placeOrder } from "./actions";
 
 const timeSlots = ["Càng sớm càng tốt", "07:00 – 09:00", "09:00 – 11:00", "11:00 – 13:00", "13:00 – 15:00", "15:00 – 17:00", "17:00 – 19:00", "19:00 – 21:00"];
@@ -34,13 +34,20 @@ function Field({ name, label, errors, required, children }: { name: string; labe
 
 export function CheckoutForm({ shipping, today }: { shipping: { fee: number; freeThreshold: number }; today: string }) {
   const { lines, subtotal, ready, clear } = useCart();
-  const router = useRouter();
   const [errors, setErrors] = useState<Errors>({});
   const [message, setMessage] = useState<string | null>(null);
   const [payment, setPayment] = useState<"vietqr" | "cod">("vietqr");
   const [pending, startTransition] = useTransition();
 
   const shippingFee = subtotal >= shipping.freeThreshold ? 0 : shipping.fee;
+
+  // GA4: bắt đầu thanh toán (một lần khi giỏ hàng đã sẵn sàng)
+  const tracked = useRef(false);
+  useEffect(() => {
+    if (!ready || !lines.length || tracked.current) return;
+    tracked.current = true;
+    trackEvent("begin_checkout", { value: subtotal, items: lines.map((l) => gaItem(l)) });
+  }, [ready, lines, subtotal]);
 
   if (!ready) return <div className="mt-8 h-96 animate-pulse rounded-3xl bg-surface-muted" />;
   if (lines.length === 0) {
@@ -63,7 +70,9 @@ export function CheckoutForm({ shipping, today }: { shipping: { fee: number; fre
       const res = await placeOrder({ ...data, paymentMethod: payment, items: lines.map((l) => ({ id: l.id, quantity: l.quantity })) });
       if (res.ok) {
         clear();
-        router.push(`/don-hang/${res.code}/?t=${res.accessToken}`);
+        // Tải lại toàn trang tại đường dẫn "đơn hàng đã nhận" giống WooCommerce cũ:
+        // thẻ chuyển đổi Google Ads trong GTM kích hoạt theo URL này khi trang tải.
+        window.location.assign(`/thanh-toan/don-hang-da-nhan/${res.code}/?t=${res.accessToken}`);
       } else {
         setErrors(res.errors);
         setMessage(res.message);
