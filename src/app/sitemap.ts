@@ -12,10 +12,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     db.select({ slug: categories.slug }).from(categories),
     db.select({ slug: pages.slug, type: pages.type, updatedAt: pages.updatedAt }).from(pages).where(eq(pages.isPublished, true)),
   ]);
+  const catSlugs = new Set(cats.map((c) => c.slug));
   return [
     { url: site.url, changeFrequency: "daily", priority: 1 },
     { url: `${site.url}/tin-tuc`, changeFrequency: "weekly", priority: 0.5 },
-    ...cms.map((p) => ({ url: `${site.url}/${p.slug}`, lastModified: p.updatedAt, priority: p.type === "post" ? 0.5 : 0.3 })),
+    // Bài viết trùng slug với danh mục thì URL đó là danh mục (đã có ở dưới)
+    ...cms.filter((p) => !catSlugs.has(p.slug)).map((p) => ({ url: `${site.url}/${p.slug}`, lastModified: p.updatedAt, priority: p.type === "post" ? 0.5 : 0.3 })),
     ...cats.map((c) => ({ url: `${site.url}/${c.slug}`, changeFrequency: "daily" as const, priority: 0.8 })),
     ...prods.map((p) => ({ url: `${site.url}/${p.slug}`, lastModified: p.updatedAt, priority: 0.7 })),
     ...Object.keys(infoPages).map((slug) => ({ url: `${site.url}/${slug}`, priority: 0.3 })),

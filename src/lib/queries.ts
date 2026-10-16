@@ -141,6 +141,17 @@ export async function getRelatedProducts(productId: number, categoryIds: number[
   return rows.map(toCard);
 }
 
+/** Thẻ sản phẩm theo danh sách slug, giữ đúng thứ tự truyền vào; bỏ qua sản phẩm đã ẩn/xóa. */
+export async function getProductCardsBySlugs(slugs: string[]) {
+  if (slugs.length === 0) return [];
+  const rows = await db
+    .select(cardColumns)
+    .from(products)
+    .where(and(inArray(products.slug, slugs), eq(products.isActive, true)));
+  const bySlug = new Map(rows.map((r) => [r.slug, toCard(r)]));
+  return slugs.map((s) => bySlug.get(s)).filter((p): p is ProductCardData => p != null);
+}
+
 export async function getProductsByIds(ids: number[]) {
   if (ids.length === 0) return [];
   return db

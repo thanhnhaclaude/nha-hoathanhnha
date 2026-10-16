@@ -4,7 +4,7 @@ import { Camera, Gift, Phone, ShieldCheck, Truck } from "lucide-react";
 import { AddToCart } from "@/components/add-to-cart";
 import { Breadcrumbs, Pagination, SortBar, parseListingParams } from "@/components/listing";
 import { ProductGallery } from "@/components/product-gallery";
-import { ProductGrid } from "@/components/product-card";
+import { ProductCard, ProductGrid } from "@/components/product-card";
 import { ZaloIcon } from "@/components/icons";
 import { effectivePrice, formatVND } from "@/lib/format";
 import { infoPages, type InfoPage } from "@/lib/info-pages";
@@ -12,17 +12,27 @@ import { mainMenu } from "@/lib/menu";
 import { PostCard } from "@/components/post-card";
 import { ReadMore } from "@/components/read-more";
 import type { Page } from "@/lib/db/schema";
-import { getCategoryBySlug, getPageBySlug, getProductBySlug, getProductsInCategory, getRecentPosts, getRelatedProducts } from "@/lib/queries";
-import { cleanHtml, plainText } from "@/lib/sanitize";
+import { getCategoryBySlug, getPageBySlug, getProductBySlug, getProductCardsBySlugs, getProductsInCategory, getRecentPosts, getRelatedProducts } from "@/lib/queries";
+import { cleanHtml, plainText, splitProductBlocks } from "@/lib/sanitize";
 import { site } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
 type Props = PageProps<"/[slug]">;
 
+/**
+ * Như WordPress cũ: khi bài viết trùng slug với danh mục sản phẩm (vd. shop-hoa-tuoi-quan-10),
+ * URL đó hiển thị danh mục chứ không phải bài viết.
+ */
+async function getVisibleCms(slug: string) {
+  const cms = await getPageBySlug(slug);
+  if (cms?.type === "post" && (await getCategoryBySlug(slug))) return null;
+  return cms;
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const cms = await getPageBySlug(slug);
+  const cms = await getVisibleCms(slug);
   if (cms) {
     return {
       title: cms.title,
@@ -54,7 +64,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function SlugPage({ params, searchParams }: Props) {
   const { slug } = await params;
-  const cms = await getPageBySlug(slug);
+  const cms = await getVisibleCms(slug);
   if (cms) return <CmsView page={cms} />;
   const info = infoPages[slug];
   if (info) return <InfoView page={info} />;
@@ -117,7 +127,14 @@ export default async function SlugPage({ params, searchParams }: Props) {
 
 async function CmsView({ page }: { page: Page }) {
   const isPost = page.type === "post";
-  const recent = isPost ? await getRecentPosts(page.id) : [];
+  const [recent, segments] = await Promise.all([
+    isPost ? getRecentPosts(page.id) : Promise.resolve([]),
+    Promise.all(
+      splitProductBlocks(page.content).map(async (seg) =>
+        seg.type === "html" ? seg : { type: "products" as const, products: await getProductCardsBySlugs(seg.slugs) },
+      ),
+    ),
+  ]);
   const jsonLd = isPost
     ? {
         "@context": "https://schema.org",
@@ -139,7 +156,19 @@ async function CmsView({ page }: { page: Page }) {
           <time dateTime={page.publishedAt.toISOString()}>{page.publishedAt.toLocaleDateString("vi-VN")}</time>
         </p>
       )}
-      <article className="prose-shop mt-8" dangerouslySetInnerHTML={{ __html: cleanHtml(page.content) }} />
+      <article className="mt-8 space-y-8">
+        {segments.map((seg, i) =>
+          seg.type === "html" ? (
+            <div key={i} className="prose-shop" dangerouslySetInnerHTML={{ __html: cleanHtml(seg.html) }} />
+          ) : (
+            <div key={i} className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
+              {seg.products.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+          ),
+        )}
+      </article>
       {recent.length > 0 && (
         <section aria-labelledby="recent-h" className="mt-16 border-t border-border pt-10">
           <h2 id="recent-h" className="heading-display text-3xl">
