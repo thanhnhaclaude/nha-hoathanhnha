@@ -12,13 +12,13 @@ async function login(formData: FormData) {
   const password = String(formData.get("password") ?? "");
   // Chậm lại một chút để hạn chế dò mật khẩu
   await new Promise((r) => setTimeout(r, 400));
-  if (!(await verifyCredentials(username, password))) redirect("/admin/login?err=1");
+  if (!(await verifyCredentials(username, password))) redirect("/admin/login/?err=1");
   await createSession(username);
-  redirect("/admin");
+  redirect("/admin/");
 }
 
 export default async function LoginPage({ searchParams }: PageProps<"/admin/login">) {
-  if (await getSession()) redirect("/admin");
+  if (await getSession()) redirect("/admin/");
   const { err } = await searchParams;
   return (
     <main className="grid min-h-screen place-items-center bg-surface-muted px-4">

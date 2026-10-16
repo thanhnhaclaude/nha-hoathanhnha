@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 async function logout() {
   "use server";
   await destroySession();
-  redirect("/admin/login");
+  redirect("/admin/login/");
 }
 
 const nav = [

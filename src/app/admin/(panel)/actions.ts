@@ -16,7 +16,7 @@ export async function updateOrder(formData: FormData) {
   const adminNote = String(formData.get("adminNote") ?? "").slice(0, 2000) || null;
   await db.update(orders).set({ status, paymentStatus, adminNote }).where(eq(orders.id, id));
   revalidatePath(`/admin/don-hang/${id}`);
-  redirect(`/admin/don-hang/${id}?saved=1`);
+  redirect(`/admin/don-hang/${id}/?saved=1`);
 }
 
 const productSchema = z.object({
@@ -91,7 +91,7 @@ export async function saveProduct(_prev: ProductFormState, formData: FormData): 
     await db.insert(productCategories).values(v.categoryIds.map((categoryId) => ({ productId: productId!, categoryId })));
   }
   revalidatePath("/", "layout");
-  redirect(`/admin/san-pham/${productId}?saved=1`);
+  redirect(`/admin/san-pham/${productId}/?saved=1`);
 }
 
 export async function deleteProduct(formData: FormData) {
@@ -101,7 +101,7 @@ export async function deleteProduct(formData: FormData) {
   await db.delete(productCategories).where(eq(productCategories.productId, id));
   await db.delete(products).where(eq(products.id, id));
   revalidatePath("/", "layout");
-  redirect("/admin/san-pham?deleted=1");
+  redirect("/admin/san-pham/?deleted=1");
 }
 
 const postSchema = z.object({
