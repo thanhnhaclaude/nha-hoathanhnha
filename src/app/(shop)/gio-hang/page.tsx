@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { seoMetadata } from "@/lib/seo";
 import { CartView } from "./cart-view";
 
+// Đọc tiêu đề SEO từ CSDL khi có yêu cầu (không cần CSDL lúc build)
+export const dynamic = "force-dynamic";
+
 export function generateMetadata(): Promise<Metadata> {
   return seoMetadata("/gio-hang/", { title: "Giỏ hàng", noindex: true });
 }

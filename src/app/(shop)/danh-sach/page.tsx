@@ -3,6 +3,9 @@ import { Breadcrumbs } from "@/components/listing";
 import { WishlistView } from "@/components/wishlist";
 import { seoMetadata } from "@/lib/seo";
 
+// Đọc tiêu đề SEO từ CSDL khi có yêu cầu (không cần CSDL lúc build)
+export const dynamic = "force-dynamic";
+
 export function generateMetadata(): Promise<Metadata> {
   return seoMetadata("/danh-sach/", { title: "Danh sách" });
 }

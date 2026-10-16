@@ -4,6 +4,9 @@ import { Heart, Phone, Search } from "lucide-react";
 import { seoMetadata } from "@/lib/seo";
 import { site } from "@/lib/site";
 
+// Đọc tiêu đề SEO từ CSDL khi có yêu cầu (không cần CSDL lúc build)
+export const dynamic = "force-dynamic";
+
 export function generateMetadata(): Promise<Metadata> {
   return seoMetadata("/tai-khoan/", { title: "Tài khoản", noindex: true });
 }
