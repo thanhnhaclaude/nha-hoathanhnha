@@ -17,6 +17,7 @@ import type { Page, PostCategory } from "@/lib/db/schema";
 import {
   getCategoryBySlug,
   getPageBySlug,
+  getPostCategoriesWithCounts,
   getPostCategoryBySlug,
   getPostsInCategory,
   getPrimaryPostCategory,
@@ -146,7 +147,7 @@ export default async function SlugPage({ params, searchParams }: Props) {
 }
 
 async function PostArchiveView({ category, page }: { category: PostCategory; page: number }) {
-  const { items, pages } = await getPostsInCategory(category.id, { page });
+  const [{ items, pages, total }, allCats] = await Promise.all([getPostsInCategory(category.id, { page }), getPostCategoriesWithCounts()]);
   const base = canonicalPath(category.slug);
   const link = (n: number) => (n === 1 ? base : `${base}?page=${n}`);
   return (
@@ -154,6 +155,24 @@ async function PostArchiveView({ category, page }: { category: PostCategory; pag
       <Breadcrumbs items={[{ label: category.name }]} />
       <h1 className="heading-display mt-6 text-4xl sm:text-5xl">{category.name}</h1>
       {category.description && <p className="mt-3 max-w-3xl text-muted">{plainText(category.description, 300)}</p>}
+      {allCats.length > 1 && (
+        <nav aria-label="Danh mục bài viết" className="-mx-4 mt-6 overflow-x-auto px-4">
+          <ul className="flex gap-2 pb-1">
+            {allCats.map((c) => (
+              <li key={c.slug} className="shrink-0">
+                <Link
+                  href={canonicalPath(c.slug)}
+                  aria-current={c.id === category.id ? "page" : undefined}
+                  className={`block rounded-full px-4 py-2 text-sm ${c.id === category.id ? "bg-brand text-white" : "bg-surface ring-1 ring-border hover:ring-brand"}`}
+                >
+                  {c.name} <span className="opacity-70">({c.count})</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
+      <p className="mt-6 text-sm text-muted">{total} bài viết</p>
       {items.length === 0 ? (
         <p className="mt-8 rounded-2xl bg-surface p-10 text-center text-muted">Chưa có bài viết.</p>
       ) : (

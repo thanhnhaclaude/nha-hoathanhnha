@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/auth";
-import { db, orders, products, productCategories, ORDER_STATUSES, PAYMENT_STATUSES } from "@/lib/db";
+import { db, orders, pageCategories, pages, products, productCategories, seoMeta, ORDER_STATUSES, PAYMENT_STATUSES } from "@/lib/db";
 import { slugify } from "@/lib/format";
 
 export async function updateOrder(formData: FormData) {
@@ -102,4 +102,87 @@ export async function deleteProduct(formData: FormData) {
   await db.delete(products).where(eq(products.id, id));
   revalidatePath("/", "layout");
   redirect("/admin/san-pham?deleted=1");
+}
+
+const postSchema = z.object({
+  type: z.enum(["post", "page"]),
+  title: z.string().trim().min(2, "Tiêu đề quá ngắn").max(255),
+  slug: z.string().trim().max(191).optional(),
+  excerpt: z.string().max(5000).optional(),
+  content: z.string().max(2_000_000).optional(),
+  image: z.string().trim().max(500).optional(),
+  publishedAt: z.string().optional(),
+  seoTitle: z.string().trim().max(255).optional(),
+  seoDescription: z.string().trim().max(500).optional(),
+  categoryIds: z.array(z.coerce.number().int()).default([]),
+  isPublished: z.boolean(),
+});
+
+export type PostFormState = { error?: string } | undefined;
+
+export async function savePost(_prev: PostFormState, formData: FormData): Promise<PostFormState> {
+  await requireAdmin();
+  const id = Number(formData.get("id")) || null;
+  const opt = (k: string) => (formData.get(k) as string | null) || undefined;
+  const parsed = postSchema.safeParse({
+    type: formData.get("type"),
+    title: formData.get("title"),
+    slug: opt("slug"),
+    excerpt: opt("excerpt"),
+    content: opt("content"),
+    image: opt("image"),
+    publishedAt: opt("publishedAt"),
+    seoTitle: opt("seoTitle"),
+    seoDescription: opt("seoDescription"),
+    categoryIds: formData.getAll("categoryIds"),
+    isPublished: formData.get("isPublished") === "on",
+  });
+  if (!parsed.success) return { error: parsed.error.issues.map((i) => i.message).join(", ") };
+  const v = parsed.data;
+  const slug = slugify(v.slug || v.title);
+  if (!slug) return { error: "Đường dẫn (slug) không hợp lệ" };
+  if (v.image && !/^(https?:\/\/|\/)/.test(v.image)) return { error: "Ảnh đại diện phải là đường dẫn http(s) hoặc bắt đầu bằng /" };
+
+  const values = {
+    type: v.type,
+    title: v.title,
+    slug,
+    excerpt: v.excerpt || null,
+    content: v.content || null,
+    image: v.image || null,
+    isPublished: v.isPublished,
+    ...(v.publishedAt ? { publishedAt: new Date(v.publishedAt) } : {}),
+  };
+
+  let pageId = id;
+  try {
+    if (id) await db.update(pages).set(values).where(eq(pages.id, id));
+    else pageId = (await db.insert(pages).values(values))[0].insertId;
+  } catch (e) {
+    const code = (e as { cause?: { code?: string } }).cause?.code ?? (e as { code?: string }).code;
+    if (code === "ER_DUP_ENTRY") return { error: `Đường dẫn "/${slug}/" đã được dùng` };
+    throw e;
+  }
+
+  await db.delete(pageCategories).where(eq(pageCategories.pageId, pageId!));
+  if (v.type === "post" && v.categoryIds.length) {
+    await db.insert(pageCategories).values(v.categoryIds.map((categoryId) => ({ pageId: pageId!, categoryId })));
+  }
+
+  // Tiêu đề / mô tả SEO riêng (để trống = dùng tự động)
+  const path = `/${slug}/`;
+  const seo = { title: v.seoTitle || null, description: v.seoDescription || null };
+  await db.insert(seoMeta).values({ path, ...seo }).onDuplicateKeyUpdate({ set: seo });
+
+  revalidatePath("/", "layout");
+  redirect(`/admin/bai-viet/${pageId}/?saved=1`);
+}
+
+export async function deletePost(formData: FormData) {
+  await requireAdmin();
+  const id = Number(formData.get("id"));
+  await db.delete(pageCategories).where(eq(pageCategories.pageId, id));
+  await db.delete(pages).where(eq(pages.id, id));
+  revalidatePath("/", "layout");
+  redirect("/admin/bai-viet/?deleted=1");
 }

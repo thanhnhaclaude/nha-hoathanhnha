@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ExternalLink, LayoutDashboard, LogOut, Package, ShoppingCart } from "lucide-react";
+import { ExternalLink, FileText, LayoutDashboard, LogOut, Package, ShoppingCart } from "lucide-react";
 import { destroySession, requireAdmin } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
@@ -16,6 +16,7 @@ const nav = [
   { href: "/admin", label: "Tổng quan", icon: LayoutDashboard },
   { href: "/admin/don-hang", label: "Đơn hàng", icon: ShoppingCart },
   { href: "/admin/san-pham", label: "Sản phẩm", icon: Package },
+  { href: "/admin/bai-viet", label: "Bài viết & trang", icon: FileText },
 ];
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {

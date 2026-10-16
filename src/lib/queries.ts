@@ -195,6 +195,17 @@ export async function getPostCategoryBySlug(slug: string) {
   return row ?? null;
 }
 
+/** Danh mục bài viết kèm số bài đã đăng, bỏ danh mục rỗng. */
+export async function getPostCategoriesWithCounts() {
+  const rows = await db
+    .select({ id: postCategories.id, slug: postCategories.slug, name: postCategories.name, count: count(pages.id) })
+    .from(postCategories)
+    .leftJoin(pageCategories, eq(pageCategories.categoryId, postCategories.id))
+    .leftJoin(pages, and(eq(pages.id, pageCategories.pageId), eq(pages.isPublished, true)))
+    .groupBy(postCategories.id, postCategories.slug, postCategories.name);
+  return rows.filter((r) => r.count > 0).sort((a, b) => b.count - a.count);
+}
+
 /** Danh mục đầu tiên của bài viết (dùng cho breadcrumb). */
 export async function getPrimaryPostCategory(pageId: number) {
   const [row] = await db
