@@ -28,7 +28,7 @@ Trên máy bạn, thư mục `deploy/` (không có trên GitHub) chứa sẵn:
 ## Bước 3: Tạo ứng dụng Node.js từ GitHub
 
 1. hPanel → **Websites → Add website → Node.js Apps** (hoặc mở website hoathanhnha.com → **Node.js**).
-2. Chọn **Import Git repository** và đăng nhập GitHub khi được hỏi. Chọn repo `<repo GitHub mới của hoathanhnha>`, nhánh `main`.
+2. Chọn **Import Git repository** và đăng nhập GitHub khi được hỏi. Chọn repo `thanhnhaclaude/nha-hoathanhnha`, nhánh `main`.
 3. Cấu hình:
    - **Node.js version:** 22.x (tối thiểu 20.9)
    - **Build command:** `npm run build`
