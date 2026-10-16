@@ -49,7 +49,7 @@ export function Header() {
               <Phone className="size-4" aria-hidden />
             </span>
             <span className="leading-tight">
-              <span className="block text-[11px] uppercase tracking-wider text-muted">Đặt hoa 24/7</span>
+              <span className="block text-xs uppercase tracking-wider text-muted">Đặt hoa 24/7</span>
               <span className="block font-semibold text-brand-strong">{site.phoneDisplay}</span>
             </span>
           </a>
@@ -62,7 +62,7 @@ export function Header() {
 
       <nav aria-label="Danh mục chính" className="hidden border-t border-border lg:block">
         <ul className="container-x flex items-center justify-between">
-          {mainMenu.map((group) => (
+          {mainMenu.map((group, i) => (
             <li key={group.slug} className="group relative">
               <Link
                 href={`/${group.slug}/`}
@@ -70,7 +70,7 @@ export function Header() {
               >
                 {group.label}
               </Link>
-              <div className="invisible absolute left-0 top-full z-50 w-64 translate-y-1 rounded-b-2xl border border-border bg-surface p-2 opacity-0 shadow-xl transition-all duration-200 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+              <div className={`invisible absolute ${i >= mainMenu.length - 2 ? "right-0" : "left-0"} top-full z-50 w-64 translate-y-1 rounded-b-2xl border border-border bg-surface p-2 opacity-0 shadow-xl transition-all duration-200 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100`}>
                 <ul className="max-h-[70vh] overflow-auto">
                   {group.children.map((item) => (
                     <li key={item.slug}>

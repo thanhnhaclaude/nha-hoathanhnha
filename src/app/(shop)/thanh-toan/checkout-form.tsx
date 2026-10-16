@@ -185,7 +185,7 @@ export function CheckoutForm({ shipping, today }: { shipping: { fee: number; fre
             <li key={l.id} className="flex gap-3 py-3">
               <div className="relative size-16 shrink-0 overflow-hidden rounded-xl bg-surface-muted">
                 {l.image && <Image src={l.image} alt="" fill sizes="64px" className="object-cover" />}
-                <span className="absolute -right-0 -top-0 grid size-5 place-items-center rounded-bl-lg bg-foreground text-[11px] font-bold text-white">{l.quantity}</span>
+                <span className="absolute -right-0 -top-0 grid size-5 place-items-center rounded-bl-lg bg-foreground text-xs font-bold text-white">{l.quantity}</span>
               </div>
               <span className="flex-1 text-sm">{l.name}</span>
               <span className="text-sm font-semibold">{formatVND(l.price * l.quantity)}</span>

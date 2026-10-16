@@ -1,9 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Be_Vietnam_Pro } from "next/font/google";
+import { Playfair_Display, Be_Vietnam_Pro } from "next/font/google";
 import { site } from "@/lib/site";
 import "./globals.css";
 
-const display = Cormorant_Garamond({
+// Playfair Display: font tiêu đề hiển thị dấu tiếng Việt chuẩn (Cormorant xếp dấu mũ sai, vd "Câu" trông như "Cầu")
+const display = Playfair_Display({
   variable: "--font-display",
   subsets: ["latin", "vietnamese"],
   weight: ["500", "600", "700"],

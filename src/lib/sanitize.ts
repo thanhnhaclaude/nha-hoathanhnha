@@ -20,10 +20,26 @@ function localizeHref(href: string) {
   return m ? m[1] : href;
 }
 
-/** Làm sạch HTML mô tả (nhập từ WooCommerce hoặc nhập trong admin) trước khi hiển thị. */
-export function cleanHtml(html: string | null | undefined) {
+/**
+ * Chuẩn SEO: trang đã có 1 thẻ H1 (tiêu đề), nên tiêu đề trong nội dung phải bắt đầu từ H2
+ * và không nhảy cấp. Dời toàn bộ cấp tiêu đề sao cho cấp cao nhất trong nội dung là H2
+ * (vd. nội dung dùng H3/H4 -> H2/H3; H1 -> H2).
+ */
+export function normalizeHeadings(html: string) {
+  const levels = [...html.matchAll(/<h([1-6])\b/gi)].map((m) => Number(m[1]));
+  if (!levels.length) return html;
+  const shift = 2 - Math.min(...levels);
+  if (shift === 0) return html;
+  return html.replace(/<(\/?)h([1-6])\b/gi, (_m, slash: string, n: string) => `<${slash}h${Math.min(6, Math.max(2, Number(n) + shift))}`);
+}
+
+/**
+ * Làm sạch HTML mô tả (nhập từ WooCommerce hoặc nhập trong admin) trước khi hiển thị.
+ * `normalize: false` khi nội dung đã được chuẩn hóa tiêu đề từ trước (vd. đã tách thành nhiều đoạn).
+ */
+export function cleanHtml(html: string | null | undefined, { normalize = true } = {}) {
   if (!html) return "";
-  return sanitizeHtml(preClean(html), {
+  return sanitizeHtml(preClean(normalize ? normalizeHeadings(html) : html), {
     allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "h2", "h3", "h4"]),
     allowedAttributes: {
       a: ["href", "title", "target", "rel"],

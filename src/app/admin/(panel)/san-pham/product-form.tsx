@@ -113,7 +113,7 @@ export function ProductForm({ product, categories, selected }: { product?: Produ
               {preview.map((src, i) => (
                 <li key={src + i} className="relative size-24 overflow-hidden rounded-xl bg-surface-muted ring-1 ring-border">
                   <img src={src} alt="" className="size-full object-cover" />
-                  {i === 0 && <span className="absolute bottom-0 inset-x-0 bg-black/60 text-center text-[10px] text-white">Ảnh chính</span>}
+                  {i === 0 && <span className="absolute bottom-0 inset-x-0 bg-black/60 text-center text-xs text-white">Ảnh chính</span>}
                 </li>
               ))}
             </ul>

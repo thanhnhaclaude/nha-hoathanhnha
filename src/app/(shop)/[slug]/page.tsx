@@ -28,7 +28,7 @@ import {
   getRelatedProducts,
 } from "@/lib/queries";
 import { canonicalPath, seoMetadata } from "@/lib/seo";
-import { cleanHtml, plainText, splitProductBlocks } from "@/lib/sanitize";
+import { cleanHtml, normalizeHeadings, plainText, splitProductBlocks } from "@/lib/sanitize";
 import { site } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
@@ -211,7 +211,7 @@ async function CmsView({ page }: { page: Page }) {
     isPost ? getRecentPosts(page.id) : Promise.resolve([]),
     isPost ? getPrimaryPostCategory(page.id) : Promise.resolve(null),
     Promise.all(
-      splitProductBlocks(page.content).map(async (seg) =>
+      splitProductBlocks(normalizeHeadings(page.content ?? "")).map(async (seg) =>
         seg.type === "html" ? seg : { type: "products" as const, products: await getProductCardsBySlugs(seg.slugs) },
       ),
     ),
@@ -231,7 +231,7 @@ async function CmsView({ page }: { page: Page }) {
     <div className="container-x max-w-3xl py-10">
       {jsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />}
       <Breadcrumbs items={[...(postCategory ? [{ label: postCategory.name, href: canonicalPath(postCategory.slug) }] : []), { label: page.title }]} />
-      <h1 className="heading-display mt-6 text-4xl leading-tight sm:text-5xl">{page.title}</h1>
+      <h1 className="heading-display mt-6 text-[1.875rem] leading-tight sm:text-4xl lg:text-5xl">{page.title}</h1>
       {isPost && (
         <p className="mt-3 text-sm text-muted">
           <time dateTime={page.publishedAt.toISOString()}>{page.publishedAt.toLocaleDateString("vi-VN")}</time>
@@ -240,7 +240,7 @@ async function CmsView({ page }: { page: Page }) {
       <article className="mt-8 space-y-8">
         {segments.map((seg, i) =>
           seg.type === "html" ? (
-            <div key={i} className="prose-shop" dangerouslySetInnerHTML={{ __html: cleanHtml(seg.html) }} />
+            <div key={i} className="prose-shop" dangerouslySetInnerHTML={{ __html: cleanHtml(seg.html, { normalize: false }) }} />
           ) : (
             <div key={i} className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
               {seg.products.map((p) => (
