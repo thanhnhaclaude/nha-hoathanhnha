@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { SortKey } from "@/lib/queries";
+import { site } from "@/lib/site";
 
 const sorts: { key: SortKey; label: string }[] = [
   { key: "newest", label: "Mới nhất" },
@@ -75,8 +76,20 @@ export function Pagination({ base, page, pages, sort, extra = {} }: { base: stri
 }
 
 export function Breadcrumbs({ items }: { items: { label: string; href?: string }[] }) {
+  // Dữ liệu có cấu trúc BreadcrumbList: Google hiển thị đường dẫn phân cấp thay cho URL trong kết quả tìm kiếm
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [{ label: "Trang chủ", href: "/" }, ...items].map((it, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: it.label,
+      ...(it.href ? { item: `${site.url}${it.href}` } : {}),
+    })),
+  };
   return (
     <nav aria-label="Breadcrumb" className="text-sm text-muted">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       <ol className="flex flex-wrap items-center gap-1.5">
         <li>
           <Link href="/" className="hover:text-brand-strong">

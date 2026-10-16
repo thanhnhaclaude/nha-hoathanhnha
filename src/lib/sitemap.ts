@@ -1,6 +1,6 @@
 import "server-only";
-import { and, eq, isNotNull } from "drizzle-orm";
-import { db, pages, postCategories, products, seoMeta } from "./db";
+import { and, eq, isNotNull, max } from "drizzle-orm";
+import { categories, db, pages, postCategories, productCategories, products, seoMeta } from "./db";
 import { HOME_SEO_SLUG } from "./constants";
 import { site } from "./site";
 
@@ -49,7 +49,22 @@ export async function sitemapEntries(name: SitemapName): Promise<Entry[]> {
   if (name === "category") {
     const rows = await db.select({ slug: postCategories.slug }).from(postCategories);
     // Rank Math không đưa danh mục rỗng vào sitemap -> chỉ giữ những danh mục có trong sitemap cũ hoặc có bài
-    return merge(old, rows.map((r) => ({ path: `/${r.slug}/`, updatedAt: null }))).filter((e) => old.has(e.path) || e.lastmod);
+    const postCats = merge(old, rows.map((r) => ({ path: `/${r.slug}/`, updatedAt: null }))).filter((e) => old.has(e.path) || e.lastmod);
+    // Danh mục sản phẩm đang có hàng (website cũ không khai báo trong sitemap): nối vào sau, lastmod = sản phẩm mới sửa nhất
+    const productCats = await db
+      .select({ slug: categories.slug, updatedAt: max(products.updatedAt) })
+      .from(categories)
+      .innerJoin(productCategories, eq(productCategories.categoryId, categories.id))
+      .innerJoin(products, and(eq(products.id, productCategories.productId), eq(products.isActive, true)))
+      .groupBy(categories.id, categories.slug);
+    const seen = new Set(postCats.map((e) => e.path));
+    return [
+      ...postCats,
+      ...productCats
+        .map((c) => ({ path: `/${c.slug}/`, lastmod: c.updatedAt ? new Date(c.updatedAt) : null }))
+        .filter((e) => !seen.has(e.path))
+        .sort((a, b) => a.path.localeCompare(b.path)),
+    ];
   }
   // page: trang chủ + các trang hệ thống + trang nội dung
   const rows = await db

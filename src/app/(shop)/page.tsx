@@ -33,6 +33,49 @@ const reasons = [
   { icon: Truck, title: "Giao hoa toàn quốc", text: "Mạng lưới cửa hàng và đối tác trên khắp 63 tỉnh thành." },
 ];
 
+/**
+ * Dữ liệu có cấu trúc cho trang chủ: tên website (WebSite) và doanh nghiệp (Florist – một loại LocalBusiness)
+ * kèm từng cửa hàng, giúp Google hiển thị đúng tên thương hiệu và hỗ trợ tìm kiếm địa phương ("shop hoa gần đây").
+ */
+function homeJsonLd() {
+  const org = `${site.url}/#organization`;
+  const contact = { telephone: "+84" + site.phone.replace(/^0/, ""), openingHours: "Mo-Su 06:00-21:00", priceRange: "300.000₫ - 5.000.000₫" };
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      { "@type": "WebSite", "@id": `${site.url}/#website`, url: `${site.url}/`, name: site.name, alternateName: ["Shop hoa tươi Thanh Nhã", "Hoa Thanh Nhã"], inLanguage: "vi-VN", publisher: { "@id": org } },
+      {
+        "@type": "Florist",
+        "@id": org,
+        name: site.name,
+        url: `${site.url}/`,
+        logo: `${site.url}/brand/logo-thanh-nha.png`,
+        image: `${site.url}/brand/banner2.webp`,
+        description: site.description,
+        email: site.email,
+        sameAs: [site.zalo],
+        areaServed: { "@type": "Country", name: "Việt Nam" },
+        ...contact,
+        address: { "@type": "PostalAddress", streetAddress: site.stores[0].addresses[0], addressLocality: site.stores[0].city, addressCountry: "VN" },
+      },
+      ...site.stores.flatMap((store) =>
+        store.addresses.map((a) => {
+          const [city, street] = a.includes(": ") ? a.split(": ") : [store.city, a];
+          return {
+            "@type": "Florist",
+            name: `${site.name} – ${street}`,
+            parentOrganization: { "@id": org },
+            url: `${site.url}/`,
+            image: `${site.url}/brand/banner2.webp`,
+            ...contact,
+            address: { "@type": "PostalAddress", streetAddress: street, addressLocality: city, addressCountry: "VN" },
+          };
+        }),
+      ),
+    ],
+  };
+}
+
 export default async function HomePage() {
   const seoHtmlPromise = getHomeSeo();
   const sections = await Promise.all(
@@ -48,6 +91,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd()).replace(/</g, "\\u003c") }} />
       <div className="container-x pt-4 sm:pt-6">
         <HeroSlider />
       </div>

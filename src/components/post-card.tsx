@@ -8,7 +8,7 @@ export function PostCard({ post }: { post: PostCardData }) {
     <Link href={`/${post.slug}/`} className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-surface transition-shadow duration-300 hover:shadow-[0_12px_32px_-12px_rgba(60,30,10,0.25)]">
       <div className="relative aspect-[16/10] overflow-hidden bg-surface-muted">
         {post.image && (
-          <Image src={post.image} alt="" fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
+          <Image src={post.image} alt={post.title} fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
         )}
       </div>
       <div className="flex flex-1 flex-col gap-2 p-4">

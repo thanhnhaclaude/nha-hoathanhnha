@@ -142,7 +142,9 @@ export async function getRelatedProducts(productId: number, categoryIds: number[
         sql`${products.id} <> ${productId}`,
       ),
     )
-    .orderBy(desc(products.createdAt))
+    // Mẫu "hàng xóm" theo mã trong cùng danh mục (thay vì luôn là mẫu mới nhất): mọi sản phẩm đều được
+    // vài sản phẩm khác trỏ tới, không có trang sản phẩm "mồ côi"
+    .orderBy(sql`ABS(${products.id} - ${productId})`, desc(products.createdAt))
     .limit(limit);
   return rows.map(toCard);
 }

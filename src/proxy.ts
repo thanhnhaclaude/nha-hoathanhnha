@@ -7,7 +7,7 @@ export function proxy(request: NextRequest) {
 
   // SEO: đường dẫn có chữ hoa (vd. /HOA-BO/) là bản trùng của /hoa-bo/ -> chuyển hướng 301 về chữ thường.
   // Bỏ qua file tĩnh (có phần mở rộng) vì tên ảnh có thể có chữ hoa, và trang có mã đơn viết hoa (HN123456).
-  if (/[A-Z]/.test(rawPath) && !/\.[a-z0-9]+$/i.test(rawPath) && !/^\/(don-hang|thanh-toan|admin)\//i.test(rawPath)) {
+  if (/[A-Z]/.test(rawPath.replace(/%[0-9A-F]{2}/gi, "")) && !/\.[a-z0-9]+$/i.test(rawPath) && !/^\/(don-hang|thanh-toan|admin)\//i.test(rawPath)) {
     const url = request.nextUrl.clone();
     url.pathname = rawPath.toLowerCase();
     return NextResponse.redirect(url, 301);

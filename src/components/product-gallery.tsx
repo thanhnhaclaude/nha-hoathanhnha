@@ -22,7 +22,7 @@ export function ProductGallery({ images, name }: { images: string[]; name: strin
                 aria-current={i === active}
                 className={`relative block size-20 cursor-pointer overflow-hidden rounded-xl ring-2 transition ${i === active ? "ring-brand" : "ring-transparent hover:ring-border"}`}
               >
-                <Image src={src} alt="" fill sizes="80px" className="object-cover" />
+                <Image src={src} alt={`${name} – ảnh ${i + 1}`} fill sizes="80px" className="object-cover" />
               </button>
             </li>
           ))}

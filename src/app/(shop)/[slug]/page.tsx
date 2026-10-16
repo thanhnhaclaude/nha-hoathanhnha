@@ -25,11 +25,11 @@ import {
   getProductBySlug,
   getProductCardsBySlugs,
   getProductsInCategory,
-  getRecentPosts,
   getRelatedProducts,
 } from "@/lib/queries";
 import { canonicalPath, paginated, seoMetadata } from "@/lib/seo";
 import { ChipScroller } from "@/components/chip-scroller";
+import { addContextualLinksMany, bestCategoryFor, getGuidePosts, getNearbyAreas, getRelatedPosts } from "@/lib/internal-links";
 import { ViewItemTracker } from "@/components/view-item-tracker";
 import { cleanHtml, introText, normalizeHeadings, plainText, removeDuplicateTitleHeading, splitCategoryShortcodes, splitProductBlocks } from "@/lib/sanitize";
 import { shippingConfig, site } from "@/lib/site";
@@ -73,10 +73,15 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   }
   const category = await getCategoryBySlug(slug);
   if (category) {
-    return paginated(await seoMetadata(path, {
-      title: category.name,
-      description: introText(category.description, 160) || `${category.name} tại Shop hoa tươi Thanh Nhã. Giao hoa hỏa tốc, miễn phí thiệp & băng rôn.`,
-    }), path, page);
+    const [meta, { total }] = await Promise.all([
+      seoMetadata(path, {
+        title: category.name,
+        description: introText(category.description, 160) || `${category.name} tại Shop hoa tươi Thanh Nhã. Giao hoa hỏa tốc, miễn phí thiệp & băng rôn.`,
+      }),
+      getProductsInCategory(category, { perPage: 1 }),
+    ]);
+    // Danh mục chưa có sản phẩm = trang mỏng: không cho lập chỉ mục cho tới khi gán sản phẩm trong admin
+    return paginated(total ? meta : { ...meta, robots: { index: false, follow: true } }, path, page);
   }
   const postCategory = await getPostCategoryBySlug(slug);
   if (postCategory) return paginated(await seoMetadata(path, { title: postCategory.name, description: introText(postCategory.description, 160) || `${postCategory.name}: kinh nghiệm chọn hoa, ý nghĩa các loài hoa và địa chỉ shop hoa tươi Thanh Nhã giao hoa tận nơi.` }), path, page);
@@ -100,7 +105,11 @@ export default async function SlugPage({ params, searchParams }: Props) {
   }
 
   const { page, sort } = parseListingParams(await searchParams);
-  const { items, total, pages } = await getProductsInCategory(category, { page, sort });
+  const [{ items, total, pages }, guides, nearby] = await Promise.all([
+    getProductsInCategory(category, { page, sort }),
+    getGuidePosts(category.name, 3),
+    getNearbyAreas(category.id, category.parentId),
+  ]);
   const group = mainMenu.find((g) => g.slug === slug || g.children.some((c) => c.slug === slug));
   const base = `/${category.slug}/`;
 
@@ -141,10 +150,45 @@ export default async function SlugPage({ params, searchParams }: Props) {
         )}
       </div>
       <Pagination base={base} page={page} pages={pages} sort={sort} />
+      {nearby.parent && nearby.siblings.length > 0 && (
+        <section aria-labelledby="near-h" className="mt-14">
+          <h2 id="near-h" className="font-display text-2xl font-semibold">
+            Giao hoa khu vực lân cận
+          </h2>
+          <ul className="mt-4 flex flex-wrap gap-2">
+            <li>
+              <Link href={canonicalPath(nearby.parent.slug)} className="block rounded-full bg-brand-soft px-4 py-2 text-sm font-semibold text-brand-strong hover:ring-1 hover:ring-brand">
+                {nearby.parent.name}
+              </Link>
+            </li>
+            {nearby.siblings.map((a) => (
+              <li key={a.slug}>
+                <Link href={canonicalPath(a.slug)} className="block rounded-full bg-surface px-4 py-2 text-sm ring-1 ring-border hover:ring-brand">
+                  {a.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+      {guides.length > 0 && (
+        <section aria-labelledby="guide-h" className="mt-14">
+          <h2 id="guide-h" className="font-display text-2xl font-semibold">
+            Cẩm nang {category.name.toLocaleLowerCase("vi")}
+          </h2>
+          <ul className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {guides.map((p) => (
+              <li key={p.id}>
+                <PostCard post={p} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
       {category.description && plainText(category.description, 10000).length > 300 && (
         <section aria-label={`Giới thiệu ${category.name}`} className="mx-auto mt-16 max-w-3xl border-t border-border pt-10">
           <ReadMore>
-            <CategoryDescription html={category.description} title={category.name} />
+            <CategoryDescription html={category.description} title={category.name} slug={category.slug} />
           </ReadMore>
         </section>
       )}
@@ -156,8 +200,8 @@ export default async function SlugPage({ params, searchParams }: Props) {
  * Mô tả danh mục nhập từ WordPress: shortcode [ux_products cat="…"] được thay bằng hàng sản phẩm
  * của danh mục tương ứng (như website cũ), kèm link xem tất cả.
  */
-async function CategoryDescription({ html, title }: { html: string; title: string }) {
-  const segments = await Promise.all(
+async function CategoryDescription({ html, title, slug }: { html: string; title: string; slug: string }) {
+  const rawSegments = await Promise.all(
     splitCategoryShortcodes(normalizeHeadings(removeDuplicateTitleHeading(html, title))).map(async (seg) => {
       if (seg.type === "html") return seg;
       const cat = await getCategoryByWooId(seg.wooId);
@@ -166,11 +210,18 @@ async function CategoryDescription({ html, title }: { html: string; title: strin
       return { type: "category" as const, label: seg.label || cat.name, category: cat, items };
     }),
   );
+  // Làm sạch + link ngữ cảnh tới danh mục khác (tối đa 3, không tự link về chính danh mục này)
+  const linked = await addContextualLinksMany(
+    rawSegments.map((seg) => (seg?.type === "html" ? cleanHtml(seg.html, { normalize: false, imgAlt: title }) : "")),
+    canonicalPath(slug),
+    3,
+  );
+  const segments = rawSegments.map((seg, i) => (seg?.type === "html" ? { ...seg, html: linked[i] } : seg));
   return (
     <div className="space-y-6">
       {segments.map((seg, i) => {
         if (!seg) return null;
-        if (seg.type === "html") return <div key={i} className="prose-shop" dangerouslySetInnerHTML={{ __html: cleanHtml(seg.html, { normalize: false }) }} />;
+        if (seg.type === "html") return <div key={i} className="prose-shop" dangerouslySetInnerHTML={{ __html: seg.html }} />;
         if (!seg.items.length) return null;
         return (
           <div key={i}>
@@ -258,15 +309,25 @@ async function PostArchiveView({ category, page }: { category: PostCategory; pag
 
 async function CmsView({ page }: { page: Page }) {
   const isPost = page.type === "post";
-  const [recent, postCategory, segments] = await Promise.all([
-    isPost ? getRecentPosts(page.id) : Promise.resolve([]),
+  const [recent, postCategory, rawSegments, suggestCat] = await Promise.all([
+    isPost ? getRelatedPosts(page.title, { excludeId: page.id, limit: 6 }) : Promise.resolve([]),
     isPost ? getPrimaryPostCategory(page.id) : Promise.resolve(null),
     Promise.all(
       splitProductBlocks(normalizeHeadings(removeDuplicateTitleHeading(page.content, page.title))).map(async (seg) =>
         seg.type === "html" ? seg : { type: "products" as const, products: await getProductCardsBySlugs(seg.slugs) },
       ),
     ),
+    isPost ? bestCategoryFor(page.title, page.content) : Promise.resolve(null),
   ]);
+  // Link nội bộ theo ngữ cảnh (tối đa 4 cho cả bài) tới danh mục đang bán, sau khi đã làm sạch HTML
+  const linkedHtml = await addContextualLinksMany(
+    rawSegments.map((seg) => (seg.type === "html" ? cleanHtml(seg.html, { normalize: false, imgAlt: page.title }) : "")),
+    canonicalPath(page.slug),
+    isPost ? undefined : 0,
+  );
+  const segments = rawSegments.map((seg, i) => (seg.type === "html" ? { ...seg, html: linkedHtml[i] } : seg));
+  const suggestCategory = suggestCat ? await getCategoryBySlug(suggestCat.slug) : null;
+  const suggested = suggestCategory ? (await getProductsInCategory(suggestCategory, { perPage: 4 })).items : [];
   const jsonLd = isPost
     ? {
         "@context": "https://schema.org",
@@ -291,7 +352,7 @@ async function CmsView({ page }: { page: Page }) {
       <article className="mt-8 space-y-8">
         {segments.map((seg, i) =>
           seg.type === "html" ? (
-            <div key={i} className="prose-shop" dangerouslySetInnerHTML={{ __html: cleanHtml(seg.html, { normalize: false }) }} />
+            <div key={i} className="prose-shop" dangerouslySetInnerHTML={{ __html: seg.html }} />
           ) : (
             <div key={i} className={`grid grid-cols-2 gap-3 sm:gap-4 lg:-mx-24 ${productGridCols(seg.products.length)}`}>
               {seg.products.map((p) => (
@@ -301,12 +362,29 @@ async function CmsView({ page }: { page: Page }) {
           ),
         )}
       </article>
+      {suggestCategory && suggested.length > 0 && (
+        <section aria-labelledby="suggest-h" className="mt-14 lg:-mx-24">
+          <div className="flex items-baseline justify-between gap-4">
+            <h2 id="suggest-h" className="heading-display text-3xl">
+              Mẫu {suggestCategory.name.toLocaleLowerCase("vi")} đẹp tại Thanh Nhã
+            </h2>
+            <Link href={canonicalPath(suggestCategory.slug)} className="shrink-0 text-sm font-semibold text-brand-strong hover:underline">
+              Xem tất cả →
+            </Link>
+          </div>
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
+            {suggested.map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+          </div>
+        </section>
+      )}
       {recent.length > 0 && (
         <section aria-labelledby="recent-h" className="mt-16 border-t border-border pt-10">
           <h2 id="recent-h" className="heading-display text-3xl">
-            Bài viết khác
+            Bài viết liên quan
           </h2>
-          <ul className="mt-6 grid gap-5 sm:grid-cols-3">
+          <ul className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {recent.map((p) => (
               <li key={p.id}>
                 <PostCard post={p} />
@@ -344,7 +422,10 @@ async function ProductView({ data }: { data: NonNullable<Awaited<ReturnType<type
   const { product, categories } = data;
   const price = effectivePrice(product);
   const onSale = price < product.price;
-  const related = await getRelatedProducts(product.id, categories.map((c) => c.id));
+  const [related, guides] = await Promise.all([
+    getRelatedProducts(product.id, categories.map((c) => c.id)),
+    getGuidePosts(`${product.name} ${categories.map((c) => c.name).join(" ")}`, 3),
+  ]);
   const primaryCat = categories.find((c) => c.parentId != null) ?? categories[0];
   const shipping = shippingConfig();
 
@@ -415,7 +496,7 @@ async function ProductView({ data }: { data: NonNullable<Awaited<ReturnType<type
           </div>
 
           {product.shortDescription && (
-            <div className="prose-shop text-[15px] text-muted" dangerouslySetInnerHTML={{ __html: cleanHtml(product.shortDescription) }} />
+            <div className="prose-shop text-[15px] text-muted" dangerouslySetInnerHTML={{ __html: cleanHtml(product.shortDescription, { imgAlt: product.name }) }} />
           )}
 
           {price > 0 ? (
@@ -454,7 +535,7 @@ async function ProductView({ data }: { data: NonNullable<Awaited<ReturnType<type
           <h2 id="desc-h" className="heading-display text-3xl">
             Mô tả sản phẩm
           </h2>
-          <div className="prose-shop mt-6" dangerouslySetInnerHTML={{ __html: cleanHtml(removeDuplicateTitleHeading(product.description, product.name)) }} />
+          <div className="prose-shop mt-6" dangerouslySetInnerHTML={{ __html: cleanHtml(removeDuplicateTitleHeading(product.description, product.name), { imgAlt: product.name }) }} />
         </section>
       )}
 
@@ -466,6 +547,20 @@ async function ProductView({ data }: { data: NonNullable<Awaited<ReturnType<type
           <div className="mt-6">
             <ProductGrid products={related.slice(0, 5)} />
           </div>
+        </section>
+      )}
+      {guides.length > 0 && (
+        <section aria-labelledby="guide-h" className="mt-16">
+          <h2 id="guide-h" className="heading-display text-3xl">
+            Cẩm nang chọn hoa
+          </h2>
+          <ul className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {guides.map((p) => (
+              <li key={p.id}>
+                <PostCard post={p} />
+              </li>
+            ))}
+          </ul>
         </section>
       )}
     </div>

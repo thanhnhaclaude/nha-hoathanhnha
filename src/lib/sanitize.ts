@@ -26,7 +26,9 @@ function preClean(html: string) {
 /** Link tuyệt đối về website cũ -> đường dẫn tương đối để giữ khách trên website mới. */
 function localizeHref(href: string) {
   const m = href.match(/^https?:\/\/(?:www\.)?hoathanhnha\.com(\/(?!wp-content\/)[^\s]*)$/i);
-  return m ? m[1] : href;
+  const local = m ? m[1] : href;
+  // Đường dẫn nội bộ thiếu "/" cuối (vd. /shop-hoa-tuoi-quan-1) -> thêm luôn, tránh một bước chuyển hướng 308
+  return local.replace(/^(\/[^?#.]*[^/?#.])(?=[?#]|$)/, "$1/");
 }
 
 /** So sánh tiêu đề: bỏ thẻ, emoji/ký hiệu, khoảng trắng, không phân biệt hoa thường. */
@@ -72,8 +74,10 @@ export function normalizeHeadings(html: string) {
  * Làm sạch HTML mô tả (nhập từ WooCommerce hoặc nhập trong admin) trước khi hiển thị.
  * `normalize: false` khi nội dung đã được chuẩn hóa tiêu đề từ trước (vd. đã tách thành nhiều đoạn).
  */
-export function cleanHtml(html: string | null | undefined, { normalize = true } = {}) {
+export function cleanHtml(html: string | null | undefined, { normalize = true, imgAlt = "" }: { normalize?: boolean; imgAlt?: string } = {}) {
   if (!html) return "";
+  // Ảnh trong nội dung cũ thường để alt rỗng: lấy tiêu đề trang làm văn bản thay thế (Google dùng alt để hiểu ảnh)
+  let imgIndex = 0;
   return sanitizeHtml(preClean(normalize ? normalizeHeadings(html) : html), {
     allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "h2", "h3", "h4"]),
     allowedAttributes: {
@@ -82,11 +86,20 @@ export function cleanHtml(html: string | null | undefined, { normalize = true } 
     },
     allowedSchemes: ["http", "https", "mailto", "tel"],
     transformTags: {
-      a: (tagName, attribs) => ({ tagName, attribs: { ...attribs, href: localizeHref(attribs.href ?? ""), rel: "noopener" } }),
-      img: sanitizeHtml.simpleTransform("img", { loading: "lazy" }),
+      // Link bị cắt cụt trong nội dung cũ (có "…") không mở được: giữ chữ, bỏ link
+      a: (tagName, attribs) =>
+        (attribs.href ?? "").includes("…") || /%E2%80%A6/i.test(attribs.href ?? "")
+          ? { tagName: "span", attribs: {} }
+          : { tagName, attribs: { ...attribs, href: localizeHref(attribs.href ?? ""), rel: "noopener" } },
+      img: (tagName, attribs) => {
+        imgIndex++;
+        const alt = attribs.alt?.trim() || (imgAlt ? (imgIndex === 1 ? imgAlt : `${imgAlt} – ảnh ${imgIndex}`) : "");
+        return { tagName, attribs: { ...attribs, alt, loading: "lazy" } };
+      },
     },
-    // Bỏ link "Xem nhanh" (#quick-view) của theme cũ
-    exclusiveFilter: (frame) => frame.tag === "a" && /^#quick-view/.test(frame.attribs.href ?? ""),
+    // Bỏ link "Xem nhanh" (#quick-view) của theme cũ và link rỗng (href="#" không có chữ)
+    exclusiveFilter: (frame) =>
+      frame.tag === "a" && (/^#quick-view/.test(frame.attribs.href ?? "") || (frame.attribs.href === "#" && !frame.text.trim())),
   });
 }
 
