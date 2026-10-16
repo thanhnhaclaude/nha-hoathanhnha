@@ -10,7 +10,7 @@ import "dotenv/config";
 import fs from "node:fs/promises";
 import path from "node:path";
 import mysql from "mysql2/promise";
-import { drizzle } from "drizzle-orm/mysql2";
+import { drizzle, type MySql2Database } from "drizzle-orm/mysql2";
 import { eq } from "drizzle-orm";
 import * as schema from "../src/lib/db/schema";
 
@@ -145,8 +145,76 @@ async function main() {
     }
   }
 
+  // 5) Trang thông tin (footer) + toàn bộ bài viết tin tức từ WordPress
+  await importWordpressContent(db);
+
   console.log("Hoàn tất!");
   await pool.end();
+}
+
+/** Các trang WordPress cần chuyển sang (liên kết ở footer). */
+const WP_PAGE_SLUGS = [
+  "cau-hoi-thuong-gap",
+  "huong-dan-doi-tra",
+  "huong-dan-dat-hang",
+  "huong-dan-thanh-toan",
+  "chinh-sach-bao-mat",
+  "lien-he",
+  "quy-dinh-chuyen-phat",
+  "quy-trinh-dien-hoa",
+  "gop-y-khieu-nai-phan-hoi",
+  "gioi-thieu",
+];
+
+type WpItem = {
+  id: number;
+  slug: string;
+  date: string;
+  title: { rendered: string };
+  content: { rendered: string };
+  excerpt: { rendered: string };
+  _embedded?: { "wp:featuredmedia"?: { source_url?: string }[] };
+};
+
+/** Bỏ shortcode WordPress còn sót (vd. [ux_image id="1"]). */
+const stripShortcodes = (html: string) => html.replace(/\[\/?[a-z_][\w-]*(?:\s[^\]]*)?\]/gi, "");
+
+async function fetchWp(path: string): Promise<WpItem[]> {
+  const out: WpItem[] = [];
+  for (let page = 1; ; page++) {
+    const url = `${SOURCE}/wp-json/wp/v2/${path}${path.includes("?") ? "&" : "?"}per_page=100&page=${page}&_embed=wp:featuredmedia`;
+    const res = await fetch(url, { headers: { "User-Agent": "hoathanhnha-migrator" } });
+    if (!res.ok) throw new Error(`${url} -> HTTP ${res.status}`);
+    out.push(...((await res.json()) as WpItem[]));
+    if (page >= Number(res.headers.get("x-wp-totalpages") || 1)) break;
+  }
+  return out;
+}
+
+async function importWordpressContent(db: MySql2Database<typeof schema>) {
+  const wpPages = await fetchWp(`pages?slug=${WP_PAGE_SLUGS.join(",")}`);
+  const wpPosts = await fetchWp("posts?orderby=date&order=asc");
+  console.log(`Tìm thấy ${wpPages.length} trang, ${wpPosts.length} bài viết`);
+
+  const items = [...wpPages.map((p) => ({ p, type: "page" as const })), ...wpPosts.map((p) => ({ p, type: "post" as const }))];
+  let done = 0;
+  for (const { p, type } of items) {
+    const image = p._embedded?.["wp:featuredmedia"]?.[0]?.source_url;
+    const values = {
+      type,
+      slug: p.slug,
+      title: decode(p.title.rendered),
+      content: stripShortcodes(p.content.rendered),
+      excerpt: p.excerpt.rendered || null,
+      image: image ? await localizeImage(image) : null,
+      wpId: p.id,
+      publishedAt: new Date(p.date),
+    };
+    await db.insert(schema.pages).values(values).onDuplicateKeyUpdate({ set: values });
+    done++;
+    if (done % 25 === 0 || done === items.length) process.stdout.write(`\r  Đã nhập ${done}/${items.length} trang & bài viết`);
+  }
+  process.stdout.write("\n");
 }
 
 main().catch((e) => {

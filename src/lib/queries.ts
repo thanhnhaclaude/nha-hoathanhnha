@@ -1,6 +1,6 @@
 import "server-only";
 import { and, desc, eq, inArray, like, or, sql, count } from "drizzle-orm";
-import { db, categories, products, productCategories, type Category } from "./db";
+import { db, categories, pages, products, productCategories, type Category } from "./db";
 
 export type ProductCardData = {
   id: number;
@@ -146,6 +146,39 @@ export async function getProductsByIds(ids: number[]) {
     .select()
     .from(products)
     .where(and(inArray(products.id, ids), eq(products.isActive, true)));
+}
+
+export async function getPageBySlug(slug: string) {
+  const [row] = await db
+    .select()
+    .from(pages)
+    .where(and(eq(pages.slug, slug), eq(pages.isPublished, true)))
+    .limit(1);
+  return row ?? null;
+}
+
+export async function getPosts({ page = 1, perPage = 12 } = {}) {
+  const where = and(eq(pages.type, "post"), eq(pages.isPublished, true));
+  const [rows, [{ total }]] = await Promise.all([
+    db
+      .select({ id: pages.id, slug: pages.slug, title: pages.title, excerpt: pages.excerpt, image: pages.image, publishedAt: pages.publishedAt })
+      .from(pages)
+      .where(where)
+      .orderBy(desc(pages.publishedAt))
+      .limit(perPage)
+      .offset((page - 1) * perPage),
+    db.select({ total: count() }).from(pages).where(where),
+  ]);
+  return { items: rows, total, pages: Math.max(1, Math.ceil(total / perPage)) };
+}
+
+export async function getRecentPosts(excludeId: number, limit = 3) {
+  return db
+    .select({ id: pages.id, slug: pages.slug, title: pages.title, image: pages.image, publishedAt: pages.publishedAt })
+    .from(pages)
+    .where(and(eq(pages.type, "post"), eq(pages.isPublished, true), sql`${pages.id} <> ${excludeId}`))
+    .orderBy(desc(pages.publishedAt))
+    .limit(limit);
 }
 
 export async function getCategoryNames(slugs: string[]) {

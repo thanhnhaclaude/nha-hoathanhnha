@@ -9,7 +9,9 @@ import { ZaloIcon } from "@/components/icons";
 import { effectivePrice, formatVND } from "@/lib/format";
 import { infoPages, type InfoPage } from "@/lib/info-pages";
 import { mainMenu } from "@/lib/menu";
-import { getCategoryBySlug, getProductBySlug, getProductsInCategory, getRelatedProducts } from "@/lib/queries";
+import { PostCard } from "@/components/post-card";
+import type { Page } from "@/lib/db/schema";
+import { getCategoryBySlug, getPageBySlug, getProductBySlug, getProductsInCategory, getRecentPosts, getRelatedProducts } from "@/lib/queries";
 import { cleanHtml, plainText } from "@/lib/sanitize";
 import { site } from "@/lib/site";
 
@@ -19,6 +21,15 @@ type Props = PageProps<"/[slug]">;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  const cms = await getPageBySlug(slug);
+  if (cms) {
+    return {
+      title: cms.title,
+      description: plainText(cms.excerpt || cms.content) || site.description,
+      alternates: { canonical: `/${cms.slug}` },
+      openGraph: cms.image ? { type: cms.type === "post" ? "article" : "website", images: [cms.image] } : undefined,
+    };
+  }
   const info = infoPages[slug];
   if (info) return { title: info.title, description: info.description, alternates: { canonical: `/${slug}` } };
   const found = await getProductBySlug(slug);
@@ -42,6 +53,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function SlugPage({ params, searchParams }: Props) {
   const { slug } = await params;
+  const cms = await getPageBySlug(slug);
+  if (cms) return <CmsView page={cms} />;
   const info = infoPages[slug];
   if (info) return <InfoView page={info} />;
   const found = await getProductBySlug(slug);
@@ -92,6 +105,49 @@ export default async function SlugPage({ params, searchParams }: Props) {
         )}
       </div>
       <Pagination base={base} page={page} pages={pages} sort={sort} />
+    </div>
+  );
+}
+
+async function CmsView({ page }: { page: Page }) {
+  const isPost = page.type === "post";
+  const recent = isPost ? await getRecentPosts(page.id) : [];
+  const jsonLd = isPost
+    ? {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: page.title,
+        image: page.image ? [page.image] : undefined,
+        datePublished: page.publishedAt.toISOString(),
+        dateModified: page.updatedAt.toISOString(),
+        publisher: { "@type": "Organization", name: site.name },
+      }
+    : null;
+  return (
+    <div className="container-x max-w-3xl py-10">
+      {jsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />}
+      <Breadcrumbs items={isPost ? [{ label: "Tin tức", href: "/tin-tuc" }, { label: page.title }] : [{ label: page.title }]} />
+      <h1 className="heading-display mt-6 text-4xl leading-tight sm:text-5xl">{page.title}</h1>
+      {isPost && (
+        <p className="mt-3 text-sm text-muted">
+          <time dateTime={page.publishedAt.toISOString()}>{page.publishedAt.toLocaleDateString("vi-VN")}</time>
+        </p>
+      )}
+      <article className="prose-shop mt-8" dangerouslySetInnerHTML={{ __html: cleanHtml(page.content) }} />
+      {recent.length > 0 && (
+        <section aria-labelledby="recent-h" className="mt-16 border-t border-border pt-10">
+          <h2 id="recent-h" className="heading-display text-3xl">
+            Bài viết khác
+          </h2>
+          <ul className="mt-6 grid gap-5 sm:grid-cols-3">
+            {recent.map((p) => (
+              <li key={p.id}>
+                <PostCard post={p} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </div>
   );
 }

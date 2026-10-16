@@ -70,6 +70,27 @@ export const productCategories = mysqlTable(
   (t) => [primaryKey({ columns: [t.productId, t.categoryId] }), index("pc_category_idx").on(t.categoryId)],
 );
 
+/** Trang thông tin (hướng dẫn, chính sách…) và bài viết tin tức nhập từ WordPress. */
+export const pages = mysqlTable(
+  "pages",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    type: mysqlEnum("type", ["page", "post"]).notNull(),
+    slug: varchar("slug", { length: 191 }).notNull(),
+    title: varchar("title", { length: 255 }).notNull(),
+    content: mediumtext("content"),
+    excerpt: text("excerpt"),
+    image: varchar("image", { length: 500 }),
+    isPublished: boolean("is_published").notNull().default(true),
+    wpId: int("wp_id"),
+    publishedAt: datetime("published_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: updatedAt(),
+  },
+  (t) => [uniqueIndex("pages_slug_uq").on(t.slug), index("pages_type_idx").on(t.type, t.publishedAt)],
+);
+
+export type Page = typeof pages.$inferSelect;
+
 export const ORDER_STATUSES = ["pending", "confirmed", "delivering", "completed", "cancelled"] as const;
 export const PAYMENT_METHODS = ["vietqr", "cod"] as const;
 export const PAYMENT_STATUSES = ["unpaid", "paid", "refunded"] as const;
