@@ -3,6 +3,7 @@
  *
  *   npm run import                     # giữ link ảnh gốc trên hoathanhnha.com
  *   npm run import -- --download-images  # tải ảnh về public/uploads (nên chạy trước khi chuyển tên miền)
+ *   npm run import -- --content-only     # chỉ nhập trang, bài viết và đoạn SEO trang chủ
  *
  * Chạy lại nhiều lần an toàn: dữ liệu được cập nhật theo slug.
  */
@@ -13,9 +14,11 @@ import mysql from "mysql2/promise";
 import { drizzle, type MySql2Database } from "drizzle-orm/mysql2";
 import { eq } from "drizzle-orm";
 import * as schema from "../src/lib/db/schema";
+import { HOME_SEO_SLUG } from "../src/lib/constants";
 
 const SOURCE = process.env.IMPORT_SOURCE || "https://hoathanhnha.com";
 const DOWNLOAD = process.argv.includes("--download-images");
+const CONTENT_ONLY = process.argv.includes("--content-only");
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
 
 type WooCategory = { id: number; name: string; slug: string; parent: number; description: string; image: { src: string } | null };
@@ -78,6 +81,12 @@ async function main() {
   const db = drizzle(pool, { schema, mode: "default" });
 
   console.log(`Nguồn: ${SOURCE}`);
+  if (CONTENT_ONLY) {
+    await importWordpressContent(db);
+    console.log("Hoàn tất!");
+    await pool.end();
+    return;
+  }
   const wooCats = await fetchAll<WooCategory>("products/categories");
   const wooProducts = await fetchAll<WooProduct>("products?orderby=date&order=asc");
   console.log(`Tìm thấy ${wooCats.length} danh mục, ${wooProducts.length} sản phẩm`);
@@ -164,7 +173,27 @@ const WP_PAGE_SLUGS = [
   "quy-trinh-dien-hoa",
   "gop-y-khieu-nai-phan-hoi",
   "gioi-thieu",
+  "chinh-sach-hoan-tien-va-tra-hang",
 ];
+
+/** Lấy phần "VỀ CHÚNG TÔI" ở cuối trang chủ WordPress (nội dung SEO). */
+async function importHomeSeo(db: MySql2Database<typeof schema>) {
+  const [home] = await fetchWp("pages?slug=trang-chu");
+  if (!home) return console.warn("  Không tìm thấy trang chủ WordPress");
+  const html = home.content.rendered;
+  const marker = html.search(/<h2[^>]*>\s*(?:<strong>)?\s*V(?:Ề|&#7872;) CHÚNG TÔI/i);
+  if (marker < 0) return console.warn("  Không tìm thấy mục 'VỀ CHÚNG TÔI' trên trang chủ");
+  const values = {
+    type: "page" as const,
+    slug: HOME_SEO_SLUG,
+    title: "Về chúng tôi",
+    content: stripShortcodes(html.slice(marker)),
+    isPublished: false,
+    wpId: home.id,
+  };
+  await db.insert(schema.pages).values(values).onDuplicateKeyUpdate({ set: values });
+  console.log("  Đã nhập đoạn SEO trang chủ");
+}
 
 type WpItem = {
   id: number;
@@ -215,6 +244,7 @@ async function importWordpressContent(db: MySql2Database<typeof schema>) {
     if (done % 25 === 0 || done === items.length) process.stdout.write(`\r  Đã nhập ${done}/${items.length} trang & bài viết`);
   }
   process.stdout.write("\n");
+  await importHomeSeo(db);
 }
 
 main().catch((e) => {

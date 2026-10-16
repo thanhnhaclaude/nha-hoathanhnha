@@ -10,6 +10,7 @@ import { effectivePrice, formatVND } from "@/lib/format";
 import { infoPages, type InfoPage } from "@/lib/info-pages";
 import { mainMenu } from "@/lib/menu";
 import { PostCard } from "@/components/post-card";
+import { ReadMore } from "@/components/read-more";
 import type { Page } from "@/lib/db/schema";
 import { getCategoryBySlug, getPageBySlug, getProductBySlug, getProductsInCategory, getRecentPosts, getRelatedProducts } from "@/lib/queries";
 import { cleanHtml, plainText } from "@/lib/sanitize";
@@ -105,6 +106,11 @@ export default async function SlugPage({ params, searchParams }: Props) {
         )}
       </div>
       <Pagination base={base} page={page} pages={pages} sort={sort} />
+      {category.description && plainText(category.description, 10000).length > 300 && (
+        <section aria-label={`Giới thiệu ${category.name}`} className="mx-auto mt-16 max-w-3xl border-t border-border pt-10">
+          <ReadMore html={cleanHtml(category.description)} />
+        </section>
+      )}
     </div>
   );
 }

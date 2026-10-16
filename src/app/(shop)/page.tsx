@@ -4,7 +4,9 @@ import { ArrowRight, BadgeCheck, Camera, Gift, HandCoins, Flower2, Truck, Users,
 import { HeroSlider } from "@/components/hero-slider";
 import { ProductCard } from "@/components/product-card";
 import { homeSections } from "@/lib/menu";
-import { getCategoryBySlug, getProductsInCategory } from "@/lib/queries";
+import { ReadMore } from "@/components/read-more";
+import { getCategoryBySlug, getHomeSeo, getProductsInCategory } from "@/lib/queries";
+import { cleanHtml } from "@/lib/sanitize";
 import { site } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
@@ -26,6 +28,7 @@ const reasons = [
 ];
 
 export default async function HomePage() {
+  const seoHtmlPromise = getHomeSeo();
   const sections = await Promise.all(
     homeSections.map(async (s) => {
       const category = await getCategoryBySlug(s.slug);
@@ -34,6 +37,8 @@ export default async function HomePage() {
       return { ...s, items };
     }),
   );
+
+  const seoHtml = await seoHtmlPromise;
 
   return (
     <>
@@ -145,6 +150,12 @@ export default async function HomePage() {
           </ul>
         </div>
       </section>
+
+      {seoHtml && (
+        <section aria-label="Về chúng tôi" className="container-x mt-16 max-w-4xl">
+          <ReadMore html={cleanHtml(seoHtml)} collapsedHeight={280} />
+        </section>
+      )}
     </>
   );
 }

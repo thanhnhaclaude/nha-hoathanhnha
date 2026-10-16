@@ -1,5 +1,6 @@
 import "server-only";
 import { and, desc, eq, inArray, like, or, sql, count } from "drizzle-orm";
+import { HOME_SEO_SLUG } from "./constants";
 import { db, categories, pages, products, productCategories, type Category } from "./db";
 
 export type ProductCardData = {
@@ -155,6 +156,12 @@ export async function getPageBySlug(slug: string) {
     .where(and(eq(pages.slug, slug), eq(pages.isPublished, true)))
     .limit(1);
   return row ?? null;
+}
+
+/** Đoạn SEO cuối trang chủ (bản ghi ẩn trong bảng pages). */
+export async function getHomeSeo() {
+  const [row] = await db.select({ content: pages.content }).from(pages).where(eq(pages.slug, HOME_SEO_SLUG)).limit(1);
+  return row?.content ?? null;
 }
 
 export async function getPosts({ page = 1, perPage = 12 } = {}) {
