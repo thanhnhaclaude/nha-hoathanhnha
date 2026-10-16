@@ -16,6 +16,7 @@ import Link from "next/link";
 import type { Page, PostCategory } from "@/lib/db/schema";
 import {
   getCategoryBySlug,
+  getCategoryByWooId,
   getPageBySlug,
   getPostCategoriesWithCounts,
   getPostCategoryBySlug,
@@ -30,7 +31,7 @@ import {
 import { canonicalPath, paginated, seoMetadata } from "@/lib/seo";
 import { ChipScroller } from "@/components/chip-scroller";
 import { ViewItemTracker } from "@/components/view-item-tracker";
-import { cleanHtml, introText, normalizeHeadings, plainText, removeDuplicateTitleHeading, splitProductBlocks } from "@/lib/sanitize";
+import { cleanHtml, introText, normalizeHeadings, plainText, removeDuplicateTitleHeading, splitCategoryShortcodes, splitProductBlocks } from "@/lib/sanitize";
 import { shippingConfig, site } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
@@ -142,9 +143,51 @@ export default async function SlugPage({ params, searchParams }: Props) {
       <Pagination base={base} page={page} pages={pages} sort={sort} />
       {category.description && plainText(category.description, 10000).length > 300 && (
         <section aria-label={`Giới thiệu ${category.name}`} className="mx-auto mt-16 max-w-3xl border-t border-border pt-10">
-          <ReadMore html={cleanHtml(removeDuplicateTitleHeading(category.description, category.name))} />
+          <ReadMore>
+            <CategoryDescription html={category.description} title={category.name} />
+          </ReadMore>
         </section>
       )}
+    </div>
+  );
+}
+
+/**
+ * Mô tả danh mục nhập từ WordPress: shortcode [ux_products cat="…"] được thay bằng hàng sản phẩm
+ * của danh mục tương ứng (như website cũ), kèm link xem tất cả.
+ */
+async function CategoryDescription({ html, title }: { html: string; title: string }) {
+  const segments = await Promise.all(
+    splitCategoryShortcodes(normalizeHeadings(removeDuplicateTitleHeading(html, title))).map(async (seg) => {
+      if (seg.type === "html") return seg;
+      const cat = await getCategoryByWooId(seg.wooId);
+      if (!cat) return null;
+      const { items } = await getProductsInCategory(cat, { perPage: 4 });
+      return { type: "category" as const, label: seg.label || cat.name, category: cat, items };
+    }),
+  );
+  return (
+    <div className="space-y-6">
+      {segments.map((seg, i) => {
+        if (!seg) return null;
+        if (seg.type === "html") return <div key={i} className="prose-shop" dangerouslySetInnerHTML={{ __html: cleanHtml(seg.html, { normalize: false }) }} />;
+        if (!seg.items.length) return null;
+        return (
+          <div key={i}>
+            <div className="mb-3 flex items-baseline justify-between gap-4">
+              <h3 className="font-display text-xl font-semibold">{seg.label}</h3>
+              <Link href={canonicalPath(seg.category.slug)} className="shrink-0 text-sm font-semibold text-brand-strong hover:underline">
+                Xem tất cả →
+              </Link>
+            </div>
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
+              {seg.items.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

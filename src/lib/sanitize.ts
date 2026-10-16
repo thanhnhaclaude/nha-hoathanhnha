@@ -10,8 +10,17 @@ const STRAY_CSS = /(^|>)([^<]*?)((?:\s*[#.][\w-][^<>{}]*\{[^<>{}]*\})+)/g;
 /** Ký tự điều khiển lẫn trong nội dung cũ (vd. \b) hiển thị thành ô vuông lỗi. */
 const CONTROL_CHARS = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g;
 
+/** Shortcode của theme Flatsome/WordPress còn sót trong nội dung cũ, vd. [ux_products cat="1270"]. */
+const SHORTCODE = /\[\/?(?:ux_[a-z_]+|section|row|col|gap|button|title|accordion(?:_item)?|tabgroup|tab|block)\b[^\]]*\]/gi;
+
+/** Shortcode hàng sản phẩm, kèm nhãn in đậm ngay trước nó (vd. "<strong>Hoa chia buồn</strong> [ux_products cat="1288"]"). */
+const PRODUCT_SHORTCODE = /(?:<(strong|b)\b[^>]*>\s*([^<]{1,80}?)\s*<\/\1>\s*)?\[ux_products\b[^\]]*?\bcat="(\d+)"[^\]]*\]/gi;
+
 function preClean(html: string) {
-  return html.replace(CONTROL_CHARS, "").replace(STRAY_CSS, (_m, open: string, before: string) => open + before);
+  return html
+    .replace(CONTROL_CHARS, "")
+    .replace(STRAY_CSS, (_m, open: string, before: string) => open + before)
+    .replace(SHORTCODE, " ");
 }
 
 /** Link tuyệt đối về website cũ -> đường dẫn tương đối để giữ khách trên website mới. */
@@ -138,9 +147,31 @@ export function splitProductBlocks(html: string | null | undefined): ContentSegm
  * không bị dính vào câu văn, cắt tại ranh giới từ.
  */
 export function introText(html: string | null | undefined, max = 300) {
-  const text = plainText((html ?? "").replace(/<h[1-6]\b[^>]*>[\s\S]*?<\/h[1-6]>/gi, " "), 100_000);
+  const text = plainText(
+    (html ?? "").replace(PRODUCT_SHORTCODE, " ").replace(/<h[1-6]\b[^>]*>[\s\S]*?<\/h[1-6]>/gi, " "),
+    100_000,
+  );
   if (text.length <= max) return text;
   const cut = text.slice(0, max - 1);
   const i = cut.lastIndexOf(" ");
   return `${(i > max * 0.6 ? cut.slice(0, i) : cut).replace(/[\s,.;:–-]+$/, "")}…`;
+}
+
+export type ShortcodeSegment = { type: "html"; html: string } | { type: "category"; wooId: number; label: string | null };
+
+/**
+ * Tách shortcode [ux_products cat="…"] trong mô tả danh mục (nhập từ WordPress) thành các hàng sản phẩm
+ * của danh mục tương ứng, như website cũ hiển thị. Nhãn in đậm ngay trước shortcode dùng làm tiêu đề hàng.
+ */
+export function splitCategoryShortcodes(html: string | null | undefined): ShortcodeSegment[] {
+  if (!html) return [];
+  const segments: ShortcodeSegment[] = [];
+  let cursor = 0;
+  for (const m of html.matchAll(PRODUCT_SHORTCODE)) {
+    segments.push({ type: "html", html: html.slice(cursor, m.index) });
+    segments.push({ type: "category", wooId: Number(m[3]), label: m[2]?.trim() || null });
+    cursor = m.index + m[0].length;
+  }
+  segments.push({ type: "html", html: html.slice(cursor) });
+  return segments.filter((s) => s.type === "category" || plainText(s.html, 10).length > 0 || /<img\b/i.test(s.html));
 }

@@ -35,6 +35,12 @@ export async function getCategoryBySlug(slug: string) {
   return row ?? null;
 }
 
+/** Danh mục theo mã term WooCommerce cũ (dùng cho shortcode [ux_products cat="…"]). */
+export async function getCategoryByWooId(wooId: number) {
+  const [row] = await db.select().from(categories).where(eq(categories.wooId, wooId)).limit(1);
+  return row ?? null;
+}
+
 /** Trả về id của danh mục và toàn bộ danh mục con cháu. */
 async function descendantIds(root: Category) {
   const all = await db.select({ id: categories.id, parentId: categories.parentId }).from(categories);
