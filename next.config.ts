@@ -24,14 +24,6 @@ const nextConfig: NextConfig = {
       { source: "/category/:slug", destination: "/:slug/", permanent: true },
     ];
   },
-  turbopack: {
-    rules: {
-      "*.css": {
-        loaders: ["@tailwindcss/turbopack"],
-        as: "*.css",
-      },
-    },
-  },
 };
 
 export default nextConfig;
