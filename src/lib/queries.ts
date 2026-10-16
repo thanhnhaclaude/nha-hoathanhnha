@@ -1,0 +1,158 @@
+import "server-only";
+import { and, desc, eq, inArray, like, or, sql, count } from "drizzle-orm";
+import { db, categories, products, productCategories, type Category } from "./db";
+
+export type ProductCardData = {
+  id: number;
+  name: string;
+  slug: string;
+  price: number;
+  salePrice: number | null;
+  image: string | null;
+};
+
+const cardColumns = {
+  id: products.id,
+  name: products.name,
+  slug: products.slug,
+  price: products.price,
+  salePrice: products.salePrice,
+  images: products.images,
+};
+
+function toCard(row: { images: string[] | null } & Omit<ProductCardData, "image">): ProductCardData {
+  const { images, ...rest } = row;
+  return { ...rest, image: images?.[0] ?? null };
+}
+
+export async function getAllCategories() {
+  return db.select().from(categories).orderBy(categories.sortOrder, categories.name);
+}
+
+export async function getCategoryBySlug(slug: string) {
+  const [row] = await db.select().from(categories).where(eq(categories.slug, slug)).limit(1);
+  return row ?? null;
+}
+
+/** Trả về id của danh mục và toàn bộ danh mục con cháu. */
+async function descendantIds(root: Category) {
+  const all = await db.select({ id: categories.id, parentId: categories.parentId }).from(categories);
+  const ids = new Set([root.id]);
+  let grew = true;
+  while (grew) {
+    grew = false;
+    for (const c of all) {
+      if (c.parentId != null && ids.has(c.parentId) && !ids.has(c.id)) {
+        ids.add(c.id);
+        grew = true;
+      }
+    }
+  }
+  return [...ids];
+}
+
+export type SortKey = "newest" | "price-asc" | "price-desc";
+
+function orderFor(sort: SortKey) {
+  const effective = sql`CASE WHEN ${products.salePrice} > 0 AND ${products.salePrice} < ${products.price} THEN ${products.salePrice} ELSE ${products.price} END`;
+  if (sort === "price-asc") return [sql`${effective} = 0`, sql`${effective} ASC`];
+  if (sort === "price-desc") return [sql`${effective} DESC`];
+  return [desc(products.createdAt), desc(products.id)];
+}
+
+export async function getProductsInCategory(
+  category: Category,
+  { page = 1, perPage = 24, sort = "newest" as SortKey } = {},
+) {
+  const ids = await descendantIds(category);
+  const inCategory = inArray(
+    products.id,
+    db
+      .selectDistinct({ id: productCategories.productId })
+      .from(productCategories)
+      .where(inArray(productCategories.categoryId, ids)),
+  );
+  const where = and(eq(products.isActive, true), inCategory);
+  const [rows, [{ total }]] = await Promise.all([
+    db
+      .select(cardColumns)
+      .from(products)
+      .where(where)
+      .orderBy(...orderFor(sort))
+      .limit(perPage)
+      .offset((page - 1) * perPage),
+    db.select({ total: count() }).from(products).where(where),
+  ]);
+  return { items: rows.map(toCard), total, pages: Math.max(1, Math.ceil(total / perPage)) };
+}
+
+export async function searchProducts(q: string, { page = 1, perPage = 24, sort = "newest" as SortKey } = {}) {
+  const term = `%${q.trim()}%`;
+  const where = and(eq(products.isActive, true), or(like(products.name, term), like(products.sku, term)));
+  const [rows, [{ total }]] = await Promise.all([
+    db
+      .select(cardColumns)
+      .from(products)
+      .where(where)
+      .orderBy(...orderFor(sort))
+      .limit(perPage)
+      .offset((page - 1) * perPage),
+    db.select({ total: count() }).from(products).where(where),
+  ]);
+  return { items: rows.map(toCard), total, pages: Math.max(1, Math.ceil(total / perPage)) };
+}
+
+export async function getProductBySlug(slug: string) {
+  const [product] = await db
+    .select()
+    .from(products)
+    .where(and(eq(products.slug, slug), eq(products.isActive, true)))
+    .limit(1);
+  if (!product) return null;
+  const cats = await db
+    .select({ id: categories.id, name: categories.name, slug: categories.slug, parentId: categories.parentId })
+    .from(productCategories)
+    .innerJoin(categories, eq(categories.id, productCategories.categoryId))
+    .where(eq(productCategories.productId, product.id));
+  return { product, categories: cats };
+}
+
+export async function getRelatedProducts(productId: number, categoryIds: number[], limit = 8) {
+  if (categoryIds.length === 0) return [];
+  const rows = await db
+    .select(cardColumns)
+    .from(products)
+    .where(
+      and(
+        eq(products.isActive, true),
+        inArray(
+          products.id,
+          db
+            .selectDistinct({ id: productCategories.productId })
+            .from(productCategories)
+            .where(inArray(productCategories.categoryId, categoryIds)),
+        ),
+        sql`${products.id} <> ${productId}`,
+      ),
+    )
+    .orderBy(desc(products.createdAt))
+    .limit(limit);
+  return rows.map(toCard);
+}
+
+export async function getProductsByIds(ids: number[]) {
+  if (ids.length === 0) return [];
+  return db
+    .select()
+    .from(products)
+    .where(and(inArray(products.id, ids), eq(products.isActive, true)));
+}
+
+export async function getCategoryNames(slugs: string[]) {
+  if (slugs.length === 0) return new Map<string, string>();
+  const rows = await db
+    .select({ slug: categories.slug, name: categories.name })
+    .from(categories)
+    .where(inArray(categories.slug, slugs));
+  return new Map(rows.map((r) => [r.slug, r.name]));
+}

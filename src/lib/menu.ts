@@ -1,0 +1,142 @@
+export type MenuGroup = { label: string; slug: string; children: { label: string; slug: string }[] };
+
+const c = (label: string, slug: string) => ({ label, slug });
+
+/** Cấu trúc menu giữ nguyên như website hiện tại (đường dẫn /<slug>/ không đổi để giữ SEO). */
+export const mainMenu: MenuGroup[] = [
+  {
+    label: "Chủ đề",
+    slug: "chu-de",
+    children: [
+      c("Hoa Khai Trương", "hoa-khai-truong"),
+      c("Giỏ Hoa Khai Trương", "gio-hoa-khai-truong"),
+      c("Kệ Hoa Khai Trương", "ke-hoa-khai-truong"),
+      c("Lan Hồ Điệp Khai Trương", "lan-ho-diep-khai-truong"),
+      c("Hoa Sinh Nhật", "hoa-sinh-nhat"),
+      c("Bó Hoa Sinh Nhật", "bo-hoa-sinh-nhat"),
+      c("Giỏ Hoa Sinh Nhật", "gio-hoa-sinh-nhat"),
+      c("Hoa Chúc Mừng", "hoa-chuc-mung"),
+      c("Hoa Bó", "hoa-bo"),
+      c("Hoa Giỏ", "hoa-gio"),
+      c("Hoa Tình Yêu", "hoa-tinh-yeu"),
+      c("Hoa Chia Buồn", "hoa-chia-buon"),
+      c("Hoa Baby", "hoa-baby"),
+      c("Hoa Cảm Ơn", "hoa-cam-on"),
+      c("Hoa Chúc Sức Khỏe", "hoa-chuc-suc-khoe"),
+      c("Hoa Mừng Tốt Nghiệp", "hoa-mung-tot-nghiep"),
+    ],
+  },
+  {
+    label: "Đối tượng",
+    slug: "doi-tuong",
+    children: [
+      c("Hoa Tặng Người Yêu", "hoa-tang-nguoi-yeu"),
+      c("Hoa Tặng Bạn Bè", "hoa-tang-ban-be"),
+      c("Hoa Tặng Mẹ", "hoa-tang-me"),
+      c("Hoa Tặng Vợ", "hoa-tang-vo"),
+      c("Hoa Tặng Chồng", "hoa-tang-chong"),
+      c("Hoa Tặng Trẻ Em", "hoa-tang-tre-em"),
+      c("Hoa Tặng Cho Nữ", "hoa-tang-cho-nu"),
+      c("Hoa Tặng Cho Nam", "hoa-tang-cho-nam"),
+      c("Hoa Tặng Đồng Nghiệp", "hoa-tang-dong-nghiep"),
+      c("Hoa Tặng Sếp", "hoa-tang-sep"),
+    ],
+  },
+  {
+    label: "Kiểu dáng",
+    slug: "kieu-dang",
+    children: [
+      c("Bó Hoa Tươi", "bo-hoa-tuoi"),
+      c("Giỏ Hoa Tươi", "gio-hoa-tuoi"),
+      c("Bình Hoa Tươi", "binh-hoa-tuoi"),
+      c("Hộp Hoa Tươi", "hop-hoa-tuoi"),
+      c("Hộp Mica", "hop-mica"),
+      c("Hoa Thả Bình", "hoa-tha-binh"),
+      c("Lẵng Hoa Chia Buồn", "lang-hoa-chia-buon"),
+      c("Lẵng Hoa Khai Trương", "lang-hoa-khai-truong"),
+    ],
+  },
+  {
+    label: "Hoa tươi",
+    slug: "hoa-tuoi",
+    children: [
+      c("Hoa Hồng", "hoa-hong"),
+      c("Hoa Hướng Dương", "hoa-huong-duong"),
+      c("Hoa Cúc Mẫu Đơn", "hoa-cuc-mau-don"),
+      c("Hoa Đồng Tiền", "hoa-dong-tien"),
+      c("Hoa Tulip", "hoa-tulip"),
+      c("Hoa Cát Tường", "hoa-cat-tuong"),
+      c("Hoa Ly", "hoa-ly"),
+      c("Cẩm Chướng", "cam-chuong"),
+      c("Lan Hồ Điệp", "lan-ho-diep"),
+      c("Sen Đá", "sen-da"),
+      c("Only Rose", "only-rose"),
+      c("Baby Flower", "baby-flower"),
+    ],
+  },
+  {
+    label: "Hoa cưới",
+    slug: "hoa-cuoi",
+    children: [
+      c("Hoa Cưới Cầm Tay", "hoa-cuoi-cam-tay"),
+      c("Hoa Bàn Gia Tiên", "hoa-ban-gia-tien"),
+      c("Hoa Bàn Gallery", "hoa-ban-gallery"),
+      c("Trang Trí Lễ Đường", "trang-tri-le-duong"),
+      c("Xe Hoa", "xe-hoa"),
+      c("Tự Thiết Kế", "tu-thiet-ke"),
+    ],
+  },
+  {
+    label: "Màu sắc",
+    slug: "mau-sac",
+    children: [
+      c("Màu Trắng", "mau-trang"),
+      c("Màu Đỏ", "mau-do"),
+      c("Màu Vàng", "mau-vang"),
+      c("Màu Hồng", "mau-hong"),
+      c("Màu Cam", "mau-cam"),
+      c("Màu Xanh", "mau-xanh"),
+      c("Màu Tím", "mau-tim"),
+      c("Màu Kết Hợp", "mau-ket-hop"),
+    ],
+  },
+  {
+    label: "Bộ sưu tập",
+    slug: "bo-suu-tap",
+    children: [
+      c("Hoa Cao Cấp", "hoa-cao-cap"),
+      c("Hoa Sự Kiện", "hoa-su-kien"),
+      c("Hoa Sinh Viên", "hoa-sinh-vien"),
+      c("Hoa Tết", "hoa-tet"),
+      c("Giáng Sinh", "giang-sinh"),
+      c("Khuyến Mãi", "khuyen-mai"),
+      c("Mẫu Hoa Mới", "mau-hoa-moi"),
+      c("Ngày Nhà Giáo 20/11", "ngay-nha-giao"),
+      c("Ngày Phụ Nữ Việt Nam 20/10", "ngay-phu-nu-viet-nam-20-10"),
+      c("Quốc Tế Phụ Nữ 8/3", "ngay-quoc-te-phu-nu"),
+    ],
+  },
+  {
+    label: "Quà tặng",
+    slug: "qua-tang",
+    children: [
+      c("Giỏ Trái Cây", "gio-trai-cay"),
+      c("Gấu Bông", "gau-bong"),
+      c("Chocolate", "chocolate"),
+      c("Nến Thơm", "nen-thom"),
+      c("Bánh Kem Brodard", "banh-kem-brodard"),
+      c("Bánh Kem Tous Les Jours", "banh-kem-tous-les-jours"),
+      c("Hamper", "hamper"),
+    ],
+  },
+];
+
+/** Các khối sản phẩm trên trang chủ, theo thứ tự như website hiện tại. */
+export const homeSections = [
+  { slug: "hoa-khai-truong", title: "Hoa khai trương", icon: "/brand/cat-khai-truong.webp" },
+  { slug: "hoa-bo", title: "Hoa bó", icon: "/brand/cat-hoa-bo.webp" },
+  { slug: "hoa-gio", title: "Hoa giỏ", icon: "/brand/cat-hoa-gio.webp" },
+  { slug: "hoa-chia-buon", title: "Hoa chia buồn", icon: "/brand/cat-chia-buon.webp" },
+  { slug: "hoa-tinh-yeu", title: "Hoa tình yêu", icon: "/brand/cat-tinh-yeu.webp" },
+  { slug: "lan-ho-diep", title: "Lan hồ điệp", icon: "/brand/cat-lan-ho-diep.webp" },
+] as const;

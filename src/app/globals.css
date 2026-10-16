@@ -1,0 +1,121 @@
+@import "tailwindcss";
+
+/* Design tokens — Hoa Thanh Nhã (xem design-system/hoa-thanh-nha/MASTER.md) */
+:root {
+  --background: #fbf8f4;
+  --surface: #ffffff;
+  --surface-muted: #f4eee6;
+  --foreground: #1f1a17;
+  --muted: #6b6159;
+  --border: #e7ddd2;
+  --brand: #e8641b; /* cam thương hiệu (logo) */
+  --brand-strong: #b9480b; /* cam đậm cho chữ, đạt tương phản 4.5:1 */
+  --brand-soft: #fdeee3;
+  --leaf: #2f5d4e; /* xanh lá – màu phụ */
+  --leaf-soft: #e6efe9;
+  --danger: #c0262d;
+  --ring: #e8641b;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-soft: var(--brand-soft);
+  --color-leaf: var(--leaf);
+  --color-leaf-soft: var(--leaf-soft);
+  --color-danger: var(--danger);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@utility container-x {
+  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+@utility btn {
+  @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full px-6 text-sm font-semibold tracking-wide transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-60;
+}
+@utility btn-primary {
+  @apply btn bg-brand text-white hover:bg-brand-strong;
+}
+@utility btn-outline {
+  @apply btn border border-foreground/15 bg-surface text-foreground hover:border-brand hover:text-brand-strong;
+}
+@utility btn-leaf {
+  @apply btn bg-leaf text-white hover:bg-leaf/90;
+}
+@utility field {
+  @apply block w-full rounded-xl border border-border bg-surface px-4 py-3 text-base text-foreground placeholder:text-muted/70 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20;
+}
+@utility label {
+  @apply mb-1.5 block text-sm font-medium text-foreground;
+}
+@utility eyebrow {
+  @apply text-xs font-semibold uppercase tracking-[0.2em] text-brand-strong;
+}
+@utility heading-display {
+  @apply font-display font-semibold tracking-tight text-foreground;
+}
+
+/* Nội dung mô tả sản phẩm nhập từ WooCommerce */
+.prose-shop {
+  line-height: 1.75;
+  color: var(--foreground);
+}
+.prose-shop p {
+  margin: 0 0 0.9em;
+}
+.prose-shop h2,
+.prose-shop h3,
+.prose-shop h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  margin: 1.4em 0 0.5em;
+  font-size: 1.35em;
+}
+.prose-shop ul,
+.prose-shop ol {
+  padding-left: 1.3em;
+  margin: 0 0 1em;
+  list-style: disc;
+}
+.prose-shop img {
+  border-radius: 12px;
+  margin: 1em auto;
+  height: auto;
+}
+.prose-shop a {
+  color: var(--brand-strong);
+  text-decoration: underline;
+}
