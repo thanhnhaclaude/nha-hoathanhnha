@@ -5,6 +5,10 @@
  *   npm run import -- --download-images  # tải ảnh về public/uploads (nên chạy trước khi chuyển tên miền)
  *   npm run import -- --content-only     # chỉ nhập trang, bài viết và đoạn SEO trang chủ
  *   npm run import -- --seo-only         # chỉ chép tiêu đề/mô tả/robots/lastmod SEO từ website cũ
+ *   npm run import -- --media-only --download-images  # chỉ tải ảnh + đổi link ảnh sang /uploads/
+ *
+ * Mọi lần chạy đều tự đổi link ảnh "hoathanhnha.com/wp-content/uploads/..." sang "/uploads/..."
+ * nếu file ảnh đã có trong public/uploads (ảnh được commit cùng code).
  *
  * Chạy lại nhiều lần an toàn: dữ liệu được cập nhật theo slug.
  */
@@ -21,6 +25,7 @@ const SOURCE = process.env.IMPORT_SOURCE || "https://hoathanhnha.com";
 const DOWNLOAD = process.argv.includes("--download-images");
 const CONTENT_ONLY = process.argv.includes("--content-only");
 const SEO_ONLY = process.argv.includes("--seo-only");
+const MEDIA_ONLY = process.argv.includes("--media-only");
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
 
 type WooCategory = { id: number; name: string; slug: string; parent: number; description: string; image: { src: string } | null };
@@ -83,6 +88,12 @@ async function main() {
   const db = drizzle(pool, { schema, mode: "default" });
 
   console.log(`Nguồn: ${SOURCE}`);
+  if (MEDIA_ONLY) {
+    await localizeAllMedia(db);
+    console.log("Hoàn tất!");
+    await pool.end();
+    return;
+  }
   if (SEO_ONLY) {
     await importSeo(db);
     console.log("Hoàn tất!");
@@ -91,6 +102,7 @@ async function main() {
   }
   if (CONTENT_ONLY) {
     await importWordpressContent(db);
+    await localizeAllMedia(db);
     console.log("Hoàn tất!");
     await pool.end();
     return;
@@ -167,6 +179,9 @@ async function main() {
 
   // 6) SEO (tiêu đề, mô tả, robots, lastmod) giữ nguyên như website cũ
   await importSeo(db);
+
+  // 7) Đổi link ảnh sang /uploads/ (tải ảnh nếu có --download-images)
+  await localizeAllMedia(db);
 
   console.log("Hoàn tất!");
   await pool.end();
@@ -361,6 +376,96 @@ async function importSeo(db: MySql2Database<typeof schema>) {
   });
   process.stdout.write("\n");
   if (missing) console.warn(`  ${missing} URL không tải được (giữ SEO mặc định)`);
+}
+
+/** Link ảnh WordPress cũ, nhóm 1 = đường dẫn bên trong /wp-content/uploads/ */
+const WP_UPLOAD_RE = /(?:https?:)?\/\/(?:www\.)?hoathanhnha\.com\/wp-content\/uploads\/([^"'\s)<>?#]+)(?:\?[^"'\s)<>#]*)?/g;
+
+const diskPath = (rel: string) => path.join(UPLOAD_DIR, ...decodeURIComponent(rel).split("/"));
+
+async function exists(file: string) {
+  try {
+    await fs.access(file);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Chép toàn bộ ảnh sang website mới: gom mọi link ảnh hoathanhnha.com/wp-content/uploads/ trong CSDL
+ * (ảnh sản phẩm, ảnh trong mô tả, bài viết, danh mục), tải về public/uploads (khi có --download-images)
+ * rồi đổi link thành /uploads/... Ảnh chưa tải được giữ nguyên link cũ.
+ */
+async function localizeAllMedia(db: MySql2Database<typeof schema>) {
+  const [prods, cats, cms] = await Promise.all([
+    db
+      .select({ id: schema.products.id, images: schema.products.images, description: schema.products.description, shortDescription: schema.products.shortDescription })
+      .from(schema.products),
+    db.select({ id: schema.categories.id, image: schema.categories.image, description: schema.categories.description }).from(schema.categories),
+    db.select({ id: schema.pages.id, image: schema.pages.image, content: schema.pages.content, excerpt: schema.pages.excerpt }).from(schema.pages),
+  ]);
+
+  const texts = [
+    ...prods.flatMap((p) => [...p.images, p.description, p.shortDescription]),
+    ...cats.flatMap((c) => [c.image, c.description]),
+    ...cms.flatMap((c) => [c.image, c.content, c.excerpt]),
+  ];
+  const rels = new Set<string>();
+  for (const t of texts) for (const m of (t ?? "").matchAll(WP_UPLOAD_RE)) rels.add(m[1]);
+  console.log(`  Tìm thấy ${rels.size} ảnh trỏ về website cũ`);
+
+  if (DOWNLOAD) {
+    const list = [...rels];
+    let done = 0;
+    const failed: string[] = [];
+    await pool(list, 8, async (rel) => {
+      const file = diskPath(rel);
+      if (!(await exists(file))) {
+        try {
+          const res = await fetch(`${SOURCE}/wp-content/uploads/${rel}`, { headers: { "User-Agent": "Mozilla/5.0" } });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          await fs.mkdir(path.dirname(file), { recursive: true });
+          await fs.writeFile(file, Buffer.from(await res.arrayBuffer()));
+        } catch (e) {
+          failed.push(`${rel} (${(e as Error).message})`);
+        }
+      }
+      done++;
+      if (done % 50 === 0 || done === list.length) process.stdout.write(`\r  Đã tải ${done}/${list.length} ảnh`);
+    });
+    process.stdout.write("\n");
+    if (failed.length) console.warn(`  ${failed.length} ảnh không tải được, giữ link cũ:\n    ${failed.slice(0, 20).join("\n    ")}`);
+  }
+
+  const available = new Set<string>();
+  for (const rel of rels) if (await exists(diskPath(rel))) available.add(rel);
+  const rewrite = <T extends string | null>(t: T): T =>
+    (t ? t.replace(WP_UPLOAD_RE, (m, rel: string) => (available.has(rel) ? `/uploads/${rel}` : m)) : t) as T;
+
+  let changed = 0;
+  for (const p of prods) {
+    const next = { images: p.images.map(rewrite), description: rewrite(p.description), shortDescription: rewrite(p.shortDescription) };
+    if (JSON.stringify(next) !== JSON.stringify({ images: p.images, description: p.description, shortDescription: p.shortDescription })) {
+      await db.update(schema.products).set(next).where(eq(schema.products.id, p.id));
+      changed++;
+    }
+  }
+  for (const c of cats) {
+    const next = { image: rewrite(c.image), description: rewrite(c.description) };
+    if (next.image !== c.image || next.description !== c.description) {
+      await db.update(schema.categories).set(next).where(eq(schema.categories.id, c.id));
+      changed++;
+    }
+  }
+  for (const c of cms) {
+    const next = { image: rewrite(c.image), content: rewrite(c.content), excerpt: rewrite(c.excerpt) };
+    if (next.image !== c.image || next.content !== c.content || next.excerpt !== c.excerpt) {
+      await db.update(schema.pages).set(next).where(eq(schema.pages.id, c.id));
+      changed++;
+    }
+  }
+  console.log(`  Đã đổi link ảnh sang /uploads/ cho ${changed} bản ghi (${available.size}/${rels.size} ảnh có sẵn)`);
 }
 
 main().catch((e) => {
