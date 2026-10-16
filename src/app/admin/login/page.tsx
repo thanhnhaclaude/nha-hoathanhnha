@@ -23,7 +23,7 @@ export default async function LoginPage({ searchParams }: PageProps<"/admin/logi
   return (
     <main className="grid min-h-screen place-items-center bg-surface-muted px-4">
       <form action={login} className="w-full max-w-sm space-y-5 rounded-3xl bg-surface p-8 shadow-xl">
-        <Image src="/brand/logo-hoa-thanhnha.webp" alt="Hoa Thanh Nhã" width={500} height={157} className="mx-auto h-14 w-auto" priority />
+        <Image src="/brand/logo-thanh-nha.webp" alt="Hoa Thanh Nhã" width={957} height={213} className="mx-auto h-14 w-auto" priority />
         <h1 className="text-center font-display text-3xl font-semibold">Quản trị cửa hàng</h1>
         <div>
           <label htmlFor="username" className="label">

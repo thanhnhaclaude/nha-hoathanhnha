@@ -26,7 +26,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <aside className="border-b border-border bg-surface md:sticky md:top-0 md:h-screen md:w-60 md:shrink-0 md:border-b-0 md:border-r">
         <div className="flex items-center justify-between p-4 md:block">
           <Link href="/admin">
-            <Image src="/brand/logo-hoa-thanhnha.webp" alt="Hoa Thanh Nhã" width={500} height={157} className="h-10 w-auto" />
+            <Image src="/brand/logo-thanh-nha.webp" alt="Hoa Thanh Nhã" width={957} height={213} className="h-10 w-auto" />
           </Link>
           <p className="text-xs text-muted md:mt-2">Xin chào, {session.username}</p>
         </div>

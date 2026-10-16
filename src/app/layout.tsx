@@ -22,7 +22,6 @@ export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: { default: site.title, template: `%s | ${site.name}` },
   description: site.description,
-  icons: { icon: "/brand/icon-hoathanhnha-100x100.png" },
   openGraph: { type: "website", locale: "vi_VN", siteName: site.name, images: ["/brand/banner2.webp"] },
 };
 
