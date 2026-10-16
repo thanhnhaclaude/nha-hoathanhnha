@@ -8,7 +8,7 @@ const typeByExt = Object.fromEntries(Object.entries(IMAGE_TYPES).map(([mime, ext
 export async function GET(_req: Request, { params }: RouteContext<"/media/[...path]">) {
   const { path: parts } = await params;
   const root = uploadDir();
-  const file = path.resolve(root, ...parts);
+  const file = path.resolve(/*turbopackIgnore: true*/ root, ...parts);
   if (!file.startsWith(root + path.sep)) return new Response("Not found", { status: 404 });
   const type = typeByExt[path.extname(file).toLowerCase()];
   if (!type) return new Response("Not found", { status: 404 });

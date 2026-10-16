@@ -1,5 +1,5 @@
 {
-  "name": "hoathanhnha",
+  "name": "shophoathanhnha",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,7 +11,8 @@
     "db:generate": "drizzle-kit generate",
     "db:local": "tsx scripts/dev-db.ts",
     "import": "tsx scripts/import-woo.ts",
-    "hash-password": "tsx scripts/hash-password.ts"
+    "hash-password": "tsx scripts/hash-password.ts",
+    "export-sql": "tsx scripts/export-sql.ts"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

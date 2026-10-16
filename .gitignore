@@ -44,3 +44,6 @@ next-env.d.ts
 /.local-db
 !.env.example
 /storage
+
+# File triển khai chứa khóa bí mật / dữ liệu (không đưa lên GitHub)
+/deploy

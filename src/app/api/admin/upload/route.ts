@@ -29,9 +29,9 @@ export async function POST(request: Request) {
   const sub = `${now.getFullYear()}/${String(now.getMonth() + 1).padStart(2, "0")}`;
   const base = slugify(path.parse(file.name).name).slice(0, 60) || "anh";
   const name = `${base}-${randomBytes(3).toString("hex")}${IMAGE_TYPES[type]}`;
-  const dir = path.join(uploadDir(), sub);
+  const dir = path.join(/*turbopackIgnore: true*/ uploadDir(), sub);
   await fs.mkdir(dir, { recursive: true });
-  await fs.writeFile(path.join(dir, name), buf);
+  await fs.writeFile(path.join(/*turbopackIgnore: true*/ dir, name), buf);
 
   return NextResponse.json({ url: `/media/${sub}/${name}` });
 }
