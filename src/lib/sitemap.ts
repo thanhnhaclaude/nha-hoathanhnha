@@ -1,3 +1,4 @@
+import { livePage } from "./published";
 import "server-only";
 import { and, eq, isNotNull, max } from "drizzle-orm";
 import { categories, db, pages, postCategories, productCategories, products, seoMeta } from "./db";
@@ -36,7 +37,7 @@ export async function sitemapEntries(name: SitemapName): Promise<Entry[]> {
     const rows = await db
       .select({ slug: pages.slug, updatedAt: pages.updatedAt })
       .from(pages)
-      .where(and(eq(pages.type, "post"), eq(pages.isPublished, true)));
+      .where(and(eq(pages.type, "post"), livePage()));
     return merge(old, rows.map((r) => ({ path: `/${r.slug}/`, updatedAt: r.updatedAt })));
   }
   if (name === "product") {
@@ -70,7 +71,7 @@ export async function sitemapEntries(name: SitemapName): Promise<Entry[]> {
   const rows = await db
     .select({ slug: pages.slug, updatedAt: pages.updatedAt })
     .from(pages)
-    .where(and(eq(pages.type, "page"), eq(pages.isPublished, true)));
+    .where(and(eq(pages.type, "page"), livePage()));
   const fixed = ["/", "/danh-sach/", "/cua-hang/", "/tai-khoan/", "/thanh-toan/", "/gio-hang/"].map((path) => ({ path, updatedAt: null }));
   return merge(old, [...fixed, ...rows.filter((r) => r.slug !== HOME_SEO_SLUG).map((r) => ({ path: `/${r.slug}/`, updatedAt: r.updatedAt }))]);
 }

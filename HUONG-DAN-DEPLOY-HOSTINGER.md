@@ -96,6 +96,13 @@ Website mới đã gắn sẵn đúng các mã của website WordPress cũ, nên
 - **Merchant Center:** *Sản phẩm → Nguồn dữ liệu → Thêm nguồn sản phẩm → Tìm nạp theo lịch*, dán URL feed ở trên, tần suất *Hằng ngày*. Feed chỉ gồm sản phẩm đang bán, có giá và có ảnh; số điện thoại trong mô tả được tự lọc bỏ theo chính sách của Google.
 - Sau khi deploy: kiểm tra GA4 → *Báo cáo → Thời gian thực*, và GTM → *Xem trước* (Tag Assistant) với `https://hoathanhnha.com`.
 
+## Bước 11: Đăng bài theo lịch và theo dõi SEO
+
+- Bài viết nằm trong `content/bai-viet/*.md`, mỗi bài có `publish:` (giờ Việt Nam). Bài có ngày tương lai được **hẹn giờ**: tự hiện trên website, sitemap và bài liên quan khi tới giờ, không cần deploy lại.
+- Đưa bài lên database Hostinger: trên máy, đặt `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` của Hostinger vào `.env` (bật Remote MySQL cho IP máy bạn), rồi chạy `npm run content:check` → `npm run content:sync`. Hoặc SSH vào hosting và chạy cùng lệnh trong thư mục app.
+- Kiểm tra toàn site: `npm run seo:audit -- https://hoathanhnha.com` → file CSV trong `reports/`.
+- Index và thứ hạng từ Search Console: `npm run seo:gsc` (cài đặt service account 1 lần, xem đầu file `scripts/gsc-report.ts`).
+
 ---
 
 ## Cập nhật website về sau

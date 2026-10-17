@@ -1,3 +1,4 @@
+import { livePage } from "./published";
 import "server-only";
 import { cache } from "react";
 import { and, count, desc, eq } from "drizzle-orm";
@@ -48,7 +49,21 @@ export const getLinkableCategories = cache(async () => {
 
 const LETTER = "[\\p{L}\\p{N}]";
 const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-const phraseRe = (p: string) => new RegExp(`(?<!${LETTER})${escapeRe(p)}(?!${LETTER})`, "iu");
+/**
+ * Cụm ngắn không được khớp khi đang nằm trong một cụm dài hơn của danh sách
+ * (vd. "hoa khai trương" trong "kệ hoa khai trương", "bó hoa" trong "bó hoa sinh nhật"),
+ * tránh cắt đôi cụm từ khi cụm dài đã có link hoặc không được link.
+ */
+const ALL_PHRASES = KEYWORD_TARGETS.flatMap((t) => t.phrases);
+const phraseRe = (p: string) => {
+  const guards = ALL_PHRASES.filter((l) => l !== p && l.includes(p)).map((l) => {
+    const i = l.indexOf(p);
+    const before = l.slice(0, i);
+    const after = l.slice(i + p.length);
+    return `${before ? `(?<!${escapeRe(before)})` : ""}${after ? `(?!${escapeRe(after)})` : ""}`;
+  });
+  return new RegExp(`(?<!${LETTER})${guards.join("")}${escapeRe(p)}(?!${LETTER})`, "iu");
+};
 
 /** Các link nội bộ đã có trong HTML (đường dẫn dạng /slug/). */
 function linkedPaths(html: string) {
@@ -59,10 +74,11 @@ function linkedPaths(html: string) {
  * Chèn link theo ngữ cảnh vào HTML đã làm sạch. `selfPath` là đường dẫn trang hiện tại (không tự link).
  * Chỉ sửa đoạn chữ nằm ngoài thẻ <a>, <h1>–<h6>, <figcaption>, <button>.
  */
-export async function addContextualLinks(html: string, selfPath: string, max = MAX_AUTO_LINKS) {
+export async function addContextualLinks(html: string, selfPath: string, max = MAX_AUTO_LINKS, exclude: Set<string> = new Set()) {
   if (!html) return html;
   const linkable = await getLinkableCategories();
-  const already = linkedPaths(html);
+  // Trang đích đã có link ở bất kỳ đâu trong bài (kể cả đoạn khác) thì không link lại
+  const already = new Set([...linkedPaths(html), ...exclude]);
   let out = html;
   let added = 0;
   for (const target of KEYWORD_TARGETS) {
@@ -129,7 +145,7 @@ const getAllPostsLite = cache(async (): Promise<PostLite[]> =>
   db
     .select({ id: pages.id, slug: pages.slug, title: pages.title, image: pages.image, publishedAt: pages.publishedAt })
     .from(pages)
-    .where(and(eq(pages.type, "post"), eq(pages.isPublished, true)))
+    .where(and(eq(pages.type, "post"), livePage()))
     .orderBy(desc(pages.publishedAt)),
 );
 
@@ -206,12 +222,18 @@ export async function getNearbyAreas(categoryId: number, parentId: number | null
 
 /** Như addContextualLinks nhưng cho bài tách nhiều đoạn (xen khối sản phẩm): giới hạn tính chung cả bài. */
 export async function addContextualLinksMany(htmls: string[], selfPath: string, max = MAX_AUTO_LINKS) {
+  // Link trỏ về chính trang đang đọc (có trong nội dung cũ) không giúp gì người đọc: giữ chữ, bỏ link
+  const selfLink = new RegExp(`<a\\b[^>]*href="${escapeRe(selfPath)}(?:#[^"]*)?"[^>]*>([\\s\\S]*?)<\\/a>`, "gi");
+  htmls = htmls.map((h) => h.replace(selfLink, "$1"));
   const out: string[] = [];
   let used = 0;
+  const everywhere = new Set(htmls.flatMap((h) => [...linkedPaths(h)]));
   for (const h of htmls) {
-    const before = linkedPaths(h).size;
-    const linked = used < max ? await addContextualLinks(h, selfPath, max - used) : h;
-    used += linkedPaths(linked).size - before;
+    const before = linkedPaths(h);
+    const linked = used < max ? await addContextualLinks(h, selfPath, max - used, everywhere) : h;
+    const added = [...linkedPaths(linked)].filter((p) => !before.has(p));
+    added.forEach((p) => everywhere.add(p));
+    used += added.length;
     out.push(linked);
   }
   return out;

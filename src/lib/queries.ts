@@ -1,3 +1,4 @@
+import { livePage } from "./published";
 import "server-only";
 import { and, desc, eq, inArray, like, or, sql, count } from "drizzle-orm";
 import { HOME_SEO_SLUG } from "./constants";
@@ -172,7 +173,7 @@ export async function getPageBySlug(slug: string) {
   const [row] = await db
     .select()
     .from(pages)
-    .where(and(eq(pages.slug, slug), eq(pages.isPublished, true)))
+    .where(and(eq(pages.slug, slug), livePage()))
     .limit(1);
   return row ?? null;
 }
@@ -184,7 +185,7 @@ export async function getHomeSeo() {
 }
 
 export async function getPosts({ page = 1, perPage = 12 } = {}) {
-  const where = and(eq(pages.type, "post"), eq(pages.isPublished, true));
+  const where = and(eq(pages.type, "post"), livePage());
   const [rows, [{ total }]] = await Promise.all([
     db
       .select({ id: pages.id, slug: pages.slug, title: pages.title, excerpt: pages.excerpt, image: pages.image, publishedAt: pages.publishedAt })
@@ -209,7 +210,7 @@ export async function getPostCategoriesWithCounts() {
     .select({ id: postCategories.id, slug: postCategories.slug, name: postCategories.name, count: count(pages.id) })
     .from(postCategories)
     .leftJoin(pageCategories, eq(pageCategories.categoryId, postCategories.id))
-    .leftJoin(pages, and(eq(pages.id, pageCategories.pageId), eq(pages.isPublished, true)))
+    .leftJoin(pages, and(eq(pages.id, pageCategories.pageId), livePage()))
     .groupBy(postCategories.id, postCategories.slug, postCategories.name);
   return rows.filter((r) => r.count > 0).sort((a, b) => b.count - a.count);
 }
@@ -229,7 +230,7 @@ export async function getPrimaryPostCategory(pageId: number) {
 export async function getPostsInCategory(categoryId: number, { page = 1, perPage = 12 } = {}) {
   const where = and(
     eq(pages.type, "post"),
-    eq(pages.isPublished, true),
+    livePage(),
     inArray(pages.id, db.select({ id: pageCategories.pageId }).from(pageCategories).where(eq(pageCategories.categoryId, categoryId))),
   );
   const [rows, [{ total }]] = await Promise.all([
@@ -264,7 +265,7 @@ export async function getRecentPosts(excludeId: number, limit = 3) {
   return db
     .select({ id: pages.id, slug: pages.slug, title: pages.title, image: pages.image, publishedAt: pages.publishedAt })
     .from(pages)
-    .where(and(eq(pages.type, "post"), eq(pages.isPublished, true), sql`${pages.id} <> ${excludeId}`))
+    .where(and(eq(pages.type, "post"), livePage(), sql`${pages.id} <> ${excludeId}`))
     .orderBy(desc(pages.publishedAt))
     .limit(limit);
 }

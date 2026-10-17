@@ -12,13 +12,18 @@
     "db:local": "tsx scripts/dev-db.ts",
     "import": "tsx scripts/import-woo.ts",
     "hash-password": "tsx scripts/hash-password.ts",
-    "export-sql": "tsx scripts/export-sql.ts"
+    "export-sql": "tsx scripts/export-sql.ts",
+    "content:sync": "tsx scripts/sync-content.ts",
+    "content:check": "tsx scripts/sync-content.ts --check",
+    "seo:audit": "tsx scripts/seo-audit.ts",
+    "seo:gsc": "tsx scripts/gsc-report.ts"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "drizzle-orm": "^0.45.4",
     "jose": "^6.2.12",
     "lucide-react": "^1.58.0",
+    "marked": "^18.1.1",
     "mysql2": "^3.24.6",
     "next": "16.4.2",
     "nodemailer": "^10.1.2",

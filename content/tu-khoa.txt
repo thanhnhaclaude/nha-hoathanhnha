@@ -1,0 +1,39 @@
+# Từ khóa mục tiêu để theo dõi thứ hạng (npm run seo:gsc). Mỗi dòng một từ khóa, viết thường.
+# Từ khóa chính của từng bài trong content/bai-viet/ được tự thêm, không cần ghi lại ở đây.
+
+# Thương hiệu
+hoa thanh nhã
+shop hoa thanh nhã
+
+# Sản phẩm chủ lực
+shop hoa tươi
+đặt hoa online
+hoa khai trương
+kệ hoa khai trương
+lan hồ điệp khai trương
+hoa sinh nhật
+bó hoa sinh nhật
+hoa chia buồn
+hoa chúc mừng
+bó hoa hướng dương
+hoa hồng
+
+# Khu vực có cửa hàng (ưu tiên viết mô tả riêng cho các trang này)
+shop hoa tươi quận 1
+shop hoa tươi gò vấp
+shop hoa tươi quận 12
+shop hoa tươi thủ đức
+shop hoa tươi đống đa
+shop hoa tươi cầu giấy
+shop hoa tươi đà nẵng
+shop hoa tươi cần thơ
+shop hoa tươi nha trang
+shop hoa tươi vũng tàu
+shop hoa tươi biên hòa
+
+# Theo dịp (lịch đăng bài)
+hoa 20/11
+hoa giáng sinh
+hoa tết
+hoa valentine
+hoa 8/3
