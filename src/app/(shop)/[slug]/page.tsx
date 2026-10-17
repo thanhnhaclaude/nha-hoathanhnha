@@ -108,7 +108,7 @@ export default async function SlugPage({ params, searchParams }: Props) {
   const [{ items, total, pages }, guides, nearby] = await Promise.all([
     getProductsInCategory(category, { page, sort }),
     getGuidePosts(category.name, 3),
-    getNearbyAreas(category.id, category.parentId),
+    getNearbyAreas(category.id, category.parentId, category.slug),
   ]);
   const group = mainMenu.find((g) => g.slug === slug || g.children.some((c) => c.slug === slug));
   const base = `/${category.slug}/`;
@@ -150,18 +150,20 @@ export default async function SlugPage({ params, searchParams }: Props) {
         )}
       </div>
       <Pagination base={base} page={page} pages={pages} sort={sort} />
-      {nearby.parent && nearby.siblings.length > 0 && (
+      {(nearby.parent || nearby.children.length > 0) && (
         <section aria-labelledby="near-h" className="mt-14">
           <h2 id="near-h" className="font-display text-2xl font-semibold">
             Giao hoa khu vực lân cận
           </h2>
           <ul className="mt-4 flex flex-wrap gap-2">
-            <li>
-              <Link href={canonicalPath(nearby.parent.slug)} className="block rounded-full bg-brand-soft px-4 py-2 text-sm font-semibold text-brand-strong hover:ring-1 hover:ring-brand">
-                {nearby.parent.name}
-              </Link>
-            </li>
-            {nearby.siblings.map((a) => (
+            {nearby.parent && (
+              <li>
+                <Link href={canonicalPath(nearby.parent.slug)} className="block rounded-full bg-brand-soft px-4 py-2 text-sm font-semibold text-brand-strong hover:ring-1 hover:ring-brand">
+                  {nearby.parent.name}
+                </Link>
+              </li>
+            )}
+            {[...nearby.children, ...nearby.siblings].map((a) => (
               <li key={a.slug}>
                 <Link href={canonicalPath(a.slug)} className="block rounded-full bg-surface px-4 py-2 text-sm ring-1 ring-border hover:ring-brand">
                   {a.name}

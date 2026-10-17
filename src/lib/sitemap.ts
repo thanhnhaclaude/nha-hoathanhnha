@@ -72,7 +72,8 @@ export async function sitemapEntries(name: SitemapName): Promise<Entry[]> {
     .select({ slug: pages.slug, updatedAt: pages.updatedAt })
     .from(pages)
     .where(and(eq(pages.type, "page"), livePage()));
-  const fixed = ["/", "/danh-sach/", "/cua-hang/", "/tai-khoan/", "/thanh-toan/", "/gio-hang/"].map((path) => ({ path, updatedAt: null }));
+  // Không đưa trang noindex (giỏ hàng, thanh toán, tài khoản, yêu thích) vào sitemap: tín hiệu mâu thuẫn với Google
+  const fixed = ["/", "/cua-hang/"].map((path) => ({ path, updatedAt: null }));
   return merge(old, [...fixed, ...rows.filter((r) => r.slug !== HOME_SEO_SLUG).map((r) => ({ path: `/${r.slug}/`, updatedAt: r.updatedAt }))]);
 }
 

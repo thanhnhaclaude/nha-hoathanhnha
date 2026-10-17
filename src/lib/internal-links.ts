@@ -2,7 +2,8 @@ import { livePage } from "./published";
 import "server-only";
 import { cache } from "react";
 import { and, count, desc, eq } from "drizzle-orm";
-import { categories, db, pages, productCategories, products } from "./db";
+import { categories, db, pages, postCategories, productCategories, products } from "./db";
+import { infoPages } from "./info-pages";
 
 /**
  * Link nội bộ theo ngữ cảnh — viết theo hướng dẫn của Google về văn bản liên kết:
@@ -207,24 +208,45 @@ export async function getGuidePosts(text: string, limit = 3) {
 }
 
 /** Các khu vực cùng thành phố (anh em) + trang thành phố (cha), cho trang "Shop hoa tươi quận …". */
-export async function getNearbyAreas(categoryId: number, parentId: number | null) {
-  if (parentId == null) return { parent: null, siblings: [] };
+export async function getNearbyAreas(categoryId: number, parentId: number | null, slug = "") {
+  const area = (s: string) => s.startsWith("shop-hoa-tuoi") || s === "khu-vuc";
+  // Khu vực con (vd. trang Bình Phước -> Đồng Xoài), để trang con không bị "mồ côi"
+  const children = area(slug)
+    ? await db.select({ id: categories.id, slug: categories.slug, name: categories.name }).from(categories).where(eq(categories.parentId, categoryId)).orderBy(categories.name)
+    : [];
+  if (parentId == null) return { parent: null, siblings: [], children };
   const [parent] = await db.select({ slug: categories.slug, name: categories.name }).from(categories).where(eq(categories.id, parentId)).limit(1);
   // Cha là trang thành phố (shop-hoa-tuoi-…) hoặc nhóm "khu-vuc" chứa các tỉnh
-  if (!parent || !(parent.slug.startsWith("shop-hoa-tuoi") || parent.slug === "khu-vuc")) return { parent: null, siblings: [] };
+  if (!parent || !area(parent.slug)) return { parent: null, siblings: [], children };
   const siblings = await db
     .select({ id: categories.id, slug: categories.slug, name: categories.name })
     .from(categories)
     .where(eq(categories.parentId, parentId))
     .orderBy(categories.name);
-  return { parent, siblings: siblings.filter((s) => s.id !== categoryId) };
+  return { parent, siblings: siblings.filter((s) => s.id !== categoryId), children };
 }
+
+/** Mọi đường dẫn nội bộ đang tồn tại (danh mục, sản phẩm, bài/trang đang hiện, danh mục bài viết, trang hệ thống). */
+export const getKnownSlugs = cache(async () => {
+  const [cats, prods, pgs, pcats] = await Promise.all([
+    db.select({ slug: categories.slug }).from(categories),
+    db.select({ slug: products.slug }).from(products).where(eq(products.isActive, true)),
+    db.select({ slug: pages.slug }).from(pages).where(livePage()),
+    db.select({ slug: postCategories.slug }).from(postCategories),
+  ]);
+  const fixed = ["", "cua-hang", "gio-hang", "thanh-toan", "tim-kiem", "tra-cuu-don-hang", "danh-sach", "tai-khoan", "don-hang", ...Object.keys(infoPages)];
+  return new Set([...cats, ...prods, ...pgs, ...pcats].map((r) => r.slug).concat(fixed));
+});
 
 /** Như addContextualLinks nhưng cho bài tách nhiều đoạn (xen khối sản phẩm): giới hạn tính chung cả bài. */
 export async function addContextualLinksMany(htmls: string[], selfPath: string, max = MAX_AUTO_LINKS) {
   // Link trỏ về chính trang đang đọc (có trong nội dung cũ) không giúp gì người đọc: giữ chữ, bỏ link
   const selfLink = new RegExp(`<a\\b[^>]*href="${escapeRe(selfPath)}(?:#[^"]*)?"[^>]*>([\\s\\S]*?)<\\/a>`, "gi");
-  htmls = htmls.map((h) => h.replace(selfLink, "$1"));
+  // Link tới trang không tồn tại (vd. /shop-hoa-tuoi-tay-ninh/ trong nội dung cũ): giữ chữ, bỏ link.
+  // Khi trang đó được tạo, link tự hoạt động lại.
+  const known = await getKnownSlugs();
+  const deadLink = /<a\b[^>]*href="\/([a-z0-9-]*)\/?(?:[?#][^"]*)?"[^>]*>([\s\S]*?)<\/a>/gi;
+  htmls = htmls.map((h) => h.replace(selfLink, "$1").replace(deadLink, (m, slug: string, label: string) => (known.has(slug) ? m : label)));
   const out: string[] = [];
   let used = 0;
   const everywhere = new Set(htmls.flatMap((h) => [...linkedPaths(h)]));
