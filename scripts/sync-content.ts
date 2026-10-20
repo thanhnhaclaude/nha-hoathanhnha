@@ -67,9 +67,11 @@ function toHtml(md: string) {
 }
 
 async function connect() {
-  if (process.env.DB_HOST && process.env.DB_USER) {
+  // Trên Hostinger database nằm cùng máy chủ: thiếu DB_HOST thì mặc định localhost
+  const host = process.env.DB_HOST || (process.env.DB_USER && process.env.DB_NAME ? "localhost" : "");
+  if (host && process.env.DB_USER) {
     return mysql.createConnection({
-      host: process.env.DB_HOST,
+      host,
       port: Number(process.env.DB_PORT || 3306),
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
