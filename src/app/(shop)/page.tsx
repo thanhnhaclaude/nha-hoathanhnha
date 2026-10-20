@@ -53,7 +53,7 @@ function homeJsonLd() {
         image: `${site.url}/brand/banner2.webp`,
         description: site.description,
         email: site.email,
-        sameAs: [site.zalo],
+        sameAs: [site.zalo, ...site.socials.map((s) => s.href)],
         areaServed: { "@type": "Country", name: "Việt Nam" },
         ...contact,
         address: { "@type": "PostalAddress", streetAddress: site.stores[0].addresses[0], addressLocality: site.stores[0].city, addressCountry: "VN" },

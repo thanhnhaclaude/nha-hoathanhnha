@@ -8,6 +8,12 @@ export const site = {
   phone: "0396727374",
   phoneDisplay: "0396.72.73.74",
   zalo: "https://zalo.me/0396727374",
+  /** Mạng xã hội của shop (lấy từ website cũ). Hiển thị ở chân trang và khai báo với Google (sameAs). */
+  socials: [
+    { name: "Facebook", href: "https://www.facebook.com/hoatuoithanhnha/" },
+    { name: "Instagram", href: "https://www.instagram.com/hoatuoithanhnha/" },
+    { name: "YouTube", href: "https://www.youtube.com/channel/UCe2zrO2IXG4P3xIZ9I3ixUQ" },
+  ],
   email: "contact@hoathanhnha.com",
   hours: "06:00 – 21:00",
   promo: "Giảm 10% khi đặt hoa hôm nay và 20% đặt hoa lần sau",

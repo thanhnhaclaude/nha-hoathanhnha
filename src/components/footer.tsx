@@ -2,6 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight, Mail, MapPin, Phone, Search } from "lucide-react";
 import { site } from "@/lib/site";
+import { FacebookIcon, InstagramIcon, YoutubeIcon, ZaloIcon } from "./icons";
+
+const SOCIAL_STYLE: Record<string, { bg: string; Icon: (p: { className?: string }) => React.ReactElement }> = {
+  Facebook: { bg: "bg-[#1877f2]", Icon: FacebookIcon },
+  Instagram: { bg: "bg-gradient-to-br from-[#f58529] via-[#dd2a7b] to-[#8134af]", Icon: InstagramIcon },
+  YouTube: { bg: "bg-[#ff0000]", Icon: YoutubeIcon },
+};
 
 // Giữ nguyên tiêu đề, thứ tự và đường dẫn như footer website cũ
 const columns = [
@@ -58,6 +65,35 @@ export function Footer() {
               <Link href="/tra-cuu-don-hang/" className="inline-flex items-center gap-2 hover:text-white">
                 <Search className="size-4 text-[#fc9cc4]" aria-hidden /> Tra cứu đơn hàng
               </Link>
+            </li>
+          </ul>
+          <ul aria-label="Mạng xã hội của Hoa Thanh Nhã" className="flex flex-wrap gap-3 pt-1">
+            {site.socials.map(({ name, href }) => {
+              const { bg, Icon } = SOCIAL_STYLE[name];
+              return (
+                <li key={name}>
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${site.name} trên ${name}`}
+                    className={`grid size-11 place-items-center rounded-full text-white transition-transform duration-200 hover:scale-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${bg}`}
+                  >
+                    <Icon className="size-5" />
+                  </a>
+                </li>
+              );
+            })}
+            <li>
+              <a
+                href={site.zalo}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Chat Zalo với ${site.name}`}
+                className="grid size-11 place-items-center overflow-hidden rounded-full transition-transform duration-200 hover:scale-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              >
+                <ZaloIcon className="size-11" />
+              </a>
             </li>
           </ul>
         </div>
