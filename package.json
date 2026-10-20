@@ -19,8 +19,7 @@
     "seo:gsc": "tsx scripts/gsc-report.ts",
     "seo:ga4": "tsx scripts/ga4-report.ts",
     "seo:speed": "tsx scripts/pagespeed-report.ts",
-    "content:fix-contact": "tsx scripts/fix-contact-info.ts",
-    "prestart": "node scripts/deploy-tasks.mjs"
+    "content:fix-contact": "tsx scripts/fix-contact-info.ts"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

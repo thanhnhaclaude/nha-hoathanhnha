@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { count } from "drizzle-orm";
 import { db, pages, products, seoMeta } from "@/lib/db";
 import { dbConnection } from "@/lib/db/config";
+import { lastMaintenance } from "@/lib/maintenance/run";
 
 export const dynamic = "force-dynamic";
 
@@ -67,7 +68,7 @@ export async function GET() {
   }
 
   return NextResponse.json(
-    { node: process.version, env, dbConfig, database },
+    { node: process.version, env, dbConfig, database, maintenance: lastMaintenance() },
     { headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex" } },
   );
 }
