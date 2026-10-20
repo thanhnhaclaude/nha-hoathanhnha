@@ -153,7 +153,7 @@ export default async function HomePage() {
             </div>
             <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-5">
               {s.items.map((p, j) => (
-                <ProductCard key={p.id} product={p} priority={i === 0 && j < 5} />
+                <ProductCard key={p.id} product={p} priority={i === 0 && j < 2} />
               ))}
             </div>
             <div className="mt-6 text-center sm:hidden">

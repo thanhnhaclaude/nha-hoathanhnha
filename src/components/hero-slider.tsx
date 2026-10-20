@@ -42,7 +42,7 @@ export function HeroSlider() {
             aria-hidden={i !== index}
             tabIndex={i === index ? 0 : -1}
           >
-            <Image src={s.src} alt={s.alt} fill priority={i === 0} sizes="(min-width: 1280px) 1216px, 100vw" className="object-cover" />
+            <Image src={s.src} alt={s.alt} fill preload={i === 0} fetchPriority={i === 0 ? "high" : "low"} loading={i === 0 ? "eager" : "lazy"} sizes="(min-width: 1280px) 1216px, 100vw" className="object-cover" />
           </Link>
         ))}
       </div>

@@ -22,7 +22,7 @@ export default async function ShopPage({ searchParams }: PageProps<"/cua-hang">)
         <SortBar base="/cua-hang/" sort={sort} total={total} />
       </div>
       <div className="mt-6">
-        <ProductGrid products={items} priorityCount={5} />
+        <ProductGrid products={items} priorityCount={2} />
       </div>
       <Pagination base="/cua-hang/" page={page} pages={pages} sort={sort} />
     </div>

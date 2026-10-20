@@ -142,7 +142,7 @@ export default async function SlugPage({ params, searchParams }: Props) {
       </div>
       <div className="mt-6">
         {items.length ? (
-          <ProductGrid products={items} priorityCount={5} />
+          <ProductGrid products={items} priorityCount={2} />
         ) : (
           <p className="rounded-2xl bg-surface p-10 text-center text-muted">
             Danh mục đang được cập nhật. Gọi <a className="font-semibold text-brand-strong" href={`tel:${site.phone}`}>{site.phoneDisplay}</a> để được tư vấn mẫu.

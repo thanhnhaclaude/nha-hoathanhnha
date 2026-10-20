@@ -18,7 +18,10 @@ export function ProductCard({ product, priority = false }: { product: ProductCar
             src={product.image}
             alt={product.name}
             fill
-            priority={priority}
+            // Next.js 16: "priority" đã bỏ, dùng preload + fetchPriority cho ảnh nằm ngay màn hình đầu
+            preload={priority}
+            fetchPriority={priority ? "high" : undefined}
+            loading={priority ? "eager" : undefined}
             sizes="(min-width: 1280px) 20vw, (min-width: 768px) 30vw, 50vw"
             className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
           />

@@ -32,7 +32,7 @@ export default async function SearchPage({ searchParams }: PageProps<"/tim-kiem"
           </div>
           <div className="mt-6">
             {result.items.length ? (
-              <ProductGrid products={result.items} priorityCount={5} />
+              <ProductGrid products={result.items} priorityCount={2} />
             ) : (
               <p className="rounded-2xl bg-surface p-10 text-center text-muted">Không tìm thấy mẫu hoa phù hợp. Thử từ khóa khác như “hoa hồng”, “khai trương”, “HB0”.</p>
             )}
