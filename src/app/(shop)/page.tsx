@@ -82,7 +82,7 @@ export default async function HomePage() {
     homeSections.map(async (s) => {
       const category = await getCategoryBySlug(s.slug);
       if (!category) return null;
-      const { items } = await getProductsInCategory(category, { perPage: 12 });
+      const { items } = await getProductsInCategory(category, { perPage: 8 });
       return { ...s, items };
     }),
   );
@@ -151,7 +151,7 @@ export default async function HomePage() {
                 Xem tất cả <ArrowRight className="size-4" aria-hidden />
               </Link>
             </div>
-            <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+            <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-4">
               {s.items.map((p, j) => (
                 <ProductCard key={p.id} product={p} priority={i === 0 && j < 2} />
               ))}
