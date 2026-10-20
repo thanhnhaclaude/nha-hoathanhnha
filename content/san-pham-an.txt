@@ -1,0 +1,8 @@
+# Ẩn / hiện sản phẩm. Website áp dụng mỗi lần khởi động (sau khi Tái triển khai trên Hostinger).
+# Mỗi dòng một đường dẫn sản phẩm (slug, không có dấu "/"):
+#   ten-san-pham        -> ẨN sản phẩm (gỡ khỏi danh mục, sitemap, feed Google Mua sắm; trang báo không tìm thấy)
+#   +ten-san-pham       -> HIỆN lại sản phẩm đã ẩn
+# Dòng bắt đầu bằng # là ghi chú.
+
+# 2026-10-21: chưa có ảnh thật (website cũ cũng không có ảnh). Khi có ảnh của shop: đổi thành +hoa-mung-tot-nghiep-am-ap-1230
+hoa-mung-tot-nghiep-am-ap-1230

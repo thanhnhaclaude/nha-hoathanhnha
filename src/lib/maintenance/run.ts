@@ -8,6 +8,7 @@ import { dbConnection } from "../db/config";
 import { fixContactInfo } from "./contact-fix";
 import { syncArticles } from "./content-sync";
 import { fixSeoTitleCodes } from "./seo-title-fix";
+import { applyProductVisibility } from "./product-visibility";
 
 export type MaintenanceResult = { at: string; ok: boolean; log: string[]; error?: string };
 
@@ -30,6 +31,7 @@ export async function runMaintenance() {
     result.log.push(...(await syncArticles(db)));
     result.log.push(...(await fixContactInfo(db)));
     result.log.push(...(await fixSeoTitleCodes(db)));
+    result.log.push(...(await applyProductVisibility(db)));
     result.ok = true;
   } catch (e) {
     result.error = (e as Error).message?.slice(0, 300) ?? String(e);
