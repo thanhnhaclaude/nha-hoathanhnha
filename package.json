@@ -18,7 +18,8 @@
     "seo:audit": "tsx scripts/seo-audit.ts",
     "seo:gsc": "tsx scripts/gsc-report.ts",
     "seo:ga4": "tsx scripts/ga4-report.ts",
-    "seo:speed": "tsx scripts/pagespeed-report.ts"
+    "seo:speed": "tsx scripts/pagespeed-report.ts",
+    "content:fix-company": "tsx scripts/fix-company-info.ts"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
