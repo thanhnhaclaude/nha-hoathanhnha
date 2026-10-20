@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CheckCircle2, Phone } from "lucide-react";
 import { formatVND } from "@/lib/format";
-import { getOrderForCustomer, orderStatusLabel, paymentStatusLabel, vietQrUrl } from "@/lib/orders";
+import { getOrderForCustomer, orderStatusLabel, paymentStatusLabel, vietQrAccount, vietQrUrl } from "@/lib/orders";
 import { site } from "@/lib/site";
 import { PaymentWatcher } from "./payment-watcher";
 import { PurchaseTracker } from "./purchase-tracker";
@@ -61,7 +61,7 @@ export async function OrderView({ code, token, trackPurchase = false }: { code: 
               </div>
               <div className="flex justify-between gap-4">
                 <dt className="text-muted">Chủ tài khoản</dt>
-                <dd className="font-semibold">{process.env.VIETQR_ACCOUNT_NAME}</dd>
+                <dd className="font-semibold">{vietQrAccount().name}</dd>
               </div>
             </dl>
             <p className="mt-4 rounded-xl bg-leaf-soft p-3 text-sm text-leaf">Trang này tự cập nhật “Đã thanh toán” trong vài giây sau khi tiền về tài khoản shop.</p>

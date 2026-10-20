@@ -44,8 +44,8 @@ function todayInVN() {
  * để webhook SePay của website này không nhận nhầm giao dịch của website kia.
  */
 export function orderPrefix() {
-  const p = process.env.ORDER_CODE_PREFIX?.trim().toUpperCase();
-  return p && /^[A-Z]{2,4}$/.test(p) ? p : "TN";
+  const p = (process.env.ORDER_CODE_PREFIX || "HN").trim().toUpperCase();
+  return /^[A-Z]{2,4}$/.test(p) ? p : "HN";
 }
 
 function makeCode() {
@@ -143,11 +143,22 @@ export async function findOrderByCodeAndPhone(code: string, phoneNumber: string)
   return order;
 }
 
+/**
+ * Tài khoản nhận chuyển khoản VietQR. Số tài khoản vốn hiển thị công khai trên mã QR cho khách,
+ * nên có giá trị mặc định ở đây; biến môi trường VIETQR_* (nếu có) được ưu tiên.
+ */
+export function vietQrAccount() {
+  return {
+    bank: process.env.VIETQR_BANK_ID || "VCB",
+    account: process.env.VIETQR_ACCOUNT_NO || "1066354898",
+    name: process.env.VIETQR_ACCOUNT_NAME || "NGUYEN TRUONG TRONG",
+  };
+}
+
 export function vietQrUrl(amount: number, content: string) {
-  const bank = process.env.VIETQR_BANK_ID;
-  const account = process.env.VIETQR_ACCOUNT_NO;
+  const { bank, account, name } = vietQrAccount();
   if (!bank || !account) return null;
-  const params = new URLSearchParams({ amount: String(amount), addInfo: content, accountName: process.env.VIETQR_ACCOUNT_NAME ?? "" });
+  const params = new URLSearchParams({ amount: String(amount), addInfo: content, accountName: name });
   return `https://img.vietqr.io/image/${encodeURIComponent(bank)}-${encodeURIComponent(account)}-compact2.png?${params}`;
 }
 

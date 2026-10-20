@@ -13,9 +13,10 @@ export type DbConnection =
 const env = (k: string) => process.env[k]?.trim().replace(/^(['"])(.*)\1$/, "$2") || undefined;
 
 export function dbConnection(): DbConnection {
-  const host = env("DB_HOST");
   const user = env("DB_USER");
   const database = env("DB_NAME");
+  // Trên Hostinger database nằm cùng máy chủ: thiếu DB_HOST thì mặc định localhost
+  const host = env("DB_HOST") ?? (user && database ? "localhost" : undefined);
   if (host || user || database) {
     const missing = [!host && "DB_HOST", !user && "DB_USER", !database && "DB_NAME"].filter(Boolean);
     if (missing.length) throw new Error(`Thiếu biến môi trường: ${missing.join(", ")}`);
