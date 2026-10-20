@@ -27,9 +27,15 @@ type Gtag = (command: "event", name: string, params: Record<string, unknown>) =>
 
 /** Gửi sự kiện thương mại điện tử GA4 (view_item, add_to_cart, begin_checkout, purchase). */
 export function trackEvent(name: string, params: Record<string, unknown>) {
-  if (typeof window === "undefined") return;
-  const gtag = (window as unknown as { gtag?: Gtag }).gtag;
-  gtag?.("event", name, { currency: "VND", ...params });
+  if (typeof window === "undefined" || !googleConfig.enabled) return;
+  // gtag.js được tải trì hoãn (DeferredTagLoader): lệnh gọi trước đó vào hàng đợi dataLayer và được gửi khi file tải xong
+  const w = window as unknown as { gtag?: Gtag; dataLayer?: unknown[] };
+  w.dataLayer ??= [];
+  w.gtag ??= function () {
+    // eslint-disable-next-line prefer-rest-params
+    w.dataLayer!.push(arguments);
+  } as Gtag;
+  w.gtag("event", name, { currency: "VND", ...params });
 }
 
 export function gaItem(p: { id: number; name: string; price: number; quantity?: number }): GaItem {
