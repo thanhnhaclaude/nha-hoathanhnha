@@ -178,7 +178,7 @@ export default async function SlugPage({ params, searchParams }: Props) {
           <h2 id="guide-h" className="font-display text-2xl font-semibold">
             Cẩm nang {category.name.toLocaleLowerCase("vi")}
           </h2>
-          <ul className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className={`mt-6 grid gap-5 ${postGridCols(guides.length)}`}>
             {guides.map((p) => (
               <li key={p.id}>
                 <PostCard post={p} />
@@ -243,6 +243,15 @@ async function CategoryDescription({ html, title, slug }: { html: string; title:
       })}
     </div>
   );
+}
+
+/** Số cột cho lưới thẻ bài viết theo số bài, để hàng luôn đủ (vd. 3 bài -> 3 cột, 4 bài -> 2 hoặc 4 cột). */
+function postGridCols(count: number) {
+  if (count === 3) return "sm:grid-cols-3";
+  if (count === 4) return "sm:grid-cols-2 lg:grid-cols-4";
+  if (count === 2) return "sm:grid-cols-2";
+  if (count % 3 === 0) return "sm:grid-cols-2 lg:grid-cols-3";
+  return "sm:grid-cols-2";
 }
 
 /** Chọn số cột để hàng cuối không bị hụt (vd. 8 sản phẩm -> 4 cột, 6 hoặc 9 -> 3 cột). */
@@ -386,7 +395,7 @@ async function CmsView({ page }: { page: Page }) {
           <h2 id="recent-h" className="heading-display text-3xl">
             Bài viết liên quan
           </h2>
-          <ul className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className={`mt-6 grid gap-5 ${postGridCols(recent.length)}`}>
             {recent.map((p) => (
               <li key={p.id}>
                 <PostCard post={p} />
@@ -547,7 +556,7 @@ async function ProductView({ data }: { data: NonNullable<Awaited<ReturnType<type
             Có thể bạn cũng thích
           </h2>
           <div className="mt-6">
-            <ProductGrid products={related.slice(0, 5)} />
+            <ProductGrid products={related.slice(0, 4)} layout="four" />
           </div>
         </section>
       )}
@@ -556,7 +565,7 @@ async function ProductView({ data }: { data: NonNullable<Awaited<ReturnType<type
           <h2 id="guide-h" className="heading-display text-3xl">
             Cẩm nang chọn hoa
           </h2>
-          <ul className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className={`mt-6 grid gap-5 ${postGridCols(guides.length)}`}>
             {guides.map((p) => (
               <li key={p.id}>
                 <PostCard post={p} />

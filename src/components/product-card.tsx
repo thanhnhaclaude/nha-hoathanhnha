@@ -51,9 +51,13 @@ export function ProductCard({ product, priority = false }: { product: ProductCar
   );
 }
 
-export function ProductGrid({ products, priorityCount = 0 }: { products: ProductCardData[]; priorityCount?: number }) {
+/**
+ * Lưới sản phẩm. Số cột chọn để hàng luôn đủ: danh mục 24 sản phẩm/trang chia hết cho 2, 3, 4 cột;
+ * "four" dành cho khối 4 sản phẩm (2 cột điện thoại, 4 cột từ máy tính bảng).
+ */
+export function ProductGrid({ products, priorityCount = 0, layout = "default" }: { products: ProductCardData[]; priorityCount?: number; layout?: "default" | "four" }) {
   return (
-    <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+    <div className={`grid grid-cols-2 gap-3 sm:gap-5 ${layout === "four" ? "md:grid-cols-4" : "md:grid-cols-3 lg:grid-cols-4"}`}>
       {products.map((p, i) => (
         <ProductCard key={p.id} product={p} priority={i < priorityCount} />
       ))}
