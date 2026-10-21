@@ -6,3 +6,6 @@
 
 # 2026-10-21: chưa có ảnh thật (website cũ cũng không có ảnh). Khi có ảnh của shop: đổi thành +hoa-mung-tot-nghiep-am-ap-1230
 hoa-mung-tot-nghiep-am-ap-1230
+
+# Không có ảnh sản phẩm (Search Console: thiếu trường "image")
+hoa-chia-buon-thanh-kinh-phan-uu-1102

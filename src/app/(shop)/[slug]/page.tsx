@@ -344,7 +344,8 @@ async function CmsView({ page }: { page: Page }) {
         "@context": "https://schema.org",
         "@type": "Article",
         headline: page.title,
-        image: page.image ? [page.image] : undefined,
+        // Google yêu cầu "image" cho Article: ảnh đại diện, nếu không có thì ảnh đầu tiên trong bài, cuối cùng là ảnh thương hiệu
+        image: [absUrl(page.image || page.content?.match(/<img[^>]+src=["']([^"']+)["']/i)?.[1] || "/brand/banner2.webp")],
         datePublished: page.publishedAt.toISOString(),
         dateModified: page.updatedAt.toISOString(),
         publisher: { "@type": "Organization", name: site.name },
@@ -444,7 +445,7 @@ async function ProductView({ data }: { data: NonNullable<Awaited<ReturnType<type
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.name,
-    image: product.images,
+    image: product.images.map(absUrl),
     sku: product.sku ?? undefined,
     description: plainText(product.shortDescription || product.description, 300),
     brand: { "@type": "Brand", name: site.name },
@@ -576,4 +577,9 @@ async function ProductView({ data }: { data: NonNullable<Awaited<ReturnType<type
       )}
     </div>
   );
+}
+
+/** Đường dẫn ảnh tuyệt đối cho dữ liệu có cấu trúc (JSON-LD): "/uploads/a.webp" -> "https://hoathanhnha.com/uploads/a.webp". */
+function absUrl(src: string) {
+  return /^https?:\/\//i.test(src) ? src : `${site.url}${src.startsWith("/") ? "" : "/"}${src}`;
 }
