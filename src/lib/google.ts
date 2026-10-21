@@ -12,9 +12,10 @@ export const googleConfig = {
   enabled: process.env.NODE_ENV === "production" || process.env.NEXT_PUBLIC_ANALYTICS_DEBUG === "1",
 };
 
-/** Mã xác minh Google Search Console / Merchant Center (thẻ meta google-site-verification), cách nhau bằng dấu phẩy. */
+/** Mã xác minh Google Search Console / Merchant Center (thẻ meta google-site-verification), cách nhau bằng dấu phẩy.
+ *  Chỉ giữ mã của chủ shop; mã của tài khoản khác (khoinguyenyi, gỡ 21/10/2026) không đặt lại. */
 export function googleVerification() {
-  const raw = process.env.GOOGLE_SITE_VERIFICATION ?? "_27xAZ-TC_egrtPKL-gZGwfvvllJ2D1bWyApNW9ZeeQ,kIeIgJvz8tgYK7n3ZgY47KzbUkIHNbsyilkwOO1t_fM";
+  const raw = process.env.GOOGLE_SITE_VERIFICATION ?? "_27xAZ-TC_egrtPKL-gZGwfvvllJ2D1bWyApNW9ZeeQ";
   return raw
     .split(",")
     .map((s) => s.trim())
