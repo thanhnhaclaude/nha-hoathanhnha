@@ -1,6 +1,6 @@
 /**
  * Việc bảo trì dữ liệu chạy một lần mỗi khi máy chủ website khởi động (gọi từ src/instrumentation.ts):
- * đồng bộ bài viết từ content/bai-viet, chuẩn hóa thông tin liên hệ, sửa tiêu đề SEO sai mã sản phẩm. Không phụ thuộc lệnh khởi động
+ * đồng bộ bài viết từ content/bai-viet, chuẩn hóa thông tin liên hệ, sửa tiêu đề SEO sai mã sản phẩm, ẩn/hiện sản phẩm, tạo trang khai trương theo giá. Không phụ thuộc lệnh khởi động
  * hay công cụ phụ trên hosting. Kết quả lần chạy gần nhất hiện ở /api/health/ (mục "maintenance").
  */
 import mysql from "mysql2/promise";
@@ -9,6 +9,7 @@ import { fixContactInfo } from "./contact-fix";
 import { syncArticles } from "./content-sync";
 import { fixSeoTitleCodes } from "./seo-title-fix";
 import { applyProductVisibility } from "./product-visibility";
+import { syncPricePages } from "./price-pages";
 
 export type MaintenanceResult = { at: string; ok: boolean; log: string[]; error?: string };
 
@@ -32,6 +33,7 @@ export async function runMaintenance() {
     result.log.push(...(await fixContactInfo(db)));
     result.log.push(...(await fixSeoTitleCodes(db)));
     result.log.push(...(await applyProductVisibility(db)));
+    result.log.push(...(await syncPricePages(db)));
     result.ok = true;
   } catch (e) {
     result.error = (e as Error).message?.slice(0, 300) ?? String(e);

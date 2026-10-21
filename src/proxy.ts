@@ -1,9 +1,18 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { legacyRedirects } from "@/lib/legacy-redirects";
 
 const LOGIN_PATH = "/admin/login/";
 
 export function proxy(request: NextRequest) {
   const { pathname: rawPath } = request.nextUrl;
+
+  // SEO: trang của website cũ không còn tồn tại -> 301 về trang gần nghĩa nhất (src/lib/legacy-redirects.ts)
+  let key = rawPath;
+  try {
+    key = decodeURIComponent(rawPath);
+  } catch {}
+  const target = legacyRedirects[key.replace(/^\/+|\/+$/g, "").toLowerCase()];
+  if (target) return NextResponse.redirect(new URL(target, request.url), 301);
 
   // SEO: đường dẫn có chữ hoa (vd. /HOA-BO/) là bản trùng của /hoa-bo/ -> chuyển hướng 301 về chữ thường.
   // Bỏ qua file tĩnh (có phần mở rộng) vì tên ảnh có thể có chữ hoa, và trang có mã đơn viết hoa (HN123456).

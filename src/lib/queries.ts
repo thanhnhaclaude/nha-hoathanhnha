@@ -121,7 +121,9 @@ export async function getProductBySlug(slug: string) {
     .select({ id: categories.id, name: categories.name, slug: categories.slug, parentId: categories.parentId })
     .from(productCategories)
     .innerJoin(categories, eq(categories.id, productCategories.categoryId))
-    .where(eq(productCategories.productId, product.id));
+    .where(eq(productCategories.productId, product.id))
+    // Thứ tự cố định: danh mục gốc (id nhỏ) trước danh mục tạo thêm như trang theo giá (maintenance/price-pages.ts)
+    .orderBy(productCategories.categoryId);
   return { product, categories: cats };
 }
 
