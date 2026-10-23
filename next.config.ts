@@ -6,6 +6,10 @@ const nextConfig: NextConfig = {
   // Luôn đặt title/description/canonical trong <head> (không stream) cho mọi trình duyệt và bot,
   // để Google, Facebook, Zalo và công cụ SEO đều đọc được ngay
   htmlLimitedBots: /.*/,
+  experimental: {
+    // CSS (~15 KB) chèn thẳng vào HTML thay vì file riêng chặn hiển thị: Lighthouse ước tính nhanh ~0,7 giây trên điện thoại
+    inlineCss: true,
+  },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "hoathanhnha.com", pathname: "/wp-content/uploads/**" },

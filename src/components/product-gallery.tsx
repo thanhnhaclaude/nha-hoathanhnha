@@ -9,7 +9,7 @@ export function ProductGallery({ images, name }: { images: string[]; name: strin
   return (
     <div className="flex flex-col gap-3">
       <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-surface-muted">
-        <Image src={images[active]} alt={name} fill priority sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
+        <Image src={images[active]} alt={name} fill preload fetchPriority="high" sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
       </div>
       {images.length > 1 && (
         <ul className="flex gap-3 overflow-x-auto pb-1">

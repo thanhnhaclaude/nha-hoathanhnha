@@ -26,7 +26,7 @@ export function Header() {
       <div className="container-x flex h-16 items-center gap-2 min-[360px]:gap-3 sm:h-20 sm:gap-6">
         <MobileMenu menu={mainMenu} />
         <Link href="/" className="shrink-0" aria-label={`${site.name} – trang chủ`}>
-          <Image src="/brand/logo-thanh-nha.webp" alt={site.name} width={957} height={213} priority className="h-7 w-auto min-[360px]:h-9 sm:h-12" />
+          <Image src="/brand/logo-thanh-nha.webp" alt={site.name} width={957} height={213} loading="eager" sizes="216px" className="h-7 w-auto min-[360px]:h-9 sm:h-12" />
         </Link>
 
         <form action="/tim-kiem/" className="relative mx-auto hidden w-full max-w-md md:block" role="search">
