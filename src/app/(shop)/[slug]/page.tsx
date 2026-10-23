@@ -200,7 +200,8 @@ export default async function SlugPage({ params, searchParams }: Props) {
       {category.description && plainText(category.description, 10000).length > 300 && (
         <section aria-label={`Giới thiệu ${category.name}`} className="defer-render mx-auto mt-16 max-w-3xl border-t border-border pt-10">
           <ReadMore>
-            <CategoryDescription html={category.description} title={category.name} slug={category.slug} />
+            {/* Trang khu vực: lưới phía trên đã đủ mẫu, bỏ các khối sản phẩm trong phần mô tả */}
+            <CategoryDescription html={category.description} title={category.name} slug={category.slug} withProducts={!isArea} />
           </ReadMore>
         </section>
       )}
@@ -212,10 +213,11 @@ export default async function SlugPage({ params, searchParams }: Props) {
  * Mô tả danh mục nhập từ WordPress: shortcode [ux_products cat="…"] được thay bằng hàng sản phẩm
  * của danh mục tương ứng (như website cũ), kèm link xem tất cả.
  */
-async function CategoryDescription({ html, title, slug }: { html: string; title: string; slug: string }) {
+async function CategoryDescription({ html, title, slug, withProducts = true }: { html: string; title: string; slug: string; withProducts?: boolean }) {
   const rawSegments = await Promise.all(
     splitCategoryShortcodes(normalizeHeadings(removeDuplicateTitleHeading(html, title))).map(async (seg) => {
       if (seg.type === "html") return seg;
+      if (!withProducts) return null;
       const cat = await getCategoryByWooId(seg.wooId);
       if (!cat) return null;
       // 8 mẫu = 2 hàng × 4 cột (2 cột × 4 hàng trên điện thoại)
@@ -237,8 +239,8 @@ async function CategoryDescription({ html, title, slug }: { html: string; title:
         if (seg.type === "html") return <div key={i} className="prose-shop" dangerouslySetInnerHTML={{ __html: seg.html }} />;
         if (!seg.items.length) return null;
         return (
-          // Khối sản phẩm rộng hơn cột chữ (giống bài viết) để 4 cột không bị chật
-          <div key={i} className="lg:-mx-24">
+          // Nằm trong cột chữ: phần "Xem thêm" ẩn phần tràn nên không được rộng hơn cột
+          <div key={i}>
             <div className="mb-3 flex items-baseline justify-between gap-4">
               <h3 className="font-display text-xl font-semibold">{seg.label}</h3>
               <Link href={canonicalPath(seg.category.slug)} className="shrink-0 text-sm font-semibold text-brand-strong hover:underline">
