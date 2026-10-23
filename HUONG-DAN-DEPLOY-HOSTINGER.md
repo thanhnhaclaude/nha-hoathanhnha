@@ -87,14 +87,12 @@ Website mới đã gắn sẵn đúng các mã của website WordPress cũ, nên
 | Dịch vụ | Mã | Ghi chú |
 |---|---|---|
 | Google Analytics 4 | `G-48L4JHB0VM` | Tự gửi: xem trang, `view_item`, `add_to_cart`, `begin_checkout`, `purchase` (kèm mã đơn, doanh thu) |
-| Google Tag Manager | `GTM-N6JH36R` | Chứa chuyển đổi Google Ads: bấm gọi `tel:`, bấm Zalo, bấm Messenger, trang đặt hàng thành công |
-| Search Console | 2 thẻ `google-site-verification` | Giữ nguyên, quyền sở hữu không mất khi chuyển website |
+| Search Console | 1 thẻ `google-site-verification` (`0BL41Q2…`) | Đã bỏ Google Tag Manager và thẻ xác minh cũ (23/10/2026) |
 | Merchant Center | `https://hoathanhnha.com/google-merchant-feed.xml` | Nguồn cấp sản phẩm, cập nhật mỗi lần Google tải |
 
-- Trang đặt hàng thành công giữ đường dẫn cũ `/thanh-toan/don-hang-da-nhan/<mã>/`, nên thẻ chuyển đổi mua hàng trong GTM vẫn chạy.
 - Chỉ bản chạy trên Hostinger mới gửi số liệu; chạy thử trên máy (`npm run dev`) không gửi.
 - **Merchant Center:** *Sản phẩm → Nguồn dữ liệu → Thêm nguồn sản phẩm → Tìm nạp theo lịch*, dán URL feed ở trên, tần suất *Hằng ngày*. Feed chỉ gồm sản phẩm đang bán, có giá và có ảnh; số điện thoại trong mô tả được tự lọc bỏ theo chính sách của Google.
-- Sau khi deploy: kiểm tra GA4 → *Báo cáo → Thời gian thực*, và GTM → *Xem trước* (Tag Assistant) với `https://hoathanhnha.com`.
+- Sau khi deploy: kiểm tra GA4 → *Báo cáo → Thời gian thực*.
 
 ## Bước 11: Đăng bài theo lịch và theo dõi SEO
 

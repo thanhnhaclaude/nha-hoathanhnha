@@ -3,7 +3,7 @@ import { OrderView } from "../../../don-hang/[code]/order-view";
 
 /**
  * Trang "đơn hàng đã nhận" ngay sau khi đặt hàng. Giữ đường dẫn giống WooCommerce cũ
- * (/thanh-toan/don-hang-da-nhan/...) vì thẻ chuyển đổi Google Ads trong GTM kích hoạt theo URL này.
+ * (/thanh-toan/don-hang-da-nhan/...); GA4 ghi sự kiện mua hàng khi trang này tải.
  */
 export const metadata: Metadata = { title: "Đặt hàng thành công", robots: { index: false } };
 export const dynamic = "force-dynamic";

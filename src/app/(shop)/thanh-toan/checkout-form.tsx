@@ -71,7 +71,7 @@ export function CheckoutForm({ shipping, today }: { shipping: { fee: number; fre
       if (res.ok) {
         clear();
         // Tải lại toàn trang tại đường dẫn "đơn hàng đã nhận" giống WooCommerce cũ:
-        // thẻ chuyển đổi Google Ads trong GTM kích hoạt theo URL này khi trang tải.
+        // GA4 ghi sự kiện mua hàng khi trang này tải (gtag.js tải ngay ở đường dẫn này).
         window.location.assign(`/thanh-toan/don-hang-da-nhan/${res.code}/?t=${res.accessToken}`);
       } else {
         setErrors(res.errors);
