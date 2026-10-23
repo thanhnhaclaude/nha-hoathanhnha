@@ -17,6 +17,7 @@ import { syncSeasonalPages } from "./seasonal-pages";
 import { fillEmptyCategories } from "./category-fill";
 import { syncNearMePage } from "./near-me-page";
 import { syncOccasionPages } from "./occasion-pages";
+import { syncCategoryCopy } from "./category-copy";
 
 export type MaintenanceResult = { at: string; ok: boolean; log: string[]; error?: string };
 
@@ -49,6 +50,7 @@ export async function runMaintenance() {
     result.log.push(...(await fillEmptyCategories(db)));
     result.log.push(...(await syncNearMePage(db)));
     result.log.push(...(await syncOccasionPages(db)));
+    result.log.push(...(await syncCategoryCopy(db)));
     result.ok = true;
   } catch (e) {
     result.error = (e as Error).message?.slice(0, 300) ?? String(e);
