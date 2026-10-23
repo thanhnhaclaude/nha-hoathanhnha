@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Playfair_Display } from "next/font/google";
 import { GoogleTags } from "@/components/google-tags";
-import { googleVerification } from "@/lib/google";
+import { bingVerification, googleVerification } from "@/lib/google";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   description: site.description,
   openGraph: { type: "website", locale: "vi_VN", siteName: site.name, images: ["/brand/banner2.webp"] },
   // Thẻ xác minh Search Console / Merchant Center chép từ website cũ, để không phải xác minh lại
-  verification: { google: googleVerification() },
+  verification: { google: googleVerification(), ...(bingVerification() ? { other: { "msvalidate.01": bingVerification() } } : {}) },
 };
 
 export const viewport: Viewport = { themeColor: "#e8641b" };

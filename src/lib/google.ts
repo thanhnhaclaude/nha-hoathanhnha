@@ -20,6 +20,11 @@ export function googleVerification() {
     .filter(Boolean);
 }
 
+/** Mã xác minh Bing Webmaster Tools (thẻ meta msvalidate.01). Đổi bằng biến BING_SITE_VERIFICATION; đặt rỗng để tắt. */
+export function bingVerification() {
+  return (process.env.BING_SITE_VERIFICATION ?? "EAF921A8607F7B97CB33175F574956CB").trim();
+}
+
 export type GaItem = { item_id: string; item_name: string; price: number; quantity: number };
 
 type Gtag = (command: "event", name: string, params: Record<string, unknown>) => void;
