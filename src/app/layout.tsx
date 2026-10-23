@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Playfair_Display, Be_Vietnam_Pro } from "next/font/google";
+import { Playfair_Display } from "next/font/google";
 import { GoogleTags } from "@/components/google-tags";
 import { googleVerification } from "@/lib/google";
 import { site } from "@/lib/site";
@@ -16,13 +16,8 @@ const display = Playfair_Display({
   preload: false,
 });
 
-const body = Be_Vietnam_Pro({
-  variable: "--font-body",
-  subsets: ["latin", "vietnamese"],
-  // 700 chỉ dùng 3 chỗ (trình duyệt dùng 600 thay thế); bớt 2 file phông tải ở đầu trang
-  weight: ["400", "500", "600"],
-  display: "swap",
-});
+// Chữ thân bài dùng phông có sẵn trên máy khách (--font-body trong globals.css), không tải phông web:
+// đầu trang chỉ còn ảnh banner và JavaScript, chữ hiện ngay không đổi phông
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -37,7 +32,7 @@ export const viewport: Viewport = { themeColor: "#e8641b" };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="vi" className={`${display.variable} ${body.variable} h-full`}>
+    <html lang="vi" className={`${display.variable} h-full`}>
       <body className="flex min-h-full flex-col">
         <GoogleTags />
         {children}
