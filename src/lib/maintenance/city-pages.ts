@@ -13,6 +13,7 @@ type CityPage = {
   city: string;
   /** Tiền tố trong site.stores ("Nha Trang: …") */
   store?: string;
+  /** Nơi giao, viết đủ ("các phường A, B" / "thành phố X và các huyện Y") */
   areas: string;
   nearby: string;
   places: string;
@@ -24,7 +25,7 @@ const CITIES: CityPage[] = [
     slug: "shop-hoa-tuoi-nha-trang",
     city: "Nha Trang",
     store: "Nha Trang",
-    areas: "Lộc Thọ, Phước Tân, Phước Tiến, Tân Lập, Vĩnh Hải, Vĩnh Phước, Phước Long, Vĩnh Nguyên, Vĩnh Hòa",
+    areas: "các phường Lộc Thọ, Phước Tân, Phước Tiến, Tân Lập, Vĩnh Hải, Vĩnh Phước, Phước Long, Vĩnh Nguyên, Vĩnh Hòa",
     nearby: "Diên Khánh, Cam Lâm, Cam Ranh",
     places: "khách sạn và resort dọc đường Trần Phú, Bệnh viện Đa khoa tỉnh Khánh Hòa, các nhà hàng tiệc cưới ven biển",
     note: "Khách ở xa đặt hoa tặng người thân đang du lịch hoặc công tác tại Nha Trang chỉ cần gửi tên khách sạn và số phòng, shop giao tận quầy lễ tân.",
@@ -41,7 +42,7 @@ const CITIES: CityPage[] = [
     slug: "shop-hoa-tuoi-vung-tau",
     city: "Vũng Tàu",
     store: "Vũng Tàu",
-    areas: "Phường 1 đến Phường 12, Thắng Tam, Thắng Nhì, Thắng Nhất, Rạch Dừa, Nguyễn An Ninh, khu Bãi Trước và Bãi Sau",
+    areas: "các phường 1 đến 12, Thắng Tam, Thắng Nhì, Thắng Nhất, Rạch Dừa, Nguyễn An Ninh, khu Bãi Trước và Bãi Sau",
     nearby: "Bà Rịa, Long Điền, Phú Mỹ",
     places: "khách sạn ven biển Bãi Sau, Bệnh viện Lê Lợi, các văn phòng khu công nghiệp dầu khí",
     note: "Hoa khai trương và hoa chia buồn tại Vũng Tàu nên đặt trước vài giờ để shop sắp xếp xe chở kệ hoa lớn.",
@@ -50,7 +51,7 @@ const CITIES: CityPage[] = [
     slug: "shop-hoa-tuoi-bien-hoa",
     city: "Biên Hòa",
     store: "Biên Hòa",
-    areas: "Trung Dũng, Quang Vinh, Tân Phong, Tân Hiệp, Tam Hiệp, Hố Nai, Long Bình, Bửu Long, Hóa An",
+    areas: "các phường Trung Dũng, Quang Vinh, Tân Phong, Tân Hiệp, Tam Hiệp, Hố Nai, Long Bình, Bửu Long, Hóa An",
     nearby: "Trảng Bom, Long Thành, Nhơn Trạch, Vĩnh Cửu",
     places: "Khu công nghiệp Biên Hòa 1, Biên Hòa 2, Amata, Bệnh viện Đa khoa Đồng Nai, các nhà tang lễ trong thành phố",
     note: "Doanh nghiệp trong khu công nghiệp thường đặt kệ hoa khai trương và hoa chúc mừng đối tác: gửi tên công ty và cổng ra vào để giao đúng chỗ.",
@@ -59,7 +60,7 @@ const CITIES: CityPage[] = [
     slug: "shop-hoa-tuoi-hue",
     city: "Huế",
     store: "Huế",
-    areas: "Phú Hội, Phú Nhuận, Vĩnh Ninh, Phú Hòa, Vỹ Dạ, An Cựu, Xuân Phú, Thuận Hòa, Kim Long",
+    areas: "các phường Phú Hội, Phú Nhuận, Vĩnh Ninh, Phú Hòa, Vỹ Dạ, An Cựu, Xuân Phú, Thuận Hòa, Kim Long",
     nearby: "Hương Thủy, Hương Trà, Phú Vang",
     places: "Bệnh viện Trung ương Huế, Đại học Huế, khách sạn khu phố Tây Phạm Ngũ Lão",
     note: "Đơn hoa chia buồn ở Huế thường cần giao sớm: báo shop địa chỉ tang lễ và nội dung băng tang ngay khi đặt.",
@@ -67,7 +68,7 @@ const CITIES: CityPage[] = [
   {
     slug: "shop-hoa-tuoi-vinh",
     city: "Vinh",
-    areas: "Hưng Dũng, Bến Thủy, Trường Thi, Quang Trung, Hà Huy Tập, Lê Mao, Hưng Bình, Đội Cung",
+    areas: "các phường Hưng Dũng, Bến Thủy, Trường Thi, Quang Trung, Hà Huy Tập, Lê Mao, Hưng Bình, Đội Cung",
     nearby: "Cửa Lò, Nghi Lộc, Hưng Nguyên",
     places: "Đại học Vinh, Bệnh viện Hữu nghị Đa khoa Nghệ An, Quảng trường Hồ Chí Minh",
     note: "Hoa tốt nghiệp ở Đại học Vinh vào mùa lễ tốt nghiệp nên đặt trước 1–2 ngày để giữ mẫu.",
@@ -75,10 +76,107 @@ const CITIES: CityPage[] = [
   {
     slug: "shop-hoa-tuoi-hai-duong",
     city: "Hải Dương",
-    areas: "Trần Hưng Đạo, Nguyễn Trãi, Phạm Ngũ Lão, Quang Trung, Thanh Bình, Tân Bình, Hải Tân, Việt Hòa",
+    areas: "các phường Trần Hưng Đạo, Nguyễn Trãi, Phạm Ngũ Lão, Quang Trung, Thanh Bình, Tân Bình, Hải Tân, Việt Hòa",
     nearby: "Nam Sách, Cẩm Giàng, Gia Lộc, Chí Linh, Kinh Môn",
     places: "Khu công nghiệp Đại An, Nam Sách, Bệnh viện Đa khoa tỉnh Hải Dương, Quảng trường Thống Nhất",
     note: "Kệ hoa khai trương cho cửa hàng, công ty ở các khu công nghiệp quanh Hải Dương được giao và dựng tận nơi.",
+  },
+  // Tuần 1 (26/10/2026): trang tỉnh đang có thứ hạng trên Google nhưng mất khi chuyển website (trước đó chuyển hướng về trang chung)
+  {
+    slug: "shop-hoa-tuoi-cao-lanh",
+    city: "Cao Lãnh",
+    areas: "các phường 1, 2, 3, 4, 6, 11, Mỹ Phú, Hòa Thuận và các xã ven thành phố",
+    nearby: "Sa Đéc, Lấp Vò, Tháp Mười, Thanh Bình",
+    places: "Bệnh viện Đa khoa Đồng Tháp, Đại học Đồng Tháp, khu di tích Nguyễn Sinh Sắc",
+    note: "Hoa chia buồn và kệ hoa khai trương tại Cao Lãnh nên đặt sớm vài giờ để shop chuẩn bị và giao đúng giờ.",
+  },
+  {
+    slug: "shop-hoa-tuoi-nhon-trach",
+    city: "Nhơn Trạch",
+    areas: "các xã, thị trấn Hiệp Phước, Phú Hội, Long Tân, Phước Thiền, Phú Thạnh, Long Thọ, Phước An",
+    nearby: "Long Thành, Biên Hòa, Thủ Đức",
+    places: "các khu công nghiệp Nhơn Trạch 1 đến 6, văn phòng nhà máy, khu dân cư quanh trung tâm huyện",
+    note: "Doanh nghiệp trong khu công nghiệp Nhơn Trạch thường đặt kệ hoa khai trương và hoa chúc mừng đối tác: gửi tên công ty, cổng ra vào để giao đúng chỗ.",
+  },
+  {
+    slug: "shop-hoa-tuoi-uong-bi",
+    city: "Uông Bí",
+    areas: "các phường Quang Trung, Thanh Sơn, Trưng Vương, Yên Thanh, Bắc Sơn, Phương Đông, Nam Khê",
+    nearby: "Đông Triều, Quảng Yên, Hạ Long",
+    places: "Bệnh viện Việt Nam – Thụy Điển Uông Bí, khu di tích Yên Tử, các khu dân cư trung tâm",
+    note: "Khách ở xa đặt hoa sinh nhật, hoa chúc mừng cho người thân ở Uông Bí chỉ cần gửi địa chỉ và số điện thoại người nhận, shop gửi ảnh trước khi giao.",
+  },
+  {
+    slug: "shop-hoa-tuoi-cam-ranh",
+    city: "Cam Ranh",
+    areas: "các phường Cam Nghĩa, Cam Phú, Cam Lộc, Cam Thuận, Cam Lợi, Ba Ngòi, Cam Linh",
+    nearby: "Cam Lâm, Nha Trang",
+    places: "sân bay Cam Ranh, các resort Bãi Dài, khu dân cư trung tâm Ba Ngòi",
+    note: "Hoa tặng khách nghỉ dưỡng tại các resort Bãi Dài: gửi tên resort, tên khách và giờ có mặt để shop hẹn giao tại lễ tân.",
+  },
+  {
+    slug: "shop-hoa-tuoi-viet-tri",
+    city: "Việt Trì",
+    areas: "các phường Gia Cẩm, Tân Dân, Tiên Cát, Thọ Sơn, Nông Trang, Dữu Lâu, Vân Phú, Bến Gót",
+    nearby: "Phù Ninh, Lâm Thao, thị xã Phú Thọ",
+    places: "Bệnh viện Đa khoa tỉnh Phú Thọ, khu di tích Đền Hùng, Đại học Hùng Vương",
+    note: "Mùa lễ hội Đền Hùng và mùa tốt nghiệp đơn hoa tăng nhiều, nên đặt trước 1 ngày để giữ mẫu.",
+  },
+  {
+    slug: "shop-hoa-tuoi-hong-ngu",
+    city: "Hồng Ngự",
+    areas: "các phường An Thạnh, An Lộc, An Lạc, An Bình và các xã lân cận",
+    nearby: "Tân Hồng, Tam Nông, Thanh Bình",
+    places: "chợ Hồng Ngự, Bệnh viện Đa khoa khu vực Hồng Ngự, các nhà tang lễ trong thành phố",
+    note: "Đơn hoa chia buồn ở Hồng Ngự: báo shop địa chỉ tang lễ và nội dung băng tang ngay khi đặt để giao kịp.",
+  },
+  {
+    slug: "shop-hoa-tuoi-tuy-hoa",
+    city: "Tuy Hòa",
+    areas: "các phường 1 đến 9, Phú Lâm, Phú Đông, Phú Thạnh",
+    nearby: "Đông Hòa, Phú Hòa, Sông Cầu",
+    places: "Bệnh viện Đa khoa tỉnh Phú Yên, tháp Nhạn, các khách sạn ven biển đường Độc Lập",
+    note: "Khách ở xa đặt hoa cho gia đình ở Tuy Hòa được gửi ảnh hoa thật qua Zalo trước khi giao.",
+  },
+  {
+    slug: "shop-hoa-tuoi-phu-quoc",
+    city: "Phú Quốc",
+    areas: "Dương Đông, An Thới, Cửa Lấp, Gành Dầu, khu Bãi Trường, Bãi Khem",
+    nearby: "các xã ven đảo theo lịch hẹn",
+    places: "các resort Bãi Trường và Bãi Khem, Grand World, sân bay Phú Quốc",
+    note: "Hoa tặng khách đang nghỉ dưỡng hoặc cầu hôn tại resort: gửi tên resort, tên khách và giờ hẹn để shop phối hợp với lễ tân.",
+  },
+  {
+    slug: "shop-hoa-tuoi-rach-gia",
+    city: "Rạch Giá",
+    areas: "các phường Vĩnh Thanh Vân, Vĩnh Thanh, Vĩnh Lạc, Vĩnh Bảo, An Hòa, Rạch Sỏi, Vĩnh Quang, Vĩnh Hiệp",
+    nearby: "Châu Thành, Tân Hiệp, Hòn Đất, Hà Tiên (theo lịch hẹn)",
+    places: "Bệnh viện Đa khoa tỉnh Kiên Giang, khu lấn biển Phú Cường, các văn phòng trung tâm",
+    note: "Kệ hoa khai trương ở khu lấn biển Rạch Giá được giao và dựng tận nơi trước giờ làm lễ.",
+  },
+  {
+    slug: "shop-hoa-tuoi-ha-nam",
+    city: "Hà Nam",
+    areas: "thành phố Phủ Lý (Hai Bà Trưng, Lương Khánh Thiện, Minh Khai, Quang Trung, Lam Hạ) và Duy Tiên, Kim Bảng, Thanh Liêm, Bình Lục, Lý Nhân",
+    nearby: "Hà Nội, Nam Định, Ninh Bình",
+    places: "Bệnh viện Bạch Mai và Việt Đức cơ sở 2 tại Phủ Lý, khu công nghiệp Đồng Văn, chùa Tam Chúc",
+    note: "Thăm người thân điều trị tại các bệnh viện cơ sở 2 ở Phủ Lý: chọn giỏ hoa hoặc giỏ trái cây nhỏ gọn, gửi tên khoa và số phòng.",
+  },
+  {
+    slug: "shop-hoa-tuoi-quang-ngai",
+    city: "Quảng Ngãi",
+    areas: "các phường Trần Phú, Lê Hồng Phong, Nghĩa Chánh, Nghĩa Lộ, Chánh Lộ, Quảng Phú, Trương Quang Trọng",
+    nearby: "Sơn Tịnh, Tư Nghĩa, Bình Sơn (Dung Quất)",
+    places: "Bệnh viện Đa khoa tỉnh Quảng Ngãi, khu kinh tế Dung Quất, các văn phòng trung tâm",
+    note: "Doanh nghiệp ở khu kinh tế Dung Quất đặt hoa chúc mừng, khai trương: gửi tên công ty và giờ làm lễ.",
+  },
+  {
+    slug: "shop-hoa-tuoi-hau-giang",
+    city: "Hậu Giang",
+    areas: "thành phố Vị Thanh (phường I, III, IV, V, VII), Ngã Bảy và Long Mỹ, Châu Thành A, Phụng Hiệp",
+    nearby: "Cần Thơ, Sóc Trăng",
+    places: "Bệnh viện Đa khoa tỉnh Hậu Giang, khu công nghiệp Tân Phú Thạnh, chợ nổi Ngã Bảy",
+    note: "Khách ở Cần Thơ hoặc TP.HCM đặt hoa cho người thân ở Hậu Giang được gửi ảnh hoa thật qua Zalo trước khi giao.",
   },
 ];
 
@@ -104,7 +202,7 @@ function html(c: CityPage) {
   return `<p>Hoa Thanh Nhã nhận đặt và giao hoa tươi tại ${c.city}: hoa sinh nhật, hoa khai trương, hoa chúc mừng, hoa chia buồn và lan hồ điệp. Mỗi đơn được chụp ảnh thật gửi bạn trước khi giao, kèm thiệp hoặc băng rôn ghi lời chúc miễn phí.</p>
 ${SECTIONS}
 <h2>Giao hoa tận nơi tại ${c.city}</h2>
-<p>Shop giao trong ngày đến các phường ${c.areas}. Khu vực lân cận: ${c.nearby}. Điểm giao thường gặp: ${c.places}.</p>
+<p>Shop giao trong ngày đến ${c.areas}. Khu vực lân cận: ${c.nearby}. Điểm giao thường gặp: ${c.places}.</p>
 <p>${c.note}</p>
 ${
   addr
