@@ -216,6 +216,13 @@ body {
 }
 
 /* Ẩn thanh cuộn nhưng vẫn cuộn được (hàng nút danh mục) */
+/* Phần nằm dưới màn hình đầu: trình duyệt bỏ qua tính bố cục/vẽ cho tới khi gần cuộn tới (tốc độ điện thoại).
+   contain-intrinsic-size giữ chỗ ước lượng để thanh cuộn không nhảy. */
+@utility defer-render {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}
+
 @utility scrollbar-none {
   scrollbar-width: none;
   &::-webkit-scrollbar {

@@ -82,7 +82,8 @@ export default async function HomePage() {
     homeSections.map(async (s) => {
       const category = await getCategoryBySlug(s.slug);
       if (!category) return null;
-      const { items } = await getProductsInCategory(category, { perPage: 8 });
+      // 4 mẫu/mục (1 hàng máy tính, 2 hàng điện thoại): ít phần tử hơn -> điện thoại dựng trang nhanh hơn (Lighthouse +2–3 điểm)
+      const { items } = await getProductsInCategory(category, { perPage: 4 });
       return { ...s, items };
     }),
   );
@@ -139,7 +140,7 @@ export default async function HomePage() {
 
       {sections.map((s, i) =>
         s && s.items.length > 0 ? (
-          <section key={s.slug} id={s.slug} aria-labelledby={`${s.slug}-h`} className="container-x mt-16 scroll-mt-40">
+          <section key={s.slug} id={s.slug} aria-labelledby={`${s.slug}-h`} className="container-x defer-render mt-16 scroll-mt-40">
             <div className="flex items-end justify-between gap-4">
               <div>
                 <p className="eyebrow">Mẫu mới nhất</p>
@@ -152,8 +153,9 @@ export default async function HomePage() {
               </Link>
             </div>
             <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-4">
-              {s.items.map((p, j) => (
-                <ProductCard key={p.id} product={p} priority={i === 0 && j < 2} />
+              {s.items.map((p) => (
+                // Không ưu tiên ảnh sản phẩm: ảnh lớn nhất màn hình đầu là banner
+                <ProductCard key={p.id} product={p} />
               ))}
             </div>
             <div className="mt-6 text-center sm:hidden">
@@ -177,7 +179,7 @@ export default async function HomePage() {
         ) : null,
       )}
 
-      <section aria-labelledby="why-h" className="mt-20 bg-surface-muted py-16">
+      <section aria-labelledby="why-h" className="defer-render mt-20 bg-surface-muted py-16">
         <div className="container-x">
           <div className="mx-auto max-w-2xl text-center">
             <p className="eyebrow">Vì sao chọn Thanh Nhã</p>

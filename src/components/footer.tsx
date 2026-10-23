@@ -42,7 +42,7 @@ function Heading({ children }: { children: React.ReactNode }) {
 
 export function Footer() {
   return (
-    <footer className="mt-20 bg-[#273647] text-[#f1f1f1]">
+    <footer className="defer-render mt-20 bg-[#273647] text-[#f1f1f1]">
       <div className="container-x grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_1fr]">
         <div className="space-y-4">
           <Image src="/brand/logo-thanh-nha.webp" alt={site.name} width={957} height={213} sizes="252px" className="h-14 w-auto rounded-lg bg-white p-1.5" />

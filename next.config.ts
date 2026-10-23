@@ -7,10 +7,14 @@ const nextConfig: NextConfig = {
   // để Google, Facebook, Zalo và công cụ SEO đều đọc được ngay
   htmlLimitedBots: /.*/,
   experimental: {
-    // CSS (~15 KB) chèn thẳng vào HTML thay vì file riêng chặn hiển thị: Lighthouse ước tính nhanh ~0,7 giây trên điện thoại
-    inlineCss: true,
+    // Không chèn CSS vào HTML: Next chép CSS 2 lần (thẻ <style> + dữ liệu React), trang chủ nặng thêm ~110 KB
+    // mà Lighthouse đo không nhanh hơn; file CSS riêng còn được trình duyệt lưu lại cho các trang sau
+    inlineCss: false,
   },
   images: {
+    // Ít kích thước hơn mặc định (8 + 8): mỗi ảnh trong HTML ngắn hơn ~1/2, trang chủ 48 ảnh nhẹ hơn đáng kể
+    deviceSizes: [640, 828, 1080, 1920],
+    imageSizes: [96, 256, 384],
     remotePatterns: [
       { protocol: "https", hostname: "hoathanhnha.com", pathname: "/wp-content/uploads/**" },
       { protocol: "https", hostname: "img.vietqr.io" },

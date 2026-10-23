@@ -9,14 +9,18 @@ import "./globals.css";
 const display = Playfair_Display({
   variable: "--font-display",
   subsets: ["latin", "vietnamese"],
-  weight: ["500", "600", "700"],
+  // Chỉ dùng 600 (heading-display, font-semibold). Không tải trước: tiêu đề hiện bằng phông dự phòng rồi đổi,
+  // để băng thông đầu trang dành cho ảnh banner/sản phẩm (tốc độ điện thoại)
+  weight: ["600"],
   display: "swap",
+  preload: false,
 });
 
 const body = Be_Vietnam_Pro({
   variable: "--font-body",
   subsets: ["latin", "vietnamese"],
-  weight: ["400", "500", "600", "700"],
+  // 700 chỉ dùng 3 chỗ (trình duyệt dùng 600 thay thế); bớt 2 file phông tải ở đầu trang
+  weight: ["400", "500", "600"],
   display: "swap",
 });
 
