@@ -151,7 +151,7 @@ export default async function SlugPage({ params, searchParams }: Props) {
       </div>
       <Pagination base={base} page={page} pages={pages} sort={sort} />
       {(nearby.parent || nearby.children.length > 0) && (
-        <section aria-labelledby="near-h" className="mt-14">
+        <section aria-labelledby="near-h" className="defer-render mt-14">
           <h2 id="near-h" className="font-display text-2xl font-semibold">
             Giao hoa khu vực lân cận
           </h2>
@@ -174,7 +174,7 @@ export default async function SlugPage({ params, searchParams }: Props) {
         </section>
       )}
       {guides.length > 0 && (
-        <section aria-labelledby="guide-h" className="mt-14">
+        <section aria-labelledby="guide-h" className="defer-render mt-14">
           <h2 id="guide-h" className="font-display text-2xl font-semibold">
             Cẩm nang {category.name.toLocaleLowerCase("vi")}
           </h2>
@@ -188,7 +188,7 @@ export default async function SlugPage({ params, searchParams }: Props) {
         </section>
       )}
       {category.description && plainText(category.description, 10000).length > 300 && (
-        <section aria-label={`Giới thiệu ${category.name}`} className="mx-auto mt-16 max-w-3xl border-t border-border pt-10">
+        <section aria-label={`Giới thiệu ${category.name}`} className="defer-render mx-auto mt-16 max-w-3xl border-t border-border pt-10">
           <ReadMore>
             <CategoryDescription html={category.description} title={category.name} slug={category.slug} />
           </ReadMore>
@@ -375,7 +375,7 @@ async function CmsView({ page }: { page: Page }) {
         )}
       </article>
       {suggestCategory && suggested.length > 0 && (
-        <section aria-labelledby="suggest-h" className="mt-14 lg:-mx-24">
+        <section aria-labelledby="suggest-h" className="defer-render mt-14 lg:-mx-24">
           <div className="flex items-baseline justify-between gap-4">
             <h2 id="suggest-h" className="heading-display text-3xl">
               Mẫu {suggestCategory.name.toLocaleLowerCase("vi")} đẹp tại Thanh Nhã
@@ -392,7 +392,7 @@ async function CmsView({ page }: { page: Page }) {
         </section>
       )}
       {recent.length > 0 && (
-        <section aria-labelledby="recent-h" className="mt-16 border-t border-border pt-10">
+        <section aria-labelledby="recent-h" className="defer-render mt-16 border-t border-border pt-10">
           <h2 id="recent-h" className="heading-display text-3xl">
             Bài viết liên quan
           </h2>
@@ -543,7 +543,7 @@ async function ProductView({ data }: { data: NonNullable<Awaited<ReturnType<type
       </div>
 
       {product.description && (
-        <section aria-labelledby="desc-h" className="mx-auto mt-16 max-w-3xl">
+        <section aria-labelledby="desc-h" className="defer-render mx-auto mt-16 max-w-3xl">
           <h2 id="desc-h" className="heading-display text-3xl">
             Mô tả sản phẩm
           </h2>
@@ -552,7 +552,7 @@ async function ProductView({ data }: { data: NonNullable<Awaited<ReturnType<type
       )}
 
       {related.length > 0 && (
-        <section aria-labelledby="rel-h" className="mt-16">
+        <section aria-labelledby="rel-h" className="defer-render mt-16">
           <h2 id="rel-h" className="heading-display text-3xl">
             Có thể bạn cũng thích
           </h2>
@@ -562,7 +562,7 @@ async function ProductView({ data }: { data: NonNullable<Awaited<ReturnType<type
         </section>
       )}
       {guides.length > 0 && (
-        <section aria-labelledby="guide-h" className="mt-16">
+        <section aria-labelledby="guide-h" className="defer-render mt-16">
           <h2 id="guide-h" className="heading-display text-3xl">
             Cẩm nang chọn hoa
           </h2>
