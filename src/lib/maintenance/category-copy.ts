@@ -11,35 +11,36 @@ const PRICE = "case when p.sale_price > 0 and p.sale_price < p.price then p.sale
 const vnd = (n: number) => `${Number(n).toLocaleString("vi-VN")}đ`;
 
 type Band = { label: string; min: number; max: number };
+type Kind = { slug: string; name: string };
 const BANDS: Band[] = [
   { label: "Dưới 1 triệu", min: 1, max: 999_999 },
   { label: "1 – 2 triệu", min: 1_000_000, max: 1_999_999 },
   { label: "2 – 3 triệu", min: 2_000_000, max: 2_999_999 },
   { label: "Từ 3 triệu", min: 3_000_000, max: 1e12 },
 ];
-const TYPES = [
+const TYPES: Kind[] = [
   { slug: "gio-hoa-khai-truong", name: "Giỏ hoa khai trương" },
   { slug: "ke-hoa-khai-truong", name: "Kệ hoa khai trương" },
   { slug: "lan-ho-diep-khai-truong", name: "Lan hồ điệp khai trương" },
 ];
 
-async function priceTable(db: Connection) {
+async function priceTable(db: Connection, types: Kind[] = TYPES, bands: Band[] = BANDS) {
   const rows: string[] = [];
-  for (const t of TYPES) {
+  for (const t of types) {
     const [[r]] = (await db.query(
       `select count(*) n, min(${PRICE}) mn, max(${PRICE}) mx,
-        ${BANDS.map((b, i) => `sum(${PRICE} between ${b.min} and ${b.max}) b${i}`).join(", ")}
+        ${bands.map((b, i) => `sum(${PRICE} between ${b.min} and ${b.max}) b${i}`).join(", ")}
        from products p join product_categories pc on pc.product_id = p.id join categories c on c.id = pc.category_id
        where c.slug = ? and p.is_active = 1 and p.price > 0`,
       [t.slug],
     )) as [Record<string, number>[], unknown];
     if (!r || !Number(r.n)) continue;
     rows.push(
-      `<tr><td><a href="/${t.slug}/">${t.name}</a></td><td>${Number(r.n)}</td><td>${vnd(r.mn)} – ${vnd(r.mx)}</td>${BANDS.map((_, i) => `<td>${Number(r[`b${i}`])}</td>`).join("")}</tr>`,
+      `<tr><td><a href="/${t.slug}/">${t.name}</a></td><td>${Number(r.n)}</td><td>${vnd(r.mn)} – ${vnd(r.mx)}</td>${bands.map((_, i) => `<td>${Number(r[`b${i}`])}</td>`).join("")}</tr>`,
     );
   }
   if (!rows.length) return "";
-  return `<table><thead><tr><th>Loại</th><th>Số mẫu</th><th>Khoảng giá</th>${BANDS.map((b) => `<th>${b.label}</th>`).join("")}</tr></thead><tbody>${rows.join("")}</tbody></table>`;
+  return `<table><thead><tr><th>Loại</th><th>Số mẫu</th><th>Khoảng giá</th>${bands.map((b) => `<th>${b.label}</th>`).join("")}</tr></thead><tbody>${rows.join("")}</tbody></table>`;
 }
 
 async function khaiTruongHtml(db: Connection) {
@@ -72,8 +73,59 @@ ${table}
 <p>Có. Shop nhận giao tại nhiều tỉnh thành; xem trang khu vực của bạn trong mục <a href="/khu-vuc/">Khu vực</a>.</p>`;
 }
 
+/** Tuần 6: "hoa sinh nhật" 19.000 lượt tìm/tháng (vị trí ~15–44), "đặt hoa sinh nhật" 1.500 (vị trí 51) */
+async function sinhNhatHtml(db: Connection) {
+  const phone = `<a href="tel:${site.phone}">${site.phoneDisplay}</a>`;
+  const table = await priceTable(
+    db,
+    [
+      { slug: "bo-hoa-sinh-nhat", name: "Bó hoa sinh nhật" },
+      { slug: "gio-hoa-sinh-nhat", name: "Giỏ hoa sinh nhật" },
+    ],
+    [
+      { label: "Dưới 500 nghìn", min: 1, max: 499_999 },
+      { label: "500 nghìn – 1 triệu", min: 500_000, max: 999_999 },
+      { label: "1 – 2 triệu", min: 1_000_000, max: 1_999_999 },
+      { label: "Từ 2 triệu", min: 2_000_000, max: 1e12 },
+    ],
+  );
+  return `<p>Hoa sinh nhật là món quà dễ chọn mà luôn được nhớ: một bó hoa tươi tặng người yêu, giỏ hoa tặng mẹ, hay lẵng hoa gửi sếp, đồng nghiệp. Hoa Thanh Nhã thiết kế hoa sinh nhật theo người nhận và ngân sách, ghi thiệp tay miễn phí, gửi ảnh hoa thật trước khi giao và giao tận nơi trong ngày.</p>
+<h2>Bảng giá hoa sinh nhật</h2>
+<p>Số mẫu và giá lấy từ các mẫu đang bán, cập nhật tự động.</p>
+${table}
+<h2>Chọn hoa sinh nhật theo người nhận</h2>
+<ul><li><strong>Người yêu:</strong> bó hồng đỏ, hồng phấn hoặc hoa baby; xem <a href="/hoa-tang-nguoi-yeu/">hoa tặng người yêu</a>.</li>
+<li><strong>Mẹ, bà:</strong> giỏ hoa tông hồng, cẩm chướng hoặc lan hồ điệp; xem <a href="/hoa-tang-me/">hoa tặng mẹ</a>.</li>
+<li><strong>Vợ, chồng:</strong> bó hoa lớn, giỏ hoa đặt bàn tiệc; xem <a href="/hoa-tang-vo/">hoa tặng vợ</a>, <a href="/hoa-tang-chong/">hoa tặng chồng</a>.</li>
+<li><strong>Sếp, đối tác:</strong> giỏ hoa sang trọng hoặc lan hồ điệp; xem <a href="/hoa-tang-sep/">hoa tặng sếp</a>.</li>
+<li><strong>Bạn bè, đồng nghiệp:</strong> bó hoa vừa phải, màu tươi sáng; xem <a href="/hoa-tang-ban-be/">hoa tặng bạn bè</a>.</li></ul>
+<h2>Bó hoa hay giỏ hoa?</h2>
+<p><a href="/bo-hoa-sinh-nhat/">Bó hoa sinh nhật</a> gọn, dễ trao tận tay, đẹp khi chụp ảnh. <a href="/gio-hoa-sinh-nhat/">Giỏ hoa sinh nhật</a> đặt được ngay trên bàn, giữ hoa tươi lâu hơn, hợp gửi tới văn phòng hoặc tiệc sinh nhật.</p>
+<h2>Màu hoa và ý nghĩa</h2>
+<p>Đỏ: tình yêu nồng nhiệt. Hồng: dịu dàng, biết ơn. Vàng, hướng dương: niềm vui, năng lượng. Trắng, pastel: trong trẻo, thanh lịch. Tím: thủy chung, lãng mạn.</p>
+<h2>Đặt hoa sinh nhật như thế nào?</h2>
+<ol><li>Chọn mẫu trên website hoặc gửi ảnh mẫu bạn thích qua Zalo ${phone}.</li>
+<li>Ghi lời chúc để shop viết thiệp tay, chọn giờ giao.</li>
+<li>Shop gửi ảnh hoa thật trước khi giao; không đúng mẫu bạn không cần thanh toán.</li>
+<li>Hoa được giao tận nơi, kể cả gửi bất ngờ tới công ty hoặc nhà hàng.</li></ol>
+<h2>Câu hỏi thường gặp</h2>
+<h3>Đặt hoa sinh nhật giao trong ngày được không?</h3>
+<p>Được. Đơn trong giờ làm việc được giao trong ngày; cần giao đúng giờ (tiệc tối, bất ngờ lúc nửa ngày), hãy ghi rõ khung giờ hoặc gọi ${phone}.</p>
+<h3>Có tặng kèm thiệp, bánh kem không?</h3>
+<p>Thiệp ghi tay luôn miễn phí. Muốn kèm bánh kem hoặc quà khác, nhắn shop để được báo mẫu còn hàng.</p>
+<h3>Ở tỉnh khác có đặt được không?</h3>
+<p>Có. Shop giao hoa sinh nhật tại nhiều tỉnh thành; xem trang khu vực trong mục <a href="/khu-vuc/">Khu vực</a>.</p>`;
+}
+
 export async function syncCategoryCopy(db: Connection): Promise<string[]> {
-  const html = await khaiTruongHtml(db);
-  const [res] = (await db.query("update categories set description = ? where slug = 'hoa-khai-truong'", [html])) as [{ affectedRows: number }, unknown];
-  return [`✓ Nội dung danh mục: hoa-khai-truong ${res.affectedRows ? "cập nhật (bảng giá tự động)" : "không thấy"}`];
+  const pages: [string, string][] = [
+    ["hoa-khai-truong", await khaiTruongHtml(db)],
+    ["hoa-sinh-nhat", await sinhNhatHtml(db)],
+  ];
+  const done: string[] = [];
+  for (const [slug, html] of pages) {
+    const [res] = (await db.query("update categories set description = ? where slug = ?", [html, slug])) as [{ affectedRows: number }, unknown];
+    if (res.affectedRows) done.push(slug);
+  }
+  return [`✓ Nội dung danh mục (bảng giá tự động): ${done.join(", ") || "không có"}`];
 }
