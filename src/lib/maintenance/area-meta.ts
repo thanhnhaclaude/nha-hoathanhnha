@@ -67,6 +67,16 @@ const AREAS: { path: string; title: string; description: string; minFrom?: strin
     title: "Shop Hoa Tươi Gò Vấp – Cửa Hàng Quang Trung | Hoa Thanh Nhã",
     description: `Cửa hàng hoa tại 229 Quang Trung, Phường 10, Gò Vấp. Hoa sinh nhật, khai trương, chia buồn giao trong ngày, gửi ảnh trước. Gọi ${P}.`,
   },
+  {
+    path: "/shop-hoa-tuoi-quan-cam-le/",
+    title: "Shop Hoa Tươi Cẩm Lệ Đà Nẵng – Cửa Hàng Hòa Xuân | Hoa Thanh Nhã",
+    description: `Cửa hàng hoa tại 05 Trần Văn Cẩn, Hòa Xuân, Cẩm Lệ, Đà Nẵng. Hoa sinh nhật, khai trương, chia buồn giao trong ngày, gửi ảnh trước. Gọi ${P}.`,
+  },
+  {
+    path: "/shop-hoa-tuoi-da-nang/",
+    title: "Shop Hoa Tươi Đà Nẵng – 2 Cửa Hàng, Giao Nhanh | Hoa Thanh Nhã",
+    description: `Shop hoa tươi Đà Nẵng: cửa hàng 396 Nguyễn Hoàng (Thanh Khê) và 05 Trần Văn Cẩn (Cẩm Lệ). Hoa sinh nhật, khai trương, chia buồn giao trong ngày. Gọi ${P}.`,
+  },
   // Tuần 1 (26/10/2026): danh mục mức A/B
   {
     path: "/shop-hoa-tuoi-gan-day/",

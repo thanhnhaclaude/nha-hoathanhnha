@@ -114,6 +114,63 @@ const CITIES: CityPage[] = [
     places: "Làng Đại học Quốc gia, Vinhomes Grand Park, Gigamall, Vincom Thủ Đức, khu biệt thự Thảo Điền, Bệnh viện Thủ Đức",
     note: "Cửa hàng ở 61/5 Kha Vạn Cân, Hiệp Bình Chánh; hoa tốt nghiệp giao tận cổng các trường trong Làng Đại học vào mùa lễ nên đặt trước 1–2 ngày.",
   },
+  // Tuần 4 (16/11/2026): quận/huyện Đà Nẵng — nội dung riêng thay mô tả mẫu chung (giữ danh sách mẫu đang có)
+  {
+    slug: "shop-hoa-tuoi-quan-hai-chau",
+    city: "Quận Hải Châu",
+    areas: "các phường Thạch Thang, Hải Châu 1, Hải Châu 2, Phước Ninh, Bình Hiên, Bình Thuận, Nam Dương, Hòa Thuận Đông, Hòa Thuận Tây, Hòa Cường Bắc, Hòa Cường Nam, Thuận Phước, Thanh Bình (trung tâm Đà Nẵng)",
+    nearby: "Thanh Khê, Sơn Trà, Cẩm Lệ",
+    places: "khách sạn ven sông Hàn đường Bạch Đằng, chợ Hàn, Bệnh viện Đà Nẵng, Bệnh viện C, Trung tâm Hành chính thành phố, sân bay Đà Nẵng",
+    note: "Hải Châu nằm giữa hai cửa hàng Thanh Khê và Cẩm Lệ nên đơn trong quận được giao nhanh; gửi hoa tới khách sạn ven sông Hàn chỉ cần ghi tên khách sạn, số phòng.",
+  },
+  {
+    slug: "shop-hoa-tuoi-quan-thanh-khe",
+    city: "Quận Thanh Khê",
+    areas: "các phường Tam Thuận, Thanh Khê Tây, Thanh Khê Đông, Xuân Hà, Tân Chính, Chính Gián, Vĩnh Trung, Thạc Gián, An Khê, Hòa Khê (Đà Nẵng)",
+    nearby: "Hải Châu, Liên Chiểu, Cẩm Lệ",
+    places: "Công viên 29/3, bãi biển Thanh Khê, các trường và văn phòng dọc Điện Biên Phủ, Hà Huy Tập, Nguyễn Văn Linh",
+    note: "Cửa hàng ở 396 Nguyễn Hoàng; khách ở Thanh Khê có thể ghé chọn hoa trực tiếp hoặc đặt online để giao trong ngày.",
+  },
+  {
+    slug: "shop-hoa-tuoi-quan-cam-le",
+    city: "Quận Cẩm Lệ",
+    areas: "các phường Hòa Xuân, Khuê Trung, Hòa Thọ Đông, Hòa Thọ Tây, Hòa An, Hòa Phát (Đà Nẵng)",
+    nearby: "Hải Châu, Ngũ Hành Sơn, Hòa Vang",
+    places: "khu đô thị Hòa Xuân, cầu Hòa Xuân, bến xe trung tâm Đà Nẵng, chợ Cẩm Lệ",
+    note: "Cửa hàng ở 05 Trần Văn Cẩn, Hòa Xuân — thuận tiện cho khu đô thị Hòa Xuân và phía nam thành phố.",
+  },
+  {
+    slug: "shop-hoa-tuoi-quan-lien-chieu",
+    city: "Quận Liên Chiểu",
+    areas: "các phường Hòa Minh, Hòa Khánh Nam, Hòa Khánh Bắc, Hòa Hiệp Nam, Hòa Hiệp Bắc (Đà Nẵng)",
+    nearby: "Thanh Khê, Hòa Vang",
+    places: "Đại học Bách khoa và Đại học Sư phạm Đà Nẵng, khu công nghiệp Hòa Khánh, đèo Hải Vân",
+    note: "Mùa tốt nghiệp ở các trường Đại học Bách khoa, Sư phạm đơn hoa tăng mạnh, nên đặt trước 1–2 ngày và ghi rõ cổng trường.",
+  },
+  {
+    slug: "shop-hoa-tuoi-quan-son-tra",
+    city: "Quận Sơn Trà",
+    areas: "các phường An Hải Bắc, An Hải Đông, An Hải Tây, Phước Mỹ, Mân Thái, Thọ Quang, Nại Hiên Đông (Đà Nẵng)",
+    nearby: "Hải Châu, Ngũ Hành Sơn",
+    places: "khách sạn và căn hộ dọc biển Mỹ Khê, đường Võ Nguyên Giáp, bán đảo Sơn Trà, chùa Linh Ứng",
+    note: "Nhiều khách đặt hoa tặng người thân đang nghỉ ở khách sạn biển Mỹ Khê: gửi tên khách sạn và giờ khách có mặt để shop hẹn giao tại lễ tân.",
+  },
+  {
+    slug: "shop-hoa-tuoi-quan-ngu-hanh-son",
+    city: "Quận Ngũ Hành Sơn",
+    areas: "các phường Mỹ An, Khuê Mỹ, Hòa Hải, Hòa Quý (Đà Nẵng)",
+    nearby: "Sơn Trà, Cẩm Lệ, Hội An",
+    places: "các resort ven biển Võ Nguyên Giáp – Trường Sa, danh thắng Ngũ Hành Sơn, Đại học Kinh tế Đà Nẵng, FPT City",
+    note: "Hoa tặng khách nghỉ dưỡng hoặc cầu hôn tại resort Ngũ Hành Sơn: gửi tên resort, tên khách và giờ hẹn để shop phối hợp với lễ tân.",
+  },
+  {
+    slug: "shop-hoa-tuoi-huyen-hoa-vang",
+    city: "Huyện Hòa Vang",
+    areas: "các xã Hòa Châu, Hòa Tiến, Hòa Phước, Hòa Phong, Hòa Khương, Hòa Nhơn, Hòa Sơn, Hòa Liên, Hòa Ninh, Hòa Phú, Hòa Bắc (Đà Nẵng)",
+    nearby: "Cẩm Lệ, Liên Chiểu",
+    places: "khu du lịch Bà Nà Hills, các khu dân cư dọc Quốc lộ 1A và đường Trường Sơn",
+    note: "Các xã xa trung tâm như Hòa Bắc, Hòa Phú cần hẹn giờ giao; gọi trước để shop báo thời gian cụ thể.",
+  },
   // Tuần 1 (26/10/2026): trang tỉnh đang có thứ hạng trên Google nhưng mất khi chuyển website (trước đó chuyển hướng về trang chung)
   {
     slug: "shop-hoa-tuoi-cao-lanh",
@@ -335,7 +392,7 @@ export async function fillThinAreaPages(db: Connection): Promise<string[]> {
     const thin = Number(c.total) < 8;
     // Trang thành phố/tỉnh tạo ở CITIES mà vẫn mang nguyên bộ mẫu TP.HCM (bản trước). Trang quận cũ đang có thứ hạng không đụng tới.
     // Trang quận cũ (shop-hoa-tuoi-quan-…) giữ danh sách mẫu đang có
-    const copyOfHcm = CITIES.some((x) => x.slug === c.slug) && !c.slug.startsWith("shop-hoa-tuoi-quan-") && Number(c.total) >= 50 && Number(c.own) === 0;
+    const copyOfHcm = CITIES.some((x) => x.slug === c.slug) && !/^shop-hoa-tuoi-(quan|huyen)-/.test(c.slug) && Number(c.total) >= 50 && Number(c.own) === 0;
     if (!thin && !copyOfHcm) continue;
     if (!thin) {
       // đã là bộ mẫu bán chạy rồi thì thôi

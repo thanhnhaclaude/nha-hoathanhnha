@@ -66,6 +66,26 @@ export const storeAreas: Record<string, { street: string; city: string }> = {
   "shop-hoa-tuoi-bien-hoa": { street: "85 Hưng Đạo Vương, Trung Dũng", city: "Biên Hòa" },
 };
 
+/**
+ * Trang thành phố là bài viết dài từ website cũ (đang có thứ hạng, không đổi sang danh mục):
+ * hiện khung cửa hàng + link các quận ngay dưới tiêu đề, kèm dữ liệu Florist cho từng cửa hàng.
+ */
+export const cityHubs: Record<string, { city: string; stores: string[]; areas: { slug: string; name: string }[] }> = {
+  "shop-hoa-tuoi-da-nang": {
+    city: "Đà Nẵng",
+    stores: ["shop-hoa-tuoi-quan-thanh-khe", "shop-hoa-tuoi-quan-cam-le"],
+    areas: [
+      { slug: "shop-hoa-tuoi-quan-hai-chau", name: "Hải Châu" },
+      { slug: "shop-hoa-tuoi-quan-thanh-khe", name: "Thanh Khê" },
+      { slug: "shop-hoa-tuoi-quan-cam-le", name: "Cẩm Lệ" },
+      { slug: "shop-hoa-tuoi-quan-son-tra", name: "Sơn Trà" },
+      { slug: "shop-hoa-tuoi-quan-ngu-hanh-son", name: "Ngũ Hành Sơn" },
+      { slug: "shop-hoa-tuoi-quan-lien-chieu", name: "Liên Chiểu" },
+      { slug: "shop-hoa-tuoi-huyen-hoa-vang", name: "Hòa Vang" },
+    ],
+  },
+};
+
 export function shippingConfig() {
   return {
     fee: Number(process.env.SHIPPING_FEE ?? 30000),

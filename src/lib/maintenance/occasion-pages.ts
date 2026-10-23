@@ -104,6 +104,29 @@ const PAGES: Page[] = [
 <li>Màu hồng đỏ: tình yêu nồng nhiệt; hồng phấn: dịu dàng, mới yêu.</li></ul>
 <p>Xem thêm <a href="/hoa-tang-nguoi-yeu/">hoa tặng người yêu</a> hoặc gọi ${tel}.</p>`,
   },
+  // Tuần 4: trang Giáng sinh viết đầy đủ (mẫu đã gán ở seasonal-pages; ở đây chỉ cập nhật mô tả + tiêu đề)
+  {
+    slug: "giang-sinh",
+    name: "Giáng Sinh",
+    parent: "hoa-chuc-mung",
+    rule: { slug: "giang-sinh", from: ["hoa-bo", "hoa-gio"], and: ["mau-do"], limit: 24 },
+    title: "Hoa Giáng Sinh 2026 – Bó Hồng Đỏ, Giỏ Hoa Noel | Hoa Thanh Nhã",
+    description: `Hoa Giáng sinh tông đỏ: bó hồng, giỏ hoa Noel tặng người yêu, gia đình, đồng nghiệp. Đặt trước để giao đúng tối 24/12, ghi thiệp miễn phí. Gọi ${P}.`,
+    html: `<h2>Hoa Giáng sinh – quà Noel ấm áp</h2>
+<p>Mùa Noel, bó hoa và giỏ hoa tông đỏ là món quà vừa đẹp vừa đúng không khí: hồng đỏ cho người yêu, giỏ hoa cho gia đình, đồng nghiệp, đối tác. Hoa Thanh Nhã gói hoa phối lá xanh, điểm trắng, nơ đỏ và ghi thiệp chúc Giáng sinh theo lời bạn gửi.</p>
+<h3>Chọn hoa Noel theo người nhận</h3>
+<ul><li><strong>Người yêu, vợ, chồng:</strong> bó hồng đỏ, số bông tùy ý nghĩa bạn muốn gửi.</li>
+<li><strong>Bố mẹ, ông bà:</strong> giỏ hoa đặt bàn hoặc <a href="/lan-ho-diep-khai-truong/">lan hồ điệp</a> chơi được qua Tết.</li>
+<li><strong>Đồng nghiệp, khách hàng:</strong> bó nhỏ hoặc giỏ hoa cùng mẫu, đặt số lượng có giá tốt.</li></ul>
+<h3>Lịch đặt hoa mùa Noel</h3>
+<ul><li>Từ 20/12 đơn tăng mạnh, giá hoa hồng nhập tăng theo; đặt trước giữ được mẫu và giá.</li>
+<li>Muốn giao đúng tối 24/12 hoặc sáng 25/12, ghi rõ khung giờ khi đặt.</li>
+<li>Giao tới văn phòng trước kỳ nghỉ: ghi tên tòa nhà, tầng và người nhận.</li></ul>
+<h3>Câu hỏi thường gặp</h3>
+<p><strong>Có giao hoa đêm Giáng sinh không?</strong> Shop giao trong giờ mở cửa 06:00–21:00; đơn tối 24/12 nên đặt trước để giữ khung giờ.</p>
+<p><strong>Có kèm gấu bông, socola được không?</strong> Bạn nhắn shop để được tư vấn quà đi kèm còn hàng.</p>
+<p>Xem thêm <a href="/hoa-tinh-yeu/">hoa tình yêu</a>, <a href="/hoa-valentine/">hoa Valentine</a> hoặc gọi ${tel}.</p>`,
+  },
 ];
 
 export async function syncOccasionPages(db: Connection): Promise<string[]> {

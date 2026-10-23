@@ -35,7 +35,7 @@ import { getPageTags, getProductTags } from "@/lib/tags";
 import { addContextualLinksMany, bestCategoryFor, getGuidePosts, getNearbyAreas, getRelatedPosts } from "@/lib/internal-links";
 import { ViewItemTracker } from "@/components/view-item-tracker";
 import { cleanHtml, introText, normalizeHeadings, plainText, removeDuplicateTitleHeading, splitCategoryShortcodes, splitProductBlocks } from "@/lib/sanitize";
-import { shippingConfig, site, storeAreas } from "@/lib/site";
+import { cityHubs, shippingConfig, site, storeAreas } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -378,6 +378,24 @@ async function CmsView({ page }: { page: Page }) {
   );
   const segments = rawSegments.map((seg, i) => (seg.type === "html" ? { ...seg, html: linkedHtml[i] } : seg));
   const suggestCategory = suggestCat ? await getCategoryBySlug(suggestCat.slug) : null;
+  const hub = cityHubs[page.slug];
+  const hubStores = (hub?.stores ?? [])
+    .map((slug) => ({ slug, ...storeAreas[slug] }))
+    .filter((st) => st.street)
+    .map((st) => ({
+      ...st,
+      ld: {
+        "@context": "https://schema.org",
+        "@type": "Florist",
+        name: `${site.name} – ${st.street}`,
+        url: `${site.url}/${st.slug}/`,
+        image: `${site.url}/brand/banner2.webp`,
+        telephone: "+84" + site.phone.replace(/^0/, ""),
+        openingHours: "Mo-Su 06:00-21:00",
+        address: { "@type": "PostalAddress", streetAddress: st.street, addressLocality: st.city, addressCountry: "VN" },
+        parentOrganization: { "@id": `${site.url}/#organization` },
+      },
+    }));
   const suggested = suggestCategory ? (await getProductsInCategory(suggestCategory, { perPage: 4 })).items : [];
   const jsonLd = isPost
     ? {
@@ -400,6 +418,35 @@ async function CmsView({ page }: { page: Page }) {
         <p className="mt-3 text-sm text-muted">
           <time dateTime={page.publishedAt.toISOString()}>{page.publishedAt.toLocaleDateString("vi-VN")}</time>
         </p>
+      )}
+      {hub && (
+        // Trang thành phố dạng bài viết: cửa hàng thật + link các quận ngay dưới tiêu đề
+        <section aria-label={`Cửa hàng và khu vực giao hoa ${hub.city}`} className="mt-6 rounded-2xl bg-surface p-5 ring-1 ring-border">
+          {hubStores.map((st) => (
+            <script key={st.slug} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(st.ld).replace(/</g, "\\u003c") }} />
+          ))}
+          <h2 className="font-semibold">Cửa hàng hoa tại {hub.city}</h2>
+          <ul className="mt-2 space-y-1 text-sm">
+            {hubStores.map((st) => (
+              <li key={st.slug}>
+                <Link href={`/${st.slug}/`} className="font-medium text-brand-strong hover:underline">
+                  {st.street}
+                </Link>{" "}
+                <span className="text-muted">· mở cửa 06:00–21:00</span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 text-sm font-semibold">Giao hoa theo quận</p>
+          <ul className="mt-2 flex flex-wrap gap-2">
+            {hub.areas.map((a) => (
+              <li key={a.slug}>
+                <Link href={`/${a.slug}/`} className="block rounded-full bg-surface-muted px-3 py-1.5 text-sm ring-1 ring-border hover:ring-brand">
+                  {a.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
       )}
       <article className="mt-8 space-y-8">
         {segments.map((seg, i) =>
