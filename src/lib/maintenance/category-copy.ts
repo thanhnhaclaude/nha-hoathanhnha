@@ -117,15 +117,118 @@ ${table}
 <p>Có. Shop giao hoa sinh nhật tại nhiều tỉnh thành; xem trang khu vực trong mục <a href="/khu-vuc/">Khu vực</a>.</p>`;
 }
 
+// Tuần 10: trang Tết 2027 (mùng 1 = 6/2/2027) và Valentine (14/2/2027 = mùng 9 Tết)
+async function tetHtml(db: Connection) {
+  const phone = `<a href="tel:${site.phone}">${site.phoneDisplay}</a>`;
+  const table = await priceTable(
+    db,
+    [
+      { slug: "lan-ho-diep", name: "Lan hồ điệp" },
+      { slug: "hoa-gio", name: "Giỏ hoa" },
+    ],
+    [
+      { label: "Dưới 1 triệu", min: 1, max: 999_999 },
+      { label: "1 – 2 triệu", min: 1_000_000, max: 1_999_999 },
+      { label: "2 – 4 triệu", min: 2_000_000, max: 3_999_999 },
+      { label: "Từ 4 triệu", min: 4_000_000, max: 1e12 },
+    ],
+  );
+  return `<p>Hoa Tết là món quà biếu mang lời chúc năm mới an khang, tài lộc: chậu lan hồ điệp đặt phòng khách, giỏ hoa tông đỏ vàng biếu ông bà, thầy cô, hay quà Tết cho đối tác, khách hàng. Tết Đinh Mùi 2027 rơi vào ngày 6/2/2027; Hoa Thanh Nhã nhận đặt trước, ghi thiệp hoặc băng chúc Tết miễn phí, gửi ảnh hoa thật trước khi giao.</p>
+<h2>Bảng giá hoa Tết</h2>
+<p>Số mẫu và giá lấy từ các mẫu đang bán, cập nhật tự động. Giá các ngày cận Tết có thể thay đổi theo giá hoa đầu vào.</p>
+${table}
+<h2>Chọn hoa Tết theo người nhận</h2>
+<ul><li><strong>Ông bà, bố mẹ:</strong> chậu lan hồ điệp vàng, trắng hoặc tím, chơi được qua cả tháng Giêng; xem <a href="/lan-ho-diep/">lan hồ điệp</a>.</li>
+<li><strong>Đối tác, khách hàng:</strong> lan hồ điệp nhiều cành kèm thiệp tên công ty; đặt số lượng để shop chuẩn bị đồng bộ.</li>
+<li><strong>Thầy cô, người quen:</strong> giỏ hoa tông đỏ, vàng vừa phải, dễ đặt trên bàn; xem <a href="/hoa-gio/">giỏ hoa</a>.</li>
+<li><strong>Trang trí nhà, cửa hàng đầu năm:</strong> lan hồ điệp đặt phòng khách, quầy lễ tân.</li></ul>
+<h2>Màu hoa ngày Tết</h2>
+<p>Đỏ tượng trưng may mắn, vàng cho tài lộc, thịnh vượng, trắng và tím cho sự thanh cao, sang trọng. Lan hồ điệp vàng và đỏ tím là hai màu được chọn biếu Tết nhiều nhất.</p>
+<h2>Lịch đặt hoa Tết</h2>
+<ul><li><strong>Từ đầu tháng Chạp:</strong> đặt sớm giữ được mẫu đẹp và giá tốt, nhất là đơn biếu doanh nghiệp số lượng lớn.</li>
+<li><strong>Từ 23 tháng Chạp:</strong> đơn tăng mạnh, giá hoa đầu vào tăng; nên chốt mẫu trước ngày này.</li>
+<li><strong>Những ngày Tết:</strong> lịch giao có hạn, hãy hẹn trước ngày giờ giao khi đặt.</li></ul>
+<h2>Cách chăm lan hồ điệp ngày Tết</h2>
+<p>Đặt nơi sáng, thoáng, tránh nắng gắt và gió điều hòa thổi trực tiếp; tưới ít nước khoảng 1 lần mỗi tuần vào giá thể, không tưới lên hoa. Chăm đúng cách, lan giữ đẹp nhiều tuần sau Tết.</p>
+<h2>Câu hỏi thường gặp</h2>
+<h3>Có giao hoa Tết cho người thân ở tỉnh khác không?</h3>
+<p>Có. Bạn đặt và thanh toán online, shop giao đến người nhận và gửi ảnh xác nhận qua Zalo.</p>
+<h3>Có ghi lời chúc Tết lên thiệp không?</h3>
+<p>Có, miễn phí. Gửi lời chúc và tên người tặng khi đặt hàng.</p>
+<p>Đặt hoa Tết: chọn mẫu trên website hoặc gọi/Zalo ${phone}. Xem thêm <a href="/lan-ho-diep-khai-truong/">lan hồ điệp khai trương</a> cho cửa hàng mở cửa đầu năm.</p>`;
+}
+
+async function valentineHtml(db: Connection) {
+  const phone = `<a href="tel:${site.phone}">${site.phoneDisplay}</a>`;
+  const table = await priceTable(
+    db,
+    [
+      { slug: "hoa-valentine", name: "Hoa Valentine" },
+      { slug: "hoa-hong", name: "Hoa hồng" },
+      { slug: "hoa-tang-nguoi-yeu", name: "Hoa tặng người yêu" },
+    ],
+    [
+      { label: "Dưới 1 triệu", min: 1, max: 999_999 },
+      { label: "1 – 2 triệu", min: 1_000_000, max: 1_999_999 },
+      { label: "Từ 2 triệu", min: 2_000_000, max: 1e12 },
+    ],
+  );
+  return `<p>Bó hồng đỏ, hồng phấn là món quà kinh điển ngày Valentine 14/2. Năm 2027, Valentine rơi vào mùng 9 Tết Đinh Mùi, khi nhiều người vẫn đang nghỉ Tết, vì vậy nên đặt hoa sớm và hẹn rõ địa chỉ, giờ giao. Hoa Thanh Nhã ghi thiệp lời yêu thương miễn phí, gửi ảnh hoa thật trước khi giao.</p>
+<h2>Bảng giá hoa Valentine</h2>
+<p>Số mẫu và giá lấy từ các mẫu đang bán, cập nhật tự động. Ngày 13–14/2 giá hoa hồng đầu vào thường tăng.</p>
+${table}
+<h2>Chọn hoa Valentine theo màu</h2>
+<ul><li><strong>Hồng đỏ:</strong> tình yêu nồng nhiệt, hợp các cặp đã gắn bó, vợ chồng.</li>
+<li><strong>Hồng phấn:</strong> dịu dàng, ngọt ngào, hợp khi mới yêu.</li>
+<li><strong>Hồng kem, trắng:</strong> tình yêu trong sáng, chân thành.</li>
+<li><strong>Tulip, cẩm tú cầu:</strong> khác biệt, nhẹ nhàng; xem mẫu <a href="/hoa-cuoi-cam-tay/">hoa cầm tay</a> có tulip.</li></ul>
+<h2>Gợi ý theo người nhận</h2>
+<ul><li><strong>Người yêu:</strong> bó hồng đỏ hoặc hồng phấn; xem <a href="/hoa-tang-nguoi-yeu/">hoa tặng người yêu</a>.</li>
+<li><strong>Vợ:</strong> bó lớn hoặc giỏ hoa đặt bàn; xem <a href="/hoa-tang-vo/">hoa tặng vợ</a>.</li>
+<li><strong>Chồng:</strong> tông đỏ trầm, gọn gàng; xem <a href="/hoa-tang-chong/">hoa tặng chồng</a>.</li></ul>
+<h2>Lịch đặt hoa Valentine</h2>
+<ul><li>Đặt trước từ đầu tháng 2 để giữ mẫu và giá; năm nay trùng dịp Tết nên càng nên đặt sớm.</li>
+<li>Giao bất ngờ tại công ty: ghi tên tòa nhà, tầng và giờ người nhận có mặt.</li>
+<li>Người nhận đang về quê ăn Tết: gửi đúng địa chỉ ở quê, shop giao tận nơi và gửi ảnh xác nhận.</li></ul>
+<h2>Câu hỏi thường gặp</h2>
+<h3>Có giao đúng ngày 14/2 không?</h3>
+<p>Có, khi đặt trước và ghi rõ khung giờ. Đơn gấp trong ngày hãy gọi ${phone} để shop kiểm tra mẫu còn hoa.</p>
+<h3>Có kèm thiệp, gấu bông, socola được không?</h3>
+<p>Thiệp ghi lời chúc miễn phí; quà đi kèm bạn nhắn shop để được tư vấn mẫu còn hàng.</p>
+<p>Xem thêm <a href="/hoa-tinh-yeu/">hoa tình yêu</a> và <a href="/hoa-hong/">hoa hồng</a>.</p>`;
+}
+
 export async function syncCategoryCopy(db: Connection): Promise<string[]> {
-  const pages: [string, string][] = [
+  const P = site.phoneDisplay;
+  const pages: [string, string, [string, string]?][] = [
     ["hoa-khai-truong", await khaiTruongHtml(db)],
     ["hoa-sinh-nhat", await sinhNhatHtml(db)],
+    [
+      "hoa-tet",
+      await tetHtml(db),
+      [
+        "Hoa Tết 2027 – Lan Hồ Điệp, Giỏ Hoa Biếu Tết | Hoa Thanh Nhã",
+        `Hoa Tết 2027: lan hồ điệp, giỏ hoa đỏ vàng biếu ông bà, đối tác. Bảng giá cập nhật, ghi thiệp chúc Tết miễn phí, gửi ảnh trước khi giao. Gọi ${P}.`,
+      ],
+    ],
+    [
+      "hoa-valentine",
+      await valentineHtml(db),
+      [
+        "Hoa Valentine 14/2/2027 – Bó Hồng Tặng Người Yêu | Hoa Thanh Nhã",
+        `Hoa Valentine 14/2/2027 (mùng 9 Tết): bó hồng đỏ, hồng phấn tặng người yêu, vợ. Bảng giá cập nhật, ghi thiệp miễn phí, gửi ảnh trước khi giao. Gọi ${P}.`,
+      ],
+    ],
   ];
   const done: string[] = [];
-  for (const [slug, html] of pages) {
+  for (const [slug, html, seo] of pages) {
     const [res] = (await db.query("update categories set description = ? where slug = ?", [html, slug])) as [{ affectedRows: number }, unknown];
     if (res.affectedRows) done.push(slug);
+    if (seo)
+      await db.query(
+        `insert into seo_meta (path, title, description) values (?, ?, ?) on duplicate key update title = values(title), description = values(description)`,
+        [`/${slug}/`, ...seo],
+      );
   }
   return [`✓ Nội dung danh mục (bảng giá tự động): ${done.join(", ") || "không có"}`];
 }
