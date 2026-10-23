@@ -7,9 +7,9 @@ const nextConfig: NextConfig = {
   // để Google, Facebook, Zalo và công cụ SEO đều đọc được ngay
   htmlLimitedBots: /.*/,
   experimental: {
-    // Không chèn CSS vào HTML: Next chép CSS 2 lần (thẻ <style> + dữ liệu React), trang chủ nặng thêm ~110 KB
-    // mà Lighthouse đo không nhanh hơn; file CSS riêng còn được trình duyệt lưu lại cho các trang sau
-    inlineCss: false,
+    // Chèn CSS vào HTML: bỏ một lượt tải file CSS chặn hiển thị. Đo trên máy (không có độ trễ mạng) không thấy khác,
+    // nhưng PageSpeed thật (máy chủ Google ở xa Hostinger) nhanh hơn 3–6 điểm; đổi lại HTML nặng thêm ~25 KB nén
+    inlineCss: true,
   },
   images: {
     // Ít kích thước hơn mặc định (8 + 8): mỗi ảnh trong HTML ngắn hơn ~1/2, trang chủ 48 ảnh nhẹ hơn đáng kể
