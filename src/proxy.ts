@@ -6,6 +6,12 @@ const LOGIN_PATH = "/admin/login/";
 export function proxy(request: NextRequest) {
   const { pathname: rawPath } = request.nextUrl;
 
+  // SEO: www.hoathanhnha.com là bản trùng -> 301 về hoathanhnha.com (Hostinger không tự chuyển bản https://www)
+  const host = (request.headers.get("x-forwarded-host") ?? request.headers.get("host") ?? "").split(",")[0].trim().toLowerCase();
+  if (host.startsWith("www.")) {
+    return NextResponse.redirect(`https://${host.slice(4)}${rawPath}${request.nextUrl.search}`, 301);
+  }
+
   // SEO: trang của website cũ không còn tồn tại -> 301 về trang gần nghĩa nhất (src/lib/legacy-redirects.ts)
   let key = rawPath;
   try {

@@ -5,6 +5,8 @@
  * Trang tỉnh/thành không còn trang riêng -> trang khu vực gần nhất (có trang thành phố mới ở maintenance/city-pages.ts thì về đó); bài "ý nghĩa hoa" viết sai đường dẫn -> bài đúng.
  */
 export const legacyRedirects: Record<string, string> = {
+  // Sản phẩm ẩn vì không có ảnh (content/san-pham-an.txt) nhưng Google còn giữ link
+  "hoa-chia-buon-thanh-kinh-phan-uu-1102": "/hoa-chia-buon/",
   "dat-hoa-chia-buon": "/hoa-chia-buon/",
   "dat-hoa-dam-tang": "/hoa-chia-buon/",
   "dat-hoa-khai-truong": "/hoa-khai-truong/",
