@@ -18,6 +18,10 @@ type CityPage = {
   nearby: string;
   places: string;
   note: string;
+  /** Trang tỉnh: slug các trang huyện/thành phố trong tỉnh (liên kết xuống) */
+  districts?: string[];
+  /** Trang huyện/thành phố: slug trang tỉnh (liên kết lên) */
+  province?: string;
 };
 
 const CITIES: CityPage[] = [
@@ -51,6 +55,7 @@ const CITIES: CityPage[] = [
     slug: "shop-hoa-tuoi-bien-hoa",
     city: "Biên Hòa",
     store: "Biên Hòa",
+    province: "shop-hoa-tuoi-dong-nai",
     areas: "các phường Trung Dũng, Quang Vinh, Tân Phong, Tân Hiệp, Tam Hiệp, Hố Nai, Long Bình, Bửu Long, Hóa An",
     nearby: "Trảng Bom, Long Thành, Nhơn Trạch, Vĩnh Cửu",
     places: "Khu công nghiệp Biên Hòa 1, Biên Hòa 2, Amata, Bệnh viện Đa khoa Đồng Nai, các nhà tang lễ trong thành phố",
@@ -183,6 +188,7 @@ const CITIES: CityPage[] = [
   {
     slug: "shop-hoa-tuoi-nhon-trach",
     city: "Nhơn Trạch",
+    province: "shop-hoa-tuoi-dong-nai",
     areas: "các xã, thị trấn Hiệp Phước, Phú Hội, Long Tân, Phước Thiền, Phú Thạnh, Long Thọ, Phước An",
     nearby: "Long Thành, Biên Hòa, Thủ Đức",
     places: "các khu công nghiệp Nhơn Trạch 1 đến 6, văn phòng nhà máy, khu dân cư quanh trung tâm huyện",
@@ -268,6 +274,201 @@ const CITIES: CityPage[] = [
     places: "Bệnh viện Đa khoa tỉnh Hậu Giang, khu công nghiệp Tân Phú Thạnh, chợ nổi Ngã Bảy",
     note: "Khách ở Cần Thơ hoặc TP.HCM đặt hoa cho người thân ở Hậu Giang được gửi ảnh hoa thật qua Zalo trước khi giao.",
   },
+  // Tuần 7 (7/12/2026): cụm Tây Ninh — trước đó chuyển hướng về trang TP.HCM
+  {
+    slug: "shop-hoa-tuoi-tay-ninh",
+    city: "Tây Ninh",
+    areas: "trung tâm thành phố Tây Ninh (các phường 1, 2, 3, 4, Hiệp Ninh, Ninh Sơn, Ninh Thạnh) và các khu Hòa Thành, Trảng Bàng, Gò Dầu",
+    nearby: "Châu Thành, Dương Minh Châu, Tân Biên, Tân Châu, Bến Cầu",
+    places: "khu du lịch núi Bà Đen, Tòa Thánh Cao Đài, Bệnh viện Đa khoa tỉnh Tây Ninh, các khu công nghiệp Trảng Bàng, Phước Đông",
+    note: "Khách ở TP.HCM đặt hoa cho người thân ở Tây Ninh chỉ cần gửi địa chỉ và số điện thoại người nhận; shop gửi ảnh hoa thật qua Zalo trước khi giao.",
+    districts: [
+      "shop-hoa-tuoi-hoa-thanh",
+      "shop-hoa-tuoi-trang-bang",
+      "shop-hoa-tuoi-go-dau",
+      "shop-hoa-tuoi-chau-thanh-tay-ninh",
+      "shop-hoa-tuoi-duong-minh-chau",
+      "shop-hoa-tuoi-tan-bien",
+      "shop-hoa-tuoi-tan-chau-tay-ninh",
+      "shop-hoa-tuoi-ben-cau",
+    ],
+  },
+  {
+    slug: "shop-hoa-tuoi-hoa-thanh",
+    city: "Hòa Thành",
+    areas: "các khu Long Hoa, Long Thành Bắc, Long Thành Trung, Hiệp Tân và các ấp quanh chợ Long Hoa",
+    nearby: "thành phố Tây Ninh, Châu Thành, Dương Minh Châu",
+    places: "Tòa Thánh Cao Đài Tây Ninh, chợ Long Hoa, các trường học và cơ quan dọc đường Phạm Văn Đồng",
+    note: "Vào các dịp lễ lớn ở Tòa Thánh, đường quanh khu vực đông xe; nên đặt hoa sớm và ghi rõ giờ có người nhận.",
+    province: "shop-hoa-tuoi-tay-ninh",
+  },
+  {
+    slug: "shop-hoa-tuoi-trang-bang",
+    city: "Trảng Bàng",
+    areas: "các khu Trảng Bàng, An Tịnh, Gia Bình, Gia Lộc, Lộc Hưng, An Hòa dọc Quốc lộ 22",
+    nearby: "Gò Dầu, Củ Chi, Bến Cầu",
+    places: "khu công nghiệp Trảng Bàng, Thành Thành Công, văn phòng nhà máy dọc Xuyên Á, các nhà hàng đặc sản bánh canh Trảng Bàng",
+    note: "Doanh nghiệp trong các khu công nghiệp Trảng Bàng thường đặt kệ hoa khai trương, hoa chúc mừng đối tác: gửi tên công ty và cổng ra vào để giao đúng chỗ.",
+    province: "shop-hoa-tuoi-tay-ninh",
+  },
+  {
+    slug: "shop-hoa-tuoi-go-dau",
+    city: "Gò Dầu",
+    areas: "thị trấn Gò Dầu và các khu Thanh Phước, Phước Thạnh, Phước Đông, Hiệp Thạnh, Bàu Đồn",
+    nearby: "Trảng Bàng, Bến Cầu, Dương Minh Châu",
+    places: "khu công nghiệp Phước Đông, chợ Gò Dầu, các cơ quan và trường học dọc Quốc lộ 22",
+    note: "Kệ hoa khai trương cho nhà xưởng ở khu công nghiệp Phước Đông được giao và dựng tận nơi trước giờ làm lễ.",
+    province: "shop-hoa-tuoi-tay-ninh",
+  },
+  {
+    slug: "shop-hoa-tuoi-chau-thanh-tay-ninh",
+    city: "Châu Thành (Tây Ninh)",
+    areas: "thị trấn Châu Thành và các xã Thái Bình, Hảo Đước, Phước Vinh, An Bình, Trí Bình",
+    nearby: "thành phố Tây Ninh, Hòa Thành, Bến Cầu",
+    places: "Trung tâm hành chính huyện, chợ Châu Thành, các khu dân cư dọc đường 781",
+    note: "Các xã xa trung tâm cần hẹn giờ giao; gọi trước để shop báo thời gian cụ thể.",
+    province: "shop-hoa-tuoi-tay-ninh",
+  },
+  {
+    slug: "shop-hoa-tuoi-duong-minh-chau",
+    city: "Dương Minh Châu",
+    areas: "thị trấn Dương Minh Châu và các xã Suối Đá, Phan, Truông Mít, Chà Là, Bàu Năng",
+    nearby: "thành phố Tây Ninh, Hòa Thành, Tân Châu, Gò Dầu",
+    places: "hồ Dầu Tiếng, khu vực chân núi Bà Đen phía Suối Đá, chợ Dương Minh Châu",
+    note: "Hoa tặng người thân ở các xã ven hồ Dầu Tiếng nên ghi thêm mốc dễ tìm (chợ, trường, UBND xã) để giao nhanh.",
+    province: "shop-hoa-tuoi-tay-ninh",
+  },
+  {
+    slug: "shop-hoa-tuoi-tan-bien",
+    city: "Tân Biên",
+    areas: "thị trấn Tân Biên và các xã Thạnh Tây, Tân Lập, Thạnh Bình, Hòa Hiệp, Trà Vong",
+    nearby: "Tân Châu, thành phố Tây Ninh, Châu Thành",
+    places: "Khu di tích Căn cứ Trung ương Cục miền Nam, cửa khẩu Xa Mát, chợ Tân Biên",
+    note: "Tân Biên cách trung tâm tỉnh khá xa; đặt trước nửa ngày để shop sắp xếp giao đúng giờ.",
+    province: "shop-hoa-tuoi-tay-ninh",
+  },
+  {
+    slug: "shop-hoa-tuoi-tan-chau-tay-ninh",
+    city: "Tân Châu (Tây Ninh)",
+    areas: "thị trấn Tân Châu và các xã Tân Hưng, Suối Ngô, Tân Đông, Tân Hội, Thạnh Đông",
+    nearby: "Tân Biên, Dương Minh Châu",
+    places: "chợ Tân Châu, các nhà máy chế biến mì, cao su dọc đường 785",
+    note: "Các xã giáp biên giới cần hẹn giờ; gọi trước để shop báo thời gian giao cụ thể.",
+    province: "shop-hoa-tuoi-tay-ninh",
+  },
+  {
+    slug: "shop-hoa-tuoi-ben-cau",
+    city: "Bến Cầu",
+    areas: "thị trấn Bến Cầu và các xã Lợi Thuận, Long Thuận, Tiên Thuận, An Thạnh, Long Chữ",
+    nearby: "Gò Dầu, Trảng Bàng, Châu Thành",
+    places: "cửa khẩu quốc tế Mộc Bài, khu thương mại Mộc Bài, chợ Bến Cầu",
+    note: "Hoa khai trương cho cửa hàng, công ty ở khu thương mại Mộc Bài: gửi tên đơn vị và giờ làm lễ để shop giao kịp.",
+    province: "shop-hoa-tuoi-tay-ninh",
+  },
+  // Tuần 7 (7/12/2026): cụm Đồng Nai — trước đó chuyển hướng về trang Biên Hòa / Nhơn Trạch
+  {
+    slug: "shop-hoa-tuoi-dong-nai",
+    city: "Đồng Nai",
+    store: "Biên Hòa",
+    areas: "Biên Hòa, Long Khánh, Trảng Bom, Long Thành, Nhơn Trạch, Vĩnh Cửu, Thống Nhất, Cẩm Mỹ, Xuân Lộc, Định Quán, Tân Phú",
+    nearby: "Thủ Đức, Dĩ An, Bà Rịa",
+    places: "các khu công nghiệp Biên Hòa, Amata, Nhơn Trạch, Long Thành, Bàu Xéo, Bệnh viện Đa khoa Đồng Nai, khu vực dự án sân bay Long Thành",
+    note: "Cửa hàng ở Biên Hòa nhận đơn cho toàn tỉnh; các khu xa như Tân Phú, Định Quán, Xuân Lộc nên đặt trước để shop hẹn giờ giao.",
+    districts: [
+      "shop-hoa-tuoi-bien-hoa",
+      "shop-hoa-tuoi-long-khanh",
+      "shop-hoa-tuoi-trang-bom",
+      "shop-hoa-tuoi-long-thanh",
+      "shop-hoa-tuoi-nhon-trach",
+      "shop-hoa-tuoi-vinh-cuu",
+      "shop-hoa-tuoi-thong-nhat",
+      "shop-hoa-tuoi-cam-my",
+      "shop-hoa-tuoi-xuan-loc",
+      "shop-hoa-tuoi-dinh-quan",
+      "shop-hoa-tuoi-tan-phu",
+    ],
+  },
+  {
+    slug: "shop-hoa-tuoi-long-khanh",
+    city: "Long Khánh",
+    areas: "các phường Xuân An, Xuân Bình, Xuân Hòa, Xuân Trung, Xuân Thanh, Phú Bình, Bàu Trâm, Suối Tre",
+    nearby: "Xuân Lộc, Cẩm Mỹ, Thống Nhất",
+    places: "Bệnh viện Đa khoa khu vực Long Khánh, chợ Long Khánh, các vườn trái cây Suối Tre, Bảo Quang",
+    note: "Khách ở TP.HCM, Biên Hòa đặt hoa cho gia đình ở Long Khánh được gửi ảnh hoa thật qua Zalo trước khi giao.",
+    province: "shop-hoa-tuoi-dong-nai",
+  },
+  {
+    slug: "shop-hoa-tuoi-trang-bom",
+    city: "Trảng Bom",
+    areas: "thị trấn Trảng Bom và các khu Bắc Sơn, Hố Nai 3, Quảng Tiến, Sông Trầu, Bàu Hàm, Giang Điền",
+    nearby: "Biên Hòa, Thống Nhất, Vĩnh Cửu",
+    places: "các khu công nghiệp Bàu Xéo, Sông Mây, Giang Điền, Hố Nai, các giáo xứ khu Hố Nai – Bắc Sơn",
+    note: "Kệ hoa khai trương cho nhà xưởng ở khu công nghiệp Bàu Xéo, Sông Mây: gửi tên công ty và cổng ra vào để giao đúng chỗ.",
+    province: "shop-hoa-tuoi-dong-nai",
+  },
+  {
+    slug: "shop-hoa-tuoi-long-thanh",
+    city: "Long Thành",
+    areas: "thị trấn Long Thành và các xã An Phước, Long An, Long Phước, Bình An, Tam An, Lộc An, Bình Sơn",
+    nearby: "Nhơn Trạch, Biên Hòa, Cẩm Mỹ",
+    places: "các khu công nghiệp Long Thành, Lộc An – Bình Sơn, Tam Phước, khu vực dự án sân bay Long Thành, các sân golf",
+    note: "Doanh nghiệp ở các khu công nghiệp Long Thành thường đặt hoa chúc mừng đối tác, kệ hoa khai trương: gửi tên công ty và giờ làm lễ.",
+    province: "shop-hoa-tuoi-dong-nai",
+  },
+  {
+    slug: "shop-hoa-tuoi-vinh-cuu",
+    city: "Vĩnh Cửu",
+    areas: "thị trấn Vĩnh An và các xã Thạnh Phú, Tân Bình, Bình Lợi, Thiện Tân, Trị An, Tân An",
+    nearby: "Biên Hòa, Trảng Bom, Tân Uyên",
+    places: "hồ Trị An, nhà máy thủy điện Trị An, khu công nghiệp Thạnh Phú",
+    note: "Các xã quanh hồ Trị An cách xa trung tâm; đặt trước nửa ngày để shop hẹn giờ giao.",
+    province: "shop-hoa-tuoi-dong-nai",
+  },
+  {
+    slug: "shop-hoa-tuoi-thong-nhat",
+    city: "Thống Nhất",
+    areas: "các xã Dầu Giây, Gia Tân, Hưng Lộc, Quang Trung, Xuân Thiện, Bàu Hàm 2, Gia Kiệm",
+    nearby: "Trảng Bom, Long Khánh, Định Quán",
+    places: "ngã ba Dầu Giây, khu công nghiệp Dầu Giây, các giáo xứ Gia Kiệm, Gia Tân",
+    note: "Ngã ba Dầu Giây là điểm giao thuận tiện; nhà ở các xã xa nên ghi thêm mốc dễ tìm để giao nhanh.",
+    province: "shop-hoa-tuoi-dong-nai",
+  },
+  {
+    slug: "shop-hoa-tuoi-cam-my",
+    city: "Cẩm Mỹ",
+    areas: "các xã Long Giao, Xuân Mỹ, Xuân Quế, Sông Ray, Xuân Đường, Nhân Nghĩa, Xuân Bảo",
+    nearby: "Long Khánh, Xuân Lộc, Long Thành",
+    places: "trung tâm hành chính Long Giao, các trang trại và vườn cây dọc đường 765",
+    note: "Cẩm Mỹ chủ yếu là xã, nhà cách xa nhau; gửi số điện thoại người nhận để shipper gọi trước khi tới.",
+    province: "shop-hoa-tuoi-dong-nai",
+  },
+  {
+    slug: "shop-hoa-tuoi-xuan-loc",
+    city: "Xuân Lộc",
+    areas: "thị trấn Gia Ray và các xã Xuân Hiệp, Xuân Tâm, Xuân Hưng, Suối Cát, Xuân Trường, Xuân Định",
+    nearby: "Long Khánh, Cẩm Mỹ, Định Quán",
+    places: "núi Chứa Chan, chợ Gia Ray, Bệnh viện Đa khoa Xuân Lộc",
+    note: "Hoa chia buồn cho gia đình ở Xuân Lộc: báo shop địa chỉ tang lễ và nội dung băng tang ngay khi đặt để giao kịp.",
+    province: "shop-hoa-tuoi-dong-nai",
+  },
+  {
+    slug: "shop-hoa-tuoi-dinh-quan",
+    city: "Định Quán",
+    areas: "thị trấn Định Quán và các xã Phú Lợi, Phú Ngọc, La Ngà, Gia Canh, Phú Vinh, Phú Tân",
+    nearby: "Tân Phú, Xuân Lộc, Thống Nhất",
+    places: "thắng cảnh Đá Ba Chồng, hồ Trị An phía La Ngà, chợ Định Quán dọc Quốc lộ 20",
+    note: "Định Quán nằm dọc Quốc lộ 20, cách Biên Hòa khá xa; đặt trước nửa ngày để shop hẹn giờ giao.",
+    province: "shop-hoa-tuoi-dong-nai",
+  },
+  {
+    slug: "shop-hoa-tuoi-tan-phu",
+    city: "Tân Phú (Đồng Nai)",
+    areas: "thị trấn Tân Phú và các xã Phú Lâm, Phú Bình, Phú Xuân, Phú Thanh, Nam Cát Tiên, Tà Lài",
+    nearby: "Định Quán, Đạ Huoai, Bảo Lộc",
+    places: "Vườn quốc gia Cát Tiên, chợ Tân Phú, các khu dân cư dọc Quốc lộ 20",
+    note: "Tân Phú là khu xa nhất của Đồng Nai; gọi trước để shop báo thời gian giao cụ thể.",
+    province: "shop-hoa-tuoi-dong-nai",
+  },
 ];
 
 /** Khối sản phẩm của website cũ (mã danh mục WooCommerce) — trang khu vực hiện các mẫu tiêu biểu theo dịp */
@@ -286,6 +487,18 @@ function storeAddress(prefix?: string) {
   return null;
 }
 
+const cityName = (slug: string) => CITIES.find((x) => x.slug === slug)?.city ?? slug;
+
+/** Liên kết trang tỉnh ↔ trang huyện/thành phố trong tỉnh */
+function related(c: CityPage) {
+  if (c.districts?.length) {
+    const links = c.districts.map((s) => `<li><a href="/${s}/">Shop hoa tươi ${cityName(s)}</a></li>`).join("");
+    return `<h2>Giao hoa các khu vực trong tỉnh ${c.city}</h2>\n<ul>${links}</ul>\n`;
+  }
+  if (c.province) return `<p>Xem thêm: <a href="/${c.province}/">shop hoa tươi ${cityName(c.province)}</a> – giao hoa khắp tỉnh.</p>\n`;
+  return "";
+}
+
 function html(c: CityPage) {
   const addr = storeAreas[c.slug]?.street ?? storeAddress(c.store);
   const maps = addr ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${addr}, ${storeAreas[c.slug]?.city ?? c.city}`)}` : "";
@@ -295,7 +508,7 @@ ${SECTIONS}
 <h2>Giao hoa tận nơi tại ${c.city}</h2>
 <p>Shop giao trong ngày đến ${c.areas}. Khu vực lân cận: ${c.nearby}. Điểm giao thường gặp: ${c.places}.</p>
 <p>${c.note}</p>
-${
+${related(c)}${
   addr
     ? `<h2>Cửa hàng hoa tại ${c.city}</h2>
 <p>Địa chỉ: <strong>${addr}</strong> (<a href="${maps}" rel="nofollow noopener" target="_blank">chỉ đường Google Maps</a>). Mở cửa 06:00–21:00 hằng ngày. Bạn có thể ghé xem hoa trực tiếp, hoặc đặt trên website và gọi/Zalo ${phone} để được tư vấn mẫu.</p>`
