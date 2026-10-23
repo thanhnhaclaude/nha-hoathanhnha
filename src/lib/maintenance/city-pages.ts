@@ -2,7 +2,7 @@
  * Trang khu vực cho các thành phố ra đơn nhiều nhưng không có trang trên website (phân tích 21/10/2026:
  * file theo dõi sale + chuyển đổi Google Ads). Website cũ có /shop-hoa-tuoi-nha-trang/ … nhưng không chép sang được.
  * Tạo dưới nhóm "KHU VỰC"; nội dung quản lý tại đây (cập nhật mỗi lần máy chủ khởi động).
- * Sản phẩm: lần đầu chép bộ mẫu của trang TP. Hồ Chí Minh; sau đó giữ nguyên nếu đã chỉnh trong admin.
+ * Sản phẩm: lần đầu gán bộ mẫu bán chạy (AREA_MIX); sau đó giữ nguyên nếu đã chỉnh trong admin.
  * Địa chỉ cửa hàng lấy từ site.stores — thành phố không có cửa hàng thì không ghi địa chỉ. Chạy lặp lại an toàn.
  */
 import type { Connection } from "mysql2/promise";
@@ -223,7 +223,6 @@ ${
 export async function syncCityPages(db: Connection): Promise<string[]> {
   const log: string[] = [];
   const [[group]] = (await db.query("select id from categories where slug = 'khu-vuc'")) as [{ id: number }[], unknown];
-  const [[source]] = (await db.query("select id from categories where slug = 'shop-hoa-tuoi-thanh-pho-ho-chi-minh'")) as [{ id: number }[], unknown];
   for (const c of CITIES) {
     const name = `Shop Hoa Tươi ${c.city}`;
     await db.query(
@@ -233,13 +232,7 @@ export async function syncCityPages(db: Connection): Promise<string[]> {
     );
     const [[cat]] = (await db.query("select id from categories where slug = ?", [c.slug])) as [{ id: number }[], unknown];
     const [[{ n }]] = (await db.query("select count(*) n from product_categories where category_id = ?", [cat.id])) as [{ n: number }[], unknown];
-    if (!n && source) {
-      await db.query(
-        `insert ignore into product_categories (product_id, category_id)
-         select pc.product_id, ? from product_categories pc join products p on p.id = pc.product_id and p.is_active = 1 where pc.category_id = ?`,
-        [cat.id, source.id],
-      );
-    }
+    if (!n) await setAreaProducts(db, cat.id, await areaMixIds(db));
     await db.query(
       `insert into seo_meta (path, title, description) values (?, ?, ?)
        on duplicate key update title = values(title), description = values(description)`,
@@ -253,4 +246,69 @@ export async function syncCityPages(db: Connection): Promise<string[]> {
     log.push(`✓ /${c.slug}/: ${n ? "cập nhật" : "tạo"}, ${total} mẫu`);
   }
   return log;
+}
+
+/** Nhóm mẫu bán chạy dùng cho trang khu vực (số mẫu mới nhất có giá lấy từ mỗi nhóm) */
+const AREA_MIX: [string, number][] = [
+  ["hoa-bo", 12],
+  ["hoa-gio", 12],
+  ["ke-hoa-khai-truong", 12],
+  ["lan-ho-diep-khai-truong", 8],
+  ["hoa-chia-buon", 12],
+];
+
+/** Mã sản phẩm của bộ mẫu trang khu vực: hoa bó, giỏ, kệ khai trương, lan hồ điệp, chia buồn (chỉ mẫu đang bán, có giá) */
+async function areaMixIds(db: Connection) {
+  const ids = new Set<number>();
+  for (const [slug, n] of AREA_MIX) {
+    const [rows] = (await db.query(
+      `select p.id from products p join product_categories pc on pc.product_id = p.id join categories c on c.id = pc.category_id
+       where c.slug = ? and p.is_active = 1 and p.price > 0 order by p.created_at desc, p.id desc limit ?`,
+      [slug, n],
+    )) as [{ id: number }[], unknown];
+    rows.forEach((r) => ids.add(r.id));
+  }
+  return [...ids];
+}
+
+async function setAreaProducts(db: Connection, categoryId: number, ids: number[]) {
+  await db.query("delete from product_categories where category_id = ?", [categoryId]);
+  if (ids.length) await db.query("insert ignore into product_categories (product_id, category_id) values ?", [ids.map((id) => [id, categoryId])]);
+}
+
+/**
+ * Trang khu vực (shop-hoa-tuoi-…) ít mẫu (dưới 8, vd. Quy Nhơn chỉ 1 mẫu), hoặc trang thành phố trong CITIES đang mang nguyên bộ mẫu TP. Hồ Chí Minh
+ * (nhiều xe hoa cưới, giỏ trái cây giá "Liên hệ" — không hợp trang shop hoa của tỉnh): gán bộ mẫu bán chạy AREA_MIX,
+ * để lưới luôn đủ 2 hàng × 4 cột với mẫu phổ biến. Trang đã có bộ mẫu riêng (chỉnh trong admin) được giữ nguyên.
+ * Chạy lặp lại an toàn.
+ */
+export async function fillThinAreaPages(db: Connection): Promise<string[]> {
+  const [[source]] = (await db.query("select id from categories where slug = 'shop-hoa-tuoi-thanh-pho-ho-chi-minh'")) as [{ id: number }[], unknown];
+  const ids = await areaMixIds(db);
+  if (ids.length < 8) return ["! Trang khu vực: bộ mẫu bán chạy chưa đủ 8 mẫu, giữ nguyên"];
+  const [targets] = (await db.query(
+    `select c.id, c.slug,
+       (select count(*) from product_categories pc join products p on p.id = pc.product_id and p.is_active = 1 where pc.category_id = c.id) as total,
+       (select count(*) from product_categories pc where pc.category_id = c.id
+          and pc.product_id not in (select product_id from product_categories where category_id = ?)) as own
+     from categories c
+     where c.slug like 'shop-hoa-tuoi-%' and c.id <> ?`,
+    [source?.id ?? 0, source?.id ?? 0],
+  )) as [{ id: number; slug: string; total: number; own: number }[], unknown];
+  const mixSet = new Set(ids);
+  let changed = 0;
+  for (const c of targets) {
+    const thin = Number(c.total) < 8;
+    // Trang thành phố/tỉnh tạo ở CITIES mà vẫn mang nguyên bộ mẫu TP.HCM (bản trước). Trang quận cũ đang có thứ hạng không đụng tới.
+    const copyOfHcm = CITIES.some((x) => x.slug === c.slug) && Number(c.total) >= 50 && Number(c.own) === 0;
+    if (!thin && !copyOfHcm) continue;
+    if (!thin) {
+      // đã là bộ mẫu bán chạy rồi thì thôi
+      const [cur] = (await db.query("select product_id from product_categories where category_id = ?", [c.id])) as [{ product_id: number }[], unknown];
+      if (cur.length === ids.length && cur.every((r) => mixSet.has(r.product_id))) continue;
+    }
+    await setAreaProducts(db, c.id, ids);
+    changed++;
+  }
+  return [`✓ Trang khu vực: bộ mẫu bán chạy (${ids.length} mẫu) cho ${changed} trang`];
 }

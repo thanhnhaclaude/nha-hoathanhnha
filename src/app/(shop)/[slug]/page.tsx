@@ -7,6 +7,7 @@ import { ProductGallery } from "@/components/product-gallery";
 import { ProductCard, ProductGrid } from "@/components/product-card";
 import { ZaloIcon } from "@/components/icons";
 import { effectivePrice, formatVND } from "@/lib/format";
+import type { ProductCardData } from "@/lib/queries";
 import { infoPages, type InfoPage } from "@/lib/info-pages";
 import { mainMenu } from "@/lib/menu";
 import { PostCard } from "@/components/post-card";
@@ -107,11 +108,18 @@ export default async function SlugPage({ params, searchParams }: Props) {
   }
 
   const { page, sort } = parseListingParams(await searchParams);
-  const [{ items, total, pages }, guides, nearby] = await Promise.all([
-    getProductsInCategory(category, { page, sort }),
+  // Trang khu vực (shop-hoa-tuoi-…): 8 mẫu/trang = 2 hàng × 4 cột, đồng bộ với các khối sản phẩm trong phần mô tả
+  const isArea = category.slug.startsWith("shop-hoa-tuoi-");
+  // Trang khu vực, sắp "mới nhất": xếp xen kẽ theo loại (bó, giỏ, khai trương, lan…) để trang đầu đủ loại, chia buồn xếp sau
+  const mixArea = isArea && sort === "newest";
+  const [listing, guides, nearby] = await Promise.all([
+    mixArea
+      ? getProductsInCategory(category, { page: 1, perPage: 240, sort }).then((r) => paginateMixed(r.items, page, 8))
+      : getProductsInCategory(category, { page, sort, ...(isArea ? { perPage: 8 } : {}) }),
     getGuidePosts(category.name, 3),
     getNearbyAreas(category.id, category.parentId, category.slug),
   ]);
+  const { items, total, pages } = listing;
   const group = mainMenu.find((g) => g.slug === slug || g.children.some((c) => c.slug === slug));
   const base = `/${category.slug}/`;
 
@@ -144,7 +152,7 @@ export default async function SlugPage({ params, searchParams }: Props) {
       </div>
       <div className="mt-6">
         {items.length ? (
-          <ProductGrid products={items} priorityCount={2} />
+          <ProductGrid products={items} priorityCount={2} layout={isArea ? "four" : "default"} />
         ) : (
           <p className="rounded-2xl bg-surface p-10 text-center text-muted">
             Danh mục đang được cập nhật. Gọi <a className="font-semibold text-brand-strong" href={`tel:${site.phone}`}>{site.phoneDisplay}</a> để được tư vấn mẫu.
@@ -210,7 +218,8 @@ async function CategoryDescription({ html, title, slug }: { html: string; title:
       if (seg.type === "html") return seg;
       const cat = await getCategoryByWooId(seg.wooId);
       if (!cat) return null;
-      const { items } = await getProductsInCategory(cat, { perPage: 4 });
+      // 8 mẫu = 2 hàng × 4 cột (2 cột × 4 hàng trên điện thoại)
+      const { items } = await getProductsInCategory(cat, { perPage: 8 });
       return { type: "category" as const, label: seg.label || cat.name, category: cat, items };
     }),
   );
@@ -228,7 +237,8 @@ async function CategoryDescription({ html, title, slug }: { html: string; title:
         if (seg.type === "html") return <div key={i} className="prose-shop" dangerouslySetInnerHTML={{ __html: seg.html }} />;
         if (!seg.items.length) return null;
         return (
-          <div key={i}>
+          // Khối sản phẩm rộng hơn cột chữ (giống bài viết) để 4 cột không bị chật
+          <div key={i} className="lg:-mx-24">
             <div className="mb-3 flex items-baseline justify-between gap-4">
               <h3 className="font-display text-xl font-semibold">{seg.label}</h3>
               <Link href={canonicalPath(seg.category.slug)} className="shrink-0 text-sm font-semibold text-brand-strong hover:underline">
@@ -589,4 +599,23 @@ async function ProductView({ data }: { data: NonNullable<Awaited<ReturnType<type
 /** Đường dẫn ảnh tuyệt đối cho dữ liệu có cấu trúc (JSON-LD): "/uploads/a.webp" -> "https://hoathanhnha.com/uploads/a.webp". */
 function absUrl(src: string) {
   return /^https?:\/\//i.test(src) ? src : `${site.url}${src.startsWith("/") ? "" : "/"}${src}`;
+}
+
+/**
+ * Xếp xen kẽ sản phẩm theo loại (nhận từ đầu tên: "Hoa Bó", "Hoa Giỏ", "Lan Hồ Điệp"…) rồi chia trang.
+ * Hoa chia buồn và mẫu giá "Liên hệ" xếp sau cùng để đầu trang khu vực là các mẫu tặng phổ biến.
+ */
+function paginateMixed(all: ProductCardData[], page: number, perPage: number) {
+  const late = (p: ProductCardData) => /chia buồn|tang lễ|đám tang/i.test(p.name) || effectivePrice(p) <= 0;
+  const groups = new Map<string, ProductCardData[]>();
+  for (const p of all.filter((x) => !late(x))) {
+    const key = p.name.split(/\s+[–-]\s+/)[0].toLowerCase();
+    groups.set(key, [...(groups.get(key) ?? []), p]);
+  }
+  const lists = [...groups.values()];
+  const mixed: ProductCardData[] = [];
+  for (let i = 0; lists.some((l) => i < l.length); i++) for (const l of lists) if (i < l.length) mixed.push(l[i]);
+  mixed.push(...all.filter(late));
+  const pages = Math.max(1, Math.ceil(mixed.length / perPage));
+  return { items: mixed.slice((page - 1) * perPage, page * perPage), total: mixed.length, pages };
 }

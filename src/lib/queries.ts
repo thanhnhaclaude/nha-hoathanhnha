@@ -65,7 +65,8 @@ function orderFor(sort: SortKey) {
   const effective = sql`CASE WHEN ${products.salePrice} > 0 AND ${products.salePrice} < ${products.price} THEN ${products.salePrice} ELSE ${products.price} END`;
   if (sort === "price-asc") return [sql`${effective} = 0`, sql`${effective} ASC`];
   if (sort === "price-desc") return [sql`${effective} DESC`];
-  return [desc(products.createdAt), desc(products.id)];
+  // "Mới nhất": mẫu có giá trước, mẫu "Liên hệ" (giá 0: giỏ trái cây, hoa bàn tiệc…) xuống cuối
+  return [sql`${effective} = 0`, desc(products.createdAt), desc(products.id)];
 }
 
 export async function getProductsInCategory(

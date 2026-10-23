@@ -11,7 +11,7 @@ import { ensureTagTables } from "./tag-tables";
 import { fixSeoTitleCodes } from "./seo-title-fix";
 import { applyProductVisibility } from "./product-visibility";
 import { syncPricePages } from "./price-pages";
-import { syncCityPages } from "./city-pages";
+import { fillThinAreaPages, syncCityPages } from "./city-pages";
 import { syncAreaMeta } from "./area-meta";
 
 export type MaintenanceResult = { at: string; ok: boolean; log: string[]; error?: string };
@@ -39,6 +39,7 @@ export async function runMaintenance() {
     result.log.push(...(await applyProductVisibility(db)));
     result.log.push(...(await syncPricePages(db)));
     result.log.push(...(await syncCityPages(db)));
+    result.log.push(...(await fillThinAreaPages(db)));
     result.log.push(...(await syncAreaMeta(db)));
     result.ok = true;
   } catch (e) {
