@@ -5,16 +5,18 @@ import { ArrowLeft, ExternalLink, Trash2 } from "lucide-react";
 import { db, pageCategories, pages, postCategories, seoMeta } from "@/lib/db";
 import { deletePost } from "../../actions";
 import { PostForm } from "../post-form";
+import { getPageTags } from "@/lib/tags";
 
 export default async function EditPost({ params, searchParams }: PageProps<"/admin/bai-viet/[id]">) {
   const { id } = await params;
   const { saved } = await searchParams;
   const [post] = await db.select().from(pages).where(eq(pages.id, Number(id))).limit(1);
   if (!post) notFound();
-  const [categories, links, [seo]] = await Promise.all([
+  const [categories, links, [seo], tagRows] = await Promise.all([
     db.select().from(postCategories).orderBy(postCategories.name),
     db.select({ id: pageCategories.categoryId }).from(pageCategories).where(eq(pageCategories.pageId, post.id)),
     db.select({ title: seoMeta.title, description: seoMeta.description }).from(seoMeta).where(eq(seoMeta.path, `/${post.slug}/`)).limit(1),
+    getPageTags(post.id),
   ]);
 
   return (
@@ -39,7 +41,7 @@ export default async function EditPost({ params, searchParams }: PageProps<"/adm
           Đã lưu.
         </p>
       )}
-      <PostForm key={post.updatedAt.toString()} post={post} type={post.type} categories={categories} selected={links.map((l) => l.id)} seo={seo} />
+      <PostForm key={post.updatedAt.toString()} post={post} type={post.type} categories={categories} selected={links.map((l) => l.id)} seo={seo} tagsText={tagRows.map((t) => t.name).join(", ")} />
     </div>
   );
 }

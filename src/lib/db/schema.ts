@@ -115,6 +115,31 @@ export const pageCategories = mysqlTable(
 
 export type PostCategory = typeof postCategories.$inferSelect;
 
+/** Thẻ (tag) dùng chung cho bài viết và sản phẩm, vd. "hoa hồng", "tặng mẹ". Bảng tạo tự động: maintenance/tag-tables.ts */
+export const tags = mysqlTable(
+  "tags",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    name: varchar("name", { length: 120 }).notNull(),
+    slug: varchar("slug", { length: 150 }).notNull(),
+  },
+  (t) => [uniqueIndex("tags_slug_uq").on(t.slug)],
+);
+
+export const pageTags = mysqlTable(
+  "page_tags",
+  { pageId: int("page_id").notNull(), tagId: int("tag_id").notNull() },
+  (t) => [primaryKey({ columns: [t.pageId, t.tagId] }), index("page_tags_tag_idx").on(t.tagId)],
+);
+
+export const productTags = mysqlTable(
+  "product_tags",
+  { productId: int("product_id").notNull(), tagId: int("tag_id").notNull() },
+  (t) => [primaryKey({ columns: [t.productId, t.tagId] }), index("product_tags_tag_idx").on(t.tagId)],
+);
+
+export type Tag = typeof tags.$inferSelect;
+
 /**
  * Thông tin SEO lấy nguyên từ website cũ (Rank Math) theo đường dẫn, vd. "/hoa-bo/".
  * Dùng để giữ nguyên tiêu đề, mô tả, robots và lastmod trong sitemap.

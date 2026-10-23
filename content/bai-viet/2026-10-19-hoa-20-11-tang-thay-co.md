@@ -6,6 +6,7 @@ keyword: hoa 20/11
 publish: 2026-10-19 08:00
 category: tin-tuc
 image: /uploads/Hoa-bo-HB050.webp
+tags: hoa 20/11, ngày nhà giáo, tặng thầy cô, bó hoa
 ---
 
 Ngày Nhà giáo Việt Nam 20/11 là dịp học trò và phụ huynh gửi lời tri ân tới thầy cô. Một bó **hoa 20/11** không cần đắt, nhưng nên chọn đúng loài hoa, đúng màu và đến tay thầy cô đúng lúc. Bài này gợi ý mẫu hoa theo từng mức ngân sách, kèm cách ghi thiệp và những lưu ý khi đặt hoa giao tận trường.

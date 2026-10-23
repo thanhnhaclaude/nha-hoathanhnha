@@ -6,15 +6,17 @@ import { db, products, productCategories } from "@/lib/db";
 import { getAllCategories } from "@/lib/queries";
 import { deleteProduct } from "../../actions";
 import { ProductForm } from "../product-form";
+import { getProductTags } from "@/lib/tags";
 
 export default async function EditProduct({ params, searchParams }: PageProps<"/admin/san-pham/[id]">) {
   const { id } = await params;
   const { saved } = await searchParams;
   const [product] = await db.select().from(products).where(eq(products.id, Number(id))).limit(1);
   if (!product) notFound();
-  const [categories, links] = await Promise.all([
+  const [categories, links, tagRows] = await Promise.all([
     getAllCategories(),
     db.select({ id: productCategories.categoryId }).from(productCategories).where(eq(productCategories.productId, product.id)),
+    getProductTags(product.id),
   ]);
 
   return (
@@ -39,7 +41,7 @@ export default async function EditProduct({ params, searchParams }: PageProps<"/
           Đã lưu sản phẩm.
         </p>
       )}
-      <ProductForm key={product.updatedAt.toString()} product={product} categories={categories} selected={links.map((l) => l.id)} />
+      <ProductForm key={product.updatedAt.toString()} product={product} categories={categories} selected={links.map((l) => l.id)} tagsText={tagRows.map((t) => t.name).join(", ")} />
     </div>
   );
 }

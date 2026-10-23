@@ -29,6 +29,8 @@ import {
 } from "@/lib/queries";
 import { canonicalPath, paginated, seoMetadata } from "@/lib/seo";
 import { ChipScroller } from "@/components/chip-scroller";
+import { TagList } from "@/components/tag-list";
+import { getPageTags, getProductTags } from "@/lib/tags";
 import { addContextualLinksMany, bestCategoryFor, getGuidePosts, getNearbyAreas, getRelatedPosts } from "@/lib/internal-links";
 import { ViewItemTracker } from "@/components/view-item-tracker";
 import { cleanHtml, introText, normalizeHeadings, plainText, removeDuplicateTitleHeading, splitCategoryShortcodes, splitProductBlocks } from "@/lib/sanitize";
@@ -320,7 +322,7 @@ async function PostArchiveView({ category, page }: { category: PostCategory; pag
 
 async function CmsView({ page }: { page: Page }) {
   const isPost = page.type === "post";
-  const [recent, postCategory, rawSegments, suggestCat] = await Promise.all([
+  const [recent, postCategory, rawSegments, suggestCat, postTags] = await Promise.all([
     isPost ? getRelatedPosts(page.title, { excludeId: page.id, limit: 6 }) : Promise.resolve([]),
     isPost ? getPrimaryPostCategory(page.id) : Promise.resolve(null),
     Promise.all(
@@ -329,6 +331,7 @@ async function CmsView({ page }: { page: Page }) {
       ),
     ),
     isPost ? bestCategoryFor(page.title, page.content) : Promise.resolve(null),
+    isPost ? getPageTags(page.id) : Promise.resolve([]),
   ]);
   // Link nội bộ theo ngữ cảnh (tối đa 4 cho cả bài) tới danh mục đang bán, sau khi đã làm sạch HTML
   const linkedHtml = await addContextualLinksMany(
@@ -374,6 +377,7 @@ async function CmsView({ page }: { page: Page }) {
           ),
         )}
       </article>
+      <TagList tags={postTags} className="mt-10" />
       {suggestCategory && suggested.length > 0 && (
         <section aria-labelledby="suggest-h" className="defer-render mt-14 lg:-mx-24">
           <div className="flex items-baseline justify-between gap-4">
@@ -434,9 +438,10 @@ async function ProductView({ data }: { data: NonNullable<Awaited<ReturnType<type
   const { product, categories } = data;
   const price = effectivePrice(product);
   const onSale = price < product.price;
-  const [related, guides] = await Promise.all([
+  const [related, guides, productTagList] = await Promise.all([
     getRelatedProducts(product.id, categories.map((c) => c.id)),
     getGuidePosts(`${product.name} ${categories.map((c) => c.name).join(" ")}`, 3),
+    getProductTags(product.id),
   ]);
   const primaryCat = categories.find((c) => c.parentId != null) ?? categories[0];
   const shipping = shippingConfig();
@@ -548,8 +553,10 @@ async function ProductView({ data }: { data: NonNullable<Awaited<ReturnType<type
             Mô tả sản phẩm
           </h2>
           <div className="prose-shop mt-6" dangerouslySetInnerHTML={{ __html: cleanHtml(removeDuplicateTitleHeading(product.description, product.name), { imgAlt: product.name }) }} />
+          <TagList tags={productTagList} className="mt-8" />
         </section>
       )}
+      {!product.description && <TagList tags={productTagList} className="mx-auto mt-12 max-w-3xl" />}
 
       {related.length > 0 && (
         <section aria-labelledby="rel-h" className="defer-render mt-16">

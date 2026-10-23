@@ -6,6 +6,7 @@ keyword: lời chúc 20/11
 publish: 2026-10-22 08:00
 category: tin-tuc
 image: /uploads/Hoa-bo-HB030.webp
+tags: lời chúc 20/11, ngày nhà giáo, tặng thầy cô, ghi thiệp
 ---
 
 Một tấm thiệp nhỏ đi kèm bó hoa thường được thầy cô giữ lại lâu hơn cả bó hoa. Nhưng viết gì cho vừa đủ, không sáo rỗng lại là điều nhiều người băn khoăn. Dưới đây là những **lời chúc 20/11** ngắn gọn do Thanh Nhã biên soạn, chia theo từng đối tượng để bạn chọn nhanh hoặc chỉnh lại theo ý mình.

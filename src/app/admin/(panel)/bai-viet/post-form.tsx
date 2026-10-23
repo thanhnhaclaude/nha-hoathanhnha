@@ -11,12 +11,14 @@ export function PostForm({
   categories,
   selected,
   seo,
+  tagsText = "",
 }: {
   post?: Page;
   type: "post" | "page";
   categories: PostCategory[];
   selected: number[];
   seo?: Pick<SeoMeta, "title" | "description"> | null;
+  tagsText?: string;
 }) {
   const [state, formAction, pending] = useActionState<PostFormState, FormData>(savePost, undefined);
   const [image, setImage] = useState(post?.image ?? "");
@@ -43,7 +45,9 @@ export function PostForm({
     }
   }
 
-  const publishedAt = (post?.publishedAt ?? new Date()).toISOString().slice(0, 10);
+  // published_at lưu giờ Việt Nam; drizzle đọc DATETIME như UTC nên phần "UTC" của Date chính là giờ Việt Nam.
+  // Bài mới: lấy giờ hiện tại theo giờ Việt Nam. Đặt giờ tương lai = hẹn giờ, website tự hiện bài khi tới giờ.
+  const publishedAt = (post?.publishedAt ?? new Date(Date.now() + 7 * 3600_000)).toISOString().slice(0, 16);
 
   return (
     <form action={formAction} className="grid gap-6 xl:grid-cols-[1fr_360px]">
@@ -106,9 +110,10 @@ export function PostForm({
           </label>
           <div>
             <label htmlFor="publishedAt" className="label">
-              Ngày đăng
+              Ngày giờ đăng (giờ Việt Nam)
             </label>
-            <input id="publishedAt" name="publishedAt" type="date" defaultValue={publishedAt} className="field" />
+            <input id="publishedAt" name="publishedAt" type="datetime-local" defaultValue={publishedAt} className="field" />
+            <p className="mt-1 text-xs text-muted">Chọn thời điểm trong tương lai để hẹn giờ: bài hiện ở mục “Hẹn giờ đăng” và tự lên website khi tới giờ.</p>
           </div>
           {state?.error && (
             <p role="alert" className="rounded-xl bg-danger/10 p-3 text-sm text-danger">
@@ -140,6 +145,15 @@ export function PostForm({
           )}
         </section>
 
+        {type === "post" && (
+          <section className="rounded-2xl bg-surface p-6 ring-1 ring-border">
+          <label htmlFor="tags" className="text-lg font-semibold">
+            Thẻ (tag)
+          </label>
+          <p className="mt-1 text-xs text-muted">Cách nhau bằng dấu phẩy, vd: hoa hồng, tặng mẹ, màu đỏ. Thẻ mới tự được tạo.</p>
+          <textarea id="tags" name="tags" rows={2} defaultValue={tagsText} className="field mt-3" placeholder="hoa hồng, tặng mẹ" />
+        </section>
+        )}
         {type === "post" && (
           <section className="rounded-2xl bg-surface p-6 ring-1 ring-border">
             <h2 className="text-lg font-semibold">Danh mục</h2>

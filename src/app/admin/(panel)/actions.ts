@@ -7,6 +7,7 @@ import { z } from "zod";
 import { requireAdmin } from "@/lib/auth";
 import { db, orders, pageCategories, pages, products, productCategories, seoMeta, ORDER_STATUSES, PAYMENT_STATUSES } from "@/lib/db";
 import { slugify } from "@/lib/format";
+import { setPageTags, setProductTags } from "@/lib/tags";
 
 export async function updateOrder(formData: FormData) {
   await requireAdmin();
@@ -90,6 +91,7 @@ export async function saveProduct(_prev: ProductFormState, formData: FormData): 
   if (v.categoryIds.length) {
     await db.insert(productCategories).values(v.categoryIds.map((categoryId) => ({ productId: productId!, categoryId })));
   }
+  await setProductTags(productId!, formData.get("tags") as string | null);
   revalidatePath("/", "layout");
   redirect(`/admin/san-pham/${productId}/?saved=1`);
 }
@@ -99,6 +101,7 @@ export async function deleteProduct(formData: FormData) {
   const id = Number(formData.get("id"));
   // Đơn hàng cũ vẫn giữ tên/giá sản phẩm trong order_items nên có thể xóa an toàn
   await db.delete(productCategories).where(eq(productCategories.productId, id));
+  await setProductTags(id, "");
   await db.delete(products).where(eq(products.id, id));
   revalidatePath("/", "layout");
   redirect("/admin/san-pham/?deleted=1");
@@ -151,7 +154,8 @@ export async function savePost(_prev: PostFormState, formData: FormData): Promis
     content: v.content || null,
     image: v.image || null,
     isPublished: v.isPublished,
-    ...(v.publishedAt ? { publishedAt: new Date(v.publishedAt) } : {}),
+    // Ô ngày giờ gửi giờ Việt Nam ("2026-10-26T08:00"); lưu nguyên giờ đó (DATETIME giờ Việt Nam, drizzle ghi theo UTC của Date)
+    ...(v.publishedAt ? { publishedAt: new Date(`${v.publishedAt.length <= 10 ? `${v.publishedAt}T08:00` : v.publishedAt.slice(0, 16)}:00Z`) } : {}),
   };
 
   let pageId = id;
@@ -168,6 +172,7 @@ export async function savePost(_prev: PostFormState, formData: FormData): Promis
   if (v.type === "post" && v.categoryIds.length) {
     await db.insert(pageCategories).values(v.categoryIds.map((categoryId) => ({ pageId: pageId!, categoryId })));
   }
+  if (v.type === "post") await setPageTags(pageId!, formData.get("tags") as string | null);
 
   // Tiêu đề / mô tả SEO riêng (để trống = dùng tự động)
   const path = `/${slug}/`;
@@ -182,6 +187,7 @@ export async function deletePost(formData: FormData) {
   await requireAdmin();
   const id = Number(formData.get("id"));
   await db.delete(pageCategories).where(eq(pageCategories.pageId, id));
+  await setPageTags(id, "");
   await db.delete(pages).where(eq(pages.id, id));
   revalidatePath("/", "layout");
   redirect("/admin/bai-viet/?deleted=1");

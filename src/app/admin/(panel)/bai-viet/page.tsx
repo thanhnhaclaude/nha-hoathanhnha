@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { and, count, desc, eq, inArray, like, ne, or, type SQL } from "drizzle-orm";
+import { and, count, desc, eq, gt, inArray, like, ne, or, sql, type SQL } from "drizzle-orm";
 import { ExternalLink, Plus } from "lucide-react";
 import { db, pageCategories, pages, postCategories } from "@/lib/db";
 import { HOME_SEO_SLUG } from "@/lib/constants";
@@ -12,15 +12,20 @@ export default async function PostsAdmin({ searchParams }: PageProps<"/admin/bai
   const q = typeof sp.q === "string" ? sp.q.trim() : "";
   const type = sp.type === "page" ? "page" : "post";
   const cat = Number(sp.cat) || null;
+  // Bài hẹn giờ: đã bật "Đăng công khai" nhưng ngày đăng ở tương lai, website chưa hiện (xem src/lib/published.ts)
+  const scheduled = sp.status === "scheduled";
   const page = Math.max(1, Number(sp.page) || 1);
 
   // Bản ghi ẩn chứa đoạn SEO trang chủ không hiển thị ở đây
   const filters: SQL[] = [eq(pages.type, type), ne(pages.slug, HOME_SEO_SLUG)];
   if (q) filters.push(or(like(pages.title, `%${q}%`), like(pages.slug, `%${q}%`))!);
+  if (scheduled) filters.push(eq(pages.isPublished, true), gt(pages.publishedAt, sql`NOW()`));
   if (cat) filters.push(inArray(pages.id, db.select({ id: pageCategories.pageId }).from(pageCategories).where(eq(pageCategories.categoryId, cat))));
   const where = and(...filters);
 
-  const [rows, [{ total }], cats] = await Promise.all([
+  // So sánh cùng hệ: giờ Việt Nam hiện tại biểu diễn như UTC (giống cách published_at được đọc ra)
+  const now = new Date(Date.now() + 7 * 3600_000);
+  const [rows, [{ total }], cats, [{ scheduledCount }]] = await Promise.all([
     db
       .select({ id: pages.id, slug: pages.slug, title: pages.title, image: pages.image, isPublished: pages.isPublished, publishedAt: pages.publishedAt })
       .from(pages)
@@ -30,11 +35,12 @@ export default async function PostsAdmin({ searchParams }: PageProps<"/admin/bai
       .offset((page - 1) * PER_PAGE),
     db.select({ total: count() }).from(pages).where(where),
     db.select().from(postCategories).orderBy(postCategories.name),
+    db.select({ scheduledCount: count() }).from(pages).where(and(eq(pages.type, "post"), eq(pages.isPublished, true), gt(pages.publishedAt, sql`NOW()`))),
   ]);
   const list = rows;
   const pages_ = Math.max(1, Math.ceil(total / PER_PAGE));
   const qs = (extra: Record<string, string | number>) => {
-    const p = new URLSearchParams({ type, ...(q ? { q } : {}), ...(cat ? { cat: String(cat) } : {}) });
+    const p = new URLSearchParams({ type, ...(q ? { q } : {}), ...(cat ? { cat: String(cat) } : {}), ...(scheduled ? { status: "scheduled" } : {}) });
     for (const [k, v] of Object.entries(extra)) p.set(k, String(v));
     return `?${p}`;
   };
@@ -56,8 +62,11 @@ export default async function PostsAdmin({ searchParams }: PageProps<"/admin/bai
       )}
 
       <div className="flex flex-wrap items-center gap-2">
-        <Link href="/admin/bai-viet/?type=post" className={tab(type === "post" && !cat)}>
+        <Link href="/admin/bai-viet/?type=post" className={tab(type === "post" && !cat && !scheduled)}>
           Tất cả bài viết
+        </Link>
+        <Link href="/admin/bai-viet/?type=post&status=scheduled" className={tab(scheduled)}>
+          Hẹn giờ đăng{scheduledCount ? ` (${scheduledCount})` : ""}
         </Link>
         {type === "post" &&
           cats.map((c) => (
@@ -103,11 +112,21 @@ export default async function PostsAdmin({ searchParams }: PageProps<"/admin/bai
                     </span>
                   </Link>
                 </td>
-                <td className="whitespace-nowrap px-4 py-3">{p.publishedAt.toLocaleDateString("vi-VN")}</td>
+                <td className="whitespace-nowrap px-4 py-3">
+                  {/* published_at là giờ Việt Nam đọc như UTC -> hiển thị theo UTC để đúng giờ đã đặt */}
+                  {p.publishedAt.toLocaleDateString("vi-VN", { timeZone: "UTC" })}
+                  <span className="block text-xs text-muted">{p.publishedAt.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" })}</span>
+                </td>
                 <td className="px-4 py-3">
-                  <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${p.isPublished ? "bg-emerald-100 text-emerald-800" : "bg-zinc-200 text-zinc-700"}`}>
-                    {p.isPublished ? "Đã đăng" : "Bản nháp"}
-                  </span>
+                  {!p.isPublished ? (
+                    <span className="rounded-full bg-zinc-200 px-2.5 py-1 text-xs font-semibold text-zinc-700">Bản nháp</span>
+                  ) : p.publishedAt > now ? (
+                    <span className="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-800" title="Website tự hiện bài vào ngày giờ đăng">
+                      Hẹn giờ
+                    </span>
+                  ) : (
+                    <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-800">Đã đăng</span>
+                  )}
                 </td>
                 <td className="px-4 py-3 text-right">
                   <Link href={`/${p.slug}/`} target="_blank" className="inline-flex items-center gap-1 text-xs text-brand-strong hover:underline">

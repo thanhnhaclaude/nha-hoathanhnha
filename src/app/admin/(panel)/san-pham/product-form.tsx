@@ -5,7 +5,7 @@ import { Loader2, Upload } from "lucide-react";
 import type { Category, Product } from "@/lib/db/schema";
 import { saveProduct, type ProductFormState } from "../actions";
 
-export function ProductForm({ product, categories, selected }: { product?: Product; categories: Category[]; selected: number[] }) {
+export function ProductForm({ product, categories, selected, tagsText = "" }: { product?: Product; categories: Category[]; selected: number[]; tagsText?: string }) {
   const [state, formAction, pending] = useActionState<ProductFormState, FormData>(saveProduct, undefined);
   const [images, setImages] = useState((product?.images ?? []).join("\n"));
   const [uploading, setUploading] = useState(false);
@@ -145,6 +145,13 @@ export function ProductForm({ product, categories, selected }: { product?: Produ
           </button>
         </section>
         <section className="rounded-2xl bg-surface p-6 ring-1 ring-border">
+          <label htmlFor="tags" className="text-lg font-semibold">
+            Thẻ (tag)
+          </label>
+          <p className="mt-1 text-xs text-muted">Cách nhau bằng dấu phẩy, vd: hoa hồng, tặng mẹ, màu đỏ. Thẻ mới tự được tạo.</p>
+          <textarea id="tags" name="tags" rows={2} defaultValue={tagsText} className="field mt-3" placeholder="hoa hồng, tặng mẹ" />
+        </section>
+        <section className="rounded-2xl bg-surface p-6 ring-1 ring-border">
           <h2 className="text-lg font-semibold">Danh mục</h2>
           <div className="mt-3 max-h-[60vh] space-y-3 overflow-y-auto pr-2 text-sm">
             {roots.map((r) => (
@@ -154,9 +161,21 @@ export function ProductForm({ product, categories, selected }: { product?: Produ
                 </label>
                 <div className="mt-1 space-y-1 pl-6">
                   {childrenOf(r.id).map((c) => (
-                    <label key={c.id} className="flex cursor-pointer items-center gap-2">
-                      <input type="checkbox" name="categoryIds" value={c.id} defaultChecked={selected.includes(c.id)} className="accent-[var(--brand)]" /> {c.name}
-                    </label>
+                    <div key={c.id}>
+                      <label className="flex cursor-pointer items-center gap-2">
+                        <input type="checkbox" name="categoryIds" value={c.id} defaultChecked={selected.includes(c.id)} className="accent-[var(--brand)]" /> {c.name}
+                      </label>
+                      {/* Cấp 3, vd. KHU VỰC > TP. Hồ Chí Minh > Quận 1 */}
+                      {childrenOf(c.id).length > 0 && (
+                        <div className="mt-1 space-y-1 pl-6">
+                          {childrenOf(c.id).map((g) => (
+                            <label key={g.id} className="flex cursor-pointer items-center gap-2 text-muted">
+                              <input type="checkbox" name="categoryIds" value={g.id} defaultChecked={selected.includes(g.id)} className="accent-[var(--brand)]" /> {g.name}
+                            </label>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   ))}
                 </div>
               </fieldset>

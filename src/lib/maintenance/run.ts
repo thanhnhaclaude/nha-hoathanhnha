@@ -7,6 +7,7 @@ import mysql from "mysql2/promise";
 import { dbConnection } from "../db/config";
 import { fixContactInfo } from "./contact-fix";
 import { syncArticles } from "./content-sync";
+import { ensureTagTables } from "./tag-tables";
 import { fixSeoTitleCodes } from "./seo-title-fix";
 import { applyProductVisibility } from "./product-visibility";
 import { syncPricePages } from "./price-pages";
@@ -31,6 +32,7 @@ export async function runMaintenance() {
       c.mode === "parts"
         ? await mysql.createConnection({ host: c.host, port: c.port, user: c.user, password: c.password, database: c.database, timezone: "+07:00" })
         : await mysql.createConnection({ uri: c.uri, timezone: "+07:00" });
+    result.log.push(...(await ensureTagTables(db)));
     result.log.push(...(await syncArticles(db)));
     result.log.push(...(await fixContactInfo(db)));
     result.log.push(...(await fixSeoTitleCodes(db)));

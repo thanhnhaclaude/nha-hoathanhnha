@@ -7,6 +7,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { marked } from "marked";
 import type { Connection } from "mysql2/promise";
+import { slugify } from "../format";
 
 export const ARTICLES_DIR = path.join(process.cwd(), "content", "bai-viet");
 
@@ -19,6 +20,8 @@ export type Article = {
   publish: string;
   category: string;
   image: string | null;
+  /** "tags: hoa 20/11, tặng thầy cô" — thẻ hiển thị dưới bài, trang /the/<slug>/ */
+  tags: string[];
   markdown: string;
 };
 
@@ -43,6 +46,7 @@ export function parseArticle(file: string): Article {
     publish: meta.publish,
     category: meta.category || "tin-tuc",
     image: meta.image || null,
+    tags: (meta.tags || "").split(",").map((t) => t.trim()).filter(Boolean).slice(0, 15),
     markdown: m[2].trim(),
   };
 }
@@ -82,6 +86,14 @@ export async function upsertArticle(db: Connection, a: Article, html: string, po
   if (cat) {
     await db.query("delete from page_categories where page_id = ?", [page.id]);
     await db.query("insert into page_categories (page_id, category_id) values (?, ?)", [page.id, cat.id]);
+  }
+  // Thẻ: tạo nếu chưa có, rồi gán lại cho bài
+  await db.query("delete from page_tags where page_id = ?", [page.id]);
+  for (const name of a.tags) {
+    const slug = slugify(name);
+    if (!slug) continue;
+    await db.query("insert into tags (name, slug) values (?, ?) on duplicate key update slug = slug", [name.slice(0, 60), slug]);
+    await db.query("insert ignore into page_tags (page_id, tag_id) select ?, id from tags where slug = ?", [page.id, slug]);
   }
   return existing ? "cập nhật" : "thêm";
 }
