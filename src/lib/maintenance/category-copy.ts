@@ -198,6 +198,125 @@ ${table}
 <p>Xem thêm <a href="/hoa-tinh-yeu/">hoa tình yêu</a> và <a href="/hoa-hong/">hoa hồng</a>.</p>`;
 }
 
+// Tuần 12: cụm hoa cưới (hoa cưới 10.700 + hoa cưới cầm tay 7.500 lượt tìm/tháng) và trang 8/3 (8/3/2027 là thứ Hai)
+const WEDDING_BANDS: Band[] = [
+  { label: "Dưới 700 nghìn", min: 1, max: 699_999 },
+  { label: "700 nghìn – 1 triệu", min: 700_000, max: 999_999 },
+  { label: "1 – 2 triệu", min: 1_000_000, max: 1_999_999 },
+  { label: "Từ 2 triệu", min: 2_000_000, max: 1e12 },
+];
+
+async function hoaCuoiHtml(db: Connection) {
+  const phone = `<a href="tel:${site.phone}">${site.phoneDisplay}</a>`;
+  const table = await priceTable(
+    db,
+    [
+      { slug: "hoa-cuoi-cam-tay", name: "Hoa cưới cầm tay" },
+      { slug: "xe-hoa", name: "Xe hoa cưới" },
+    ],
+    WEDDING_BANDS,
+  );
+  return `<p>Hoa cưới góp phần lớn vào không khí ngày trọng đại: bó hoa cầm tay cô dâu trong ảnh cưới, xe hoa đón dâu, hoa bàn gia tiên trong lễ rước. Hoa Thanh Nhã thiết kế hoa cưới theo tông màu váy và tiệc, gửi ảnh hoa thật trước khi giao và giao đúng giờ rước dâu.</p>
+<h2>Bảng giá hoa cưới</h2>
+<p>Số mẫu và giá lấy từ các mẫu đang bán, cập nhật tự động. Hoa bàn gia tiên, bàn gallery và các hạng mục trang trí khác làm theo yêu cầu, báo giá riêng theo tông màu và quy mô tiệc.</p>
+${table}
+<h2>Các hạng mục hoa cưới</h2>
+<ul><li><strong><a href="/hoa-cuoi-cam-tay/">Hoa cưới cầm tay</a>:</strong> bó hoa cô dâu cầm trong lễ cưới và chụp ảnh; nên chọn cùng tông với váy và hoa cài áo chú rể.</li>
+<li><strong><a href="/xe-hoa/">Xe hoa</a>:</strong> kết hoa trên xe đón dâu, từ mẫu gọn trên nắp capo đến mẫu phủ kín nhiều vị trí.</li>
+<li><strong>Hoa bàn gia tiên, bàn gallery:</strong> làm theo yêu cầu, gửi ảnh không gian và tông màu để shop tư vấn.</li></ul>
+<h2>Chọn tông màu hoa cưới</h2>
+<p>Trắng, kem phối xanh lá là lựa chọn kinh điển, hợp mọi kiểu váy. Hồng pastel, hồng phấn mang nét ngọt ngào, nữ tính. Đỏ, đỏ đô hợp lễ cưới truyền thống và áo dài cưới. Tông xanh dương, tím phù hợp tiệc ngoài trời, phong cách hiện đại. Nên gửi ảnh váy cưới và ảnh trang trí tiệc để shop phối màu đồng bộ.</p>
+<h2>Lịch đặt hoa cưới</h2>
+<ul><li><strong>Hoa cầm tay:</strong> đặt trước ít nhất 3–5 ngày; mẫu dùng tulip, mẫu đơn hoặc hoa nhập nên đặt sớm hơn.</li>
+<li><strong>Xe hoa:</strong> đặt trước khoảng 1 tuần, báo hãng và màu xe, giờ đón dâu.</li>
+<li><strong>Mùa cưới cuối năm và sau Tết:</strong> nhiều đám cưới trùng ngày đẹp, nên chốt mẫu càng sớm càng tốt.</li></ul>
+<h2>Câu hỏi thường gặp</h2>
+<h3>Hoa cưới có giao đúng giờ rước dâu không?</h3>
+<p>Có. Ghi rõ địa chỉ nhà cô dâu hoặc nơi làm lễ và giờ rước; shop giao trước giờ hẹn để kịp chụp ảnh.</p>
+<h3>Có làm hoa cầm tay theo ảnh mẫu không?</h3>
+<p>Có. Gửi ảnh mẫu và ngân sách qua Zalo ${phone}; shop báo những loại hoa có thể thay thế nếu hoa trong ảnh không đúng mùa.</p>
+<h3>Hoa cưới cầm tay giữ được bao lâu?</h3>
+<p>Hoa tươi đẹp trọn ngày cưới nếu để nơi mát, tránh nắng trực tiếp. Sau tiệc có thể cắm vào bình nước để giữ thêm vài ngày.</p>
+<p>Kỷ niệm ngày cưới hằng năm: xem <a href="/hoa-ky-niem-ngay-cuoi/">hoa kỷ niệm ngày cưới</a>.</p>`;
+}
+
+async function hoaCuoiCamTayHtml(db: Connection) {
+  const phone = `<a href="tel:${site.phone}">${site.phoneDisplay}</a>`;
+  const table = await priceTable(db, [{ slug: "hoa-cuoi-cam-tay", name: "Hoa cưới cầm tay" }], WEDDING_BANDS);
+  return `<p>Bó hoa cầm tay là điểm nhấn của cô dâu trong lễ cưới và bộ ảnh cưới. Hoa Thanh Nhã thiết kế hoa cưới cầm tay theo váy cưới, vóc dáng và tông màu tiệc, dùng hoa tươi chọn kỹ trong ngày, gửi ảnh hoa thật trước khi giao.</p>
+<h2>Bảng giá hoa cưới cầm tay</h2>
+<p>Số mẫu và giá lấy từ các mẫu đang bán, cập nhật tự động.</p>
+${table}
+<h2>Hoa thường dùng cho hoa cầm tay</h2>
+<ul><li><strong>Hoa hồng:</strong> phổ biến nhất, nhiều màu, giữ dáng tốt suốt buổi lễ.</li>
+<li><strong>Baby, cát tường:</strong> nhẹ nhàng, tạo độ bồng cho bó hoa, giá mềm.</li>
+<li><strong>Cẩm tú cầu:</strong> chùm to, giúp bó hoa đầy đặn chỉ với ít cành.</li>
+<li><strong>Tulip, mẫu đơn:</strong> sang trọng, khác biệt, thường là hoa nhập nên cần đặt sớm.</li></ul>
+<h2>Chọn hoa cầm tay theo váy cưới</h2>
+<p>Váy xòe, váy công chúa hợp bó tròn đầy đặn. Váy đuôi cá, váy suông hợp bó dáng dài, buông nhẹ. Áo dài cưới hợp bó nhỏ gọn tông đỏ, hồng hoặc trắng. Cô dâu nhỏ người nên chọn bó vừa tay để cân đối trong ảnh.</p>
+<h2>Đặt hoa cưới cầm tay</h2>
+<ol><li>Chọn mẫu trên website hoặc gửi ảnh mẫu, ảnh váy cưới qua Zalo ${phone}.</li>
+<li>Đặt trước ít nhất 3–5 ngày, báo ngày cưới và giờ rước dâu.</li>
+<li>Shop gửi ảnh bó hoa thật trước khi giao, giao tận nhà cô dâu hoặc nơi trang điểm.</li></ol>
+<h2>Câu hỏi thường gặp</h2>
+<h3>Có làm kèm hoa cài áo chú rể không?</h3>
+<p>Bạn nhắn shop khi đặt để được làm hoa cài áo cùng tông với bó cầm tay.</p>
+<h3>Giữ hoa cầm tay tươi trong ngày cưới thế nào?</h3>
+<p>Để bó hoa nơi mát, tránh nắng và hơi nóng; giữa các buổi chụp ảnh có thể cắm cuống vào ly nước.</p>
+<p>Xem thêm <a href="/hoa-cuoi/">hoa cưới</a> và <a href="/xe-hoa/">xe hoa cưới</a>.</p>`;
+}
+
+async function xeHoaHtml(db: Connection) {
+  const phone = `<a href="tel:${site.phone}">${site.phoneDisplay}</a>`;
+  const table = await priceTable(db, [{ slug: "xe-hoa", name: "Xe hoa cưới" }], WEDDING_BANDS);
+  return `<p>Xe hoa đón dâu là hình ảnh mở đầu ngày cưới. Hoa Thanh Nhã nhận kết hoa xe cưới tại nơi hẹn, phối màu theo xe và tông hoa cưới, gửi ảnh mẫu trước để cô dâu chú rể duyệt.</p>
+<h2>Bảng giá xe hoa cưới</h2>
+<p>Số mẫu và giá lấy từ các mẫu đang bán, cập nhật tự động.</p>
+${table}
+<h2>Chọn mẫu xe hoa</h2>
+<ul><li><strong>Mẫu gọn trên nắp capo:</strong> trang nhã, giá mềm, hợp xe màu tối.</li>
+<li><strong>Mẫu nhiều vị trí</strong> (capo, cửa xe, đuôi xe): nổi bật trong ảnh đón dâu.</li>
+<li><strong>Tông màu:</strong> xe trắng hợp hoa hồng đỏ, hồng phấn; xe đen hợp trắng, kem, pastel.</li></ul>
+<h2>Đặt xe hoa</h2>
+<p>Đặt trước khoảng 1 tuần, báo hãng xe, màu xe, địa điểm và giờ kết hoa (thường trước giờ rước dâu 1–2 tiếng). Gọi/Zalo ${phone} để được tư vấn. Xem thêm <a href="/hoa-cuoi-cam-tay/">hoa cưới cầm tay</a> và <a href="/hoa-cuoi/">hoa cưới</a>.</p>`;
+}
+
+async function quocTePhuNuHtml(db: Connection) {
+  const phone = `<a href="tel:${site.phone}">${site.phoneDisplay}</a>`;
+  const table = await priceTable(
+    db,
+    [
+      { slug: "ngay-quoc-te-phu-nu", name: "Hoa 8/3" },
+      { slug: "bo-hoa-tuoi", name: "Bó hoa tươi" },
+      { slug: "gio-hoa-tuoi", name: "Giỏ hoa tươi" },
+    ],
+    [
+      { label: "Dưới 1 triệu", min: 1, max: 999_999 },
+      { label: "1 – 2 triệu", min: 1_000_000, max: 1_999_999 },
+      { label: "Từ 2 triệu", min: 2_000_000, max: 1e12 },
+    ],
+  );
+  return `<p>Ngày Quốc tế Phụ nữ 8/3 là dịp gửi lời cảm ơn tới mẹ, vợ, người yêu, cô giáo và đồng nghiệp nữ. Năm 2027, ngày 8/3 rơi vào thứ Hai, nên nhiều công ty tổ chức tặng hoa ngay đầu tuần. Hoa Thanh Nhã ghi thiệp miễn phí, gửi ảnh hoa thật trước khi giao.</p>
+<h2>Bảng giá hoa 8/3</h2>
+<p>Số mẫu và giá lấy từ các mẫu đang bán, cập nhật tự động. Ngày 7–8/3 giá hoa đầu vào thường tăng.</p>
+${table}
+<h2>Chọn hoa 8/3 theo người nhận</h2>
+<ul><li><strong>Mẹ, bà:</strong> giỏ hoa tông hồng, cẩm chướng hoặc lan hồ điệp; xem <a href="/hoa-tang-me/">hoa tặng mẹ</a>.</li>
+<li><strong>Vợ, người yêu:</strong> bó hồng phấn, hồng đỏ; xem <a href="/hoa-tang-vo/">hoa tặng vợ</a>, <a href="/hoa-tang-nguoi-yeu/">hoa tặng người yêu</a>.</li>
+<li><strong>Cô giáo:</strong> bó hoa nhẹ nhàng tông hồng, trắng.</li>
+<li><strong>Đồng nghiệp, nhân viên nữ:</strong> bó nhỏ cùng mẫu, đặt số lượng để giao một lần tại văn phòng.</li></ul>
+<h2>Công ty đặt hoa tặng nhân viên nữ</h2>
+<p>Gửi số lượng, ngân sách mỗi phần và địa chỉ văn phòng; shop tư vấn mẫu đồng bộ, ghi thiệp theo tên từng người nếu cần và giao trước giờ làm việc. Vì 8/3/2027 là thứ Hai, nên chốt đơn từ tuần trước đó.</p>
+<h2>Lịch đặt hoa 8/3</h2>
+<ul><li>Đặt trước 2–3 ngày; 7–8/3 là cao điểm.</li>
+<li>Giao tới công ty: ghi tên tòa nhà, tầng và giờ người nhận có mặt.</li>
+<li>Thiệp ghi tay miễn phí theo lời chúc bạn gửi.</li></ul>
+<h2>Câu hỏi thường gặp</h2>
+<h3>Có giao đúng sáng 8/3 không?</h3>
+<p>Có, khi đặt trước và ghi rõ khung giờ. Đơn gấp trong ngày hãy gọi ${phone}.</p>
+<p>Xem thêm <a href="/ngay-phu-nu-viet-nam-20-10/">hoa 20/10</a> và <a href="/hoa-tinh-yeu/">hoa tình yêu</a>.</p>`;
+}
+
 export async function syncCategoryCopy(db: Connection): Promise<string[]> {
   const P = site.phoneDisplay;
   const pages: [string, string, [string, string]?][] = [
@@ -217,6 +336,25 @@ export async function syncCategoryCopy(db: Connection): Promise<string[]> {
       [
         "Hoa Valentine 14/2/2027 – Bó Hồng Tặng Người Yêu | Hoa Thanh Nhã",
         `Hoa Valentine 14/2/2027 (mùng 9 Tết): bó hồng đỏ, hồng phấn tặng người yêu, vợ. Bảng giá cập nhật, ghi thiệp miễn phí, gửi ảnh trước khi giao. Gọi ${P}.`,
+      ],
+    ],
+    // Tiêu đề hoa cưới, hoa cưới cầm tay giữ ở area-meta (giá "từ {min}" tự động)
+    ["hoa-cuoi", await hoaCuoiHtml(db)],
+    ["hoa-cuoi-cam-tay", await hoaCuoiCamTayHtml(db)],
+    [
+      "xe-hoa",
+      await xeHoaHtml(db),
+      [
+        "Xe Hoa Cưới Đẹp – Kết Hoa Xe Đón Dâu | Hoa Thanh Nhã",
+        `Xe hoa cưới: kết hoa xe đón dâu theo màu xe và tông tiệc cưới, nhiều mẫu từ gọn nhẹ đến phủ kín. Bảng giá cập nhật, gửi ảnh mẫu trước. Gọi ${P}.`,
+      ],
+    ],
+    [
+      "ngay-quoc-te-phu-nu",
+      await quocTePhuNuHtml(db),
+      [
+        "Hoa 8/3 2027 – Bó Hoa, Giỏ Hoa Tặng Mẹ, Vợ, Đồng Nghiệp | Hoa Thanh Nhã",
+        `Hoa 8/3/2027: bó hồng, giỏ hoa tặng mẹ, vợ, người yêu, cô giáo, nhân viên nữ. Bảng giá cập nhật, đặt số lượng cho công ty, ghi thiệp miễn phí. Gọi ${P}.`,
       ],
     ],
   ];
