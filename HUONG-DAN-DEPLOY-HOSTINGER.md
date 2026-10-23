@@ -86,7 +86,7 @@ Website mới đã gắn sẵn đúng các mã của website WordPress cũ, nên
 
 | Dịch vụ | Mã | Ghi chú |
 |---|---|---|
-| Google Analytics 4 | `G-5DQSG3PGJ2` | Tự gửi: xem trang, `view_item`, `add_to_cart`, `begin_checkout`, `purchase` (kèm mã đơn, doanh thu) |
+| Google Analytics 4 | `G-48L4JHB0VM` | Tự gửi: xem trang, `view_item`, `add_to_cart`, `begin_checkout`, `purchase` (kèm mã đơn, doanh thu) |
 | Google Tag Manager | `GTM-N6JH36R` | Chứa chuyển đổi Google Ads: bấm gọi `tel:`, bấm Zalo, bấm Messenger, trang đặt hàng thành công |
 | Search Console | 2 thẻ `google-site-verification` | Giữ nguyên, quyền sở hữu không mất khi chuyển website |
 | Merchant Center | `https://hoathanhnha.com/google-merchant-feed.xml` | Nguồn cấp sản phẩm, cập nhật mỗi lần Google tải |

@@ -5,7 +5,7 @@
  */
 export const googleConfig = {
   /** Google Analytics 4 */
-  gaId: process.env.NEXT_PUBLIC_GA_ID ?? "G-5DQSG3PGJ2",
+  gaId: process.env.NEXT_PUBLIC_GA_ID ?? "G-48L4JHB0VM",
   /** Google Tag Manager — chứa các thẻ chuyển đổi Google Ads (gọi điện, Zalo, Messenger, đặt hàng) */
   gtmId: process.env.NEXT_PUBLIC_GTM_ID ?? "GTM-N6JH36R",
   /** Chỉ gửi số liệu trên website thật, không gửi khi chạy thử trên máy */
@@ -15,7 +15,8 @@ export const googleConfig = {
 /** Mã xác minh Google Search Console / Merchant Center (thẻ meta google-site-verification), cách nhau bằng dấu phẩy.
  *  Chỉ giữ mã của chủ shop; mã của tài khoản khác (khoinguyenyi, gỡ 21/10/2026) không đặt lại. */
 export function googleVerification() {
-  const raw = process.env.GOOGLE_SITE_VERIFICATION ?? "_27xAZ-TC_egrtPKL-gZGwfvvllJ2D1bWyApNW9ZeeQ";
+  // Mã mới (23/10/2026) đứng đầu; mã cũ _27xAZ… giữ tạm để không mất quyền sở hữu cho tới khi mã mới xác minh xong
+  const raw = process.env.GOOGLE_SITE_VERIFICATION ?? "0BL41Q2-kGGdFLnpWpfs2piKKesoA-i-M_zwugBOqI4,_27xAZ-TC_egrtPKL-gZGwfvvllJ2D1bWyApNW9ZeeQ";
   return raw
     .split(",")
     .map((s) => s.trim())
