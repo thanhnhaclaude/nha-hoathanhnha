@@ -46,6 +46,26 @@ export const site = {
   ],
 } as const;
 
+/**
+ * Trang khu vực có cửa hàng thật -> địa chỉ (lấy đúng chuỗi trong stores ở trên) và thành phố.
+ * Dùng cho đoạn "Cửa hàng hoa tại …" và dữ liệu có cấu trúc Florist trên trang khu vực.
+ */
+export const storeAreas: Record<string, { street: string; city: string }> = {
+  "shop-hoa-tuoi-quan-go-vap": { street: "229 Đ. Quang Trung, Phường 10, Gò Vấp", city: "TP. Hồ Chí Minh" },
+  "shop-hoa-tuoi-quan-12": { street: "181 Đ. Thị Mười, P. Tân Thới Hiệp, Quận 12", city: "TP. Hồ Chí Minh" },
+  "shop-hoa-tuoi-quan-1": { street: "130 Hai Bà Trưng, Bến Nghé, Quận 1", city: "TP. Hồ Chí Minh" },
+  "shop-hoa-tuoi-quan-thu-duc": { street: "61/5 Đ. Kha Vạn Cân, Hiệp Bình Chánh, Thủ Đức", city: "TP. Hồ Chí Minh" },
+  "shop-hoa-tuoi-quan-dong-da": { street: "500 Đ. Lê Duẩn, Phương Liên, Đống Đa", city: "Hà Nội" },
+  "shop-hoa-tuoi-quan-cau-giay": { street: "430 Đ. Cầu Giấy, Dịch Vọng, Cầu Giấy", city: "Hà Nội" },
+  "shop-hoa-tuoi-quan-cam-le": { street: "05 Trần Văn Cẩn, Hoà Xuân, Cẩm Lệ", city: "Đà Nẵng" },
+  "shop-hoa-tuoi-quan-thanh-khe": { street: "396 Đ. Nguyễn Hoàng, P. Bình Thuận, Thanh Khê", city: "Đà Nẵng" },
+  "shop-hoa-tuoi-hue": { street: "265 Trần Hưng Đạo, Phú Hoà", city: "Huế" },
+  "shop-hoa-tuoi-can-tho": { street: "220 Đ. Nguyễn Văn Cừ, An Hoà, Ninh Kiều", city: "Cần Thơ" },
+  "shop-hoa-tuoi-nha-trang": { street: "76 Lê Hồng Phong, Phước Tân", city: "Nha Trang" },
+  "shop-hoa-tuoi-vung-tau": { street: "120 Trương Công Định, Phường 8", city: "Vũng Tàu" },
+  "shop-hoa-tuoi-bien-hoa": { street: "85 Hưng Đạo Vương, Trung Dũng", city: "Biên Hòa" },
+};
+
 export function shippingConfig() {
   return {
     fee: Number(process.env.SHIPPING_FEE ?? 30000),

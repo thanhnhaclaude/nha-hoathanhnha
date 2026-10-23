@@ -57,6 +57,16 @@ const AREAS: { path: string; title: string; description: string; minFrom?: strin
     title: "Shop Hoa Tươi Đồng Xoài – Đặt Hoa Giao Tận Nơi | Hoa Thanh Nhã",
     description: `Đặt hoa tươi Đồng Xoài, Bình Phước: hoa sinh nhật, khai trương, chia buồn, giao trong ngày, gửi ảnh trước khi giao. Gọi ${P}.`,
   },
+  {
+    path: "/shop-hoa-tuoi-quan-1/",
+    title: "Shop Hoa Tươi Quận 1 – Cửa Hàng Hai Bà Trưng | Hoa Thanh Nhã",
+    description: `Cửa hàng hoa tại 130 Hai Bà Trưng, Bến Nghé, Quận 1. Hoa sinh nhật, khai trương, chia buồn giao trong ngày, gửi ảnh trước. Gọi ${P}.`,
+  },
+  {
+    path: "/shop-hoa-tuoi-quan-go-vap/",
+    title: "Shop Hoa Tươi Gò Vấp – Cửa Hàng Quang Trung | Hoa Thanh Nhã",
+    description: `Cửa hàng hoa tại 229 Quang Trung, Phường 10, Gò Vấp. Hoa sinh nhật, khai trương, chia buồn giao trong ngày, gửi ảnh trước. Gọi ${P}.`,
+  },
   // Tuần 1 (26/10/2026): danh mục mức A/B
   {
     path: "/shop-hoa-tuoi-gan-day/",

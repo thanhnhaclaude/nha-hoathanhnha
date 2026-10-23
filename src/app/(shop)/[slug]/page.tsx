@@ -35,7 +35,7 @@ import { getPageTags, getProductTags } from "@/lib/tags";
 import { addContextualLinksMany, bestCategoryFor, getGuidePosts, getNearbyAreas, getRelatedPosts } from "@/lib/internal-links";
 import { ViewItemTracker } from "@/components/view-item-tracker";
 import { cleanHtml, introText, normalizeHeadings, plainText, removeDuplicateTitleHeading, splitCategoryShortcodes, splitProductBlocks } from "@/lib/sanitize";
-import { shippingConfig, site } from "@/lib/site";
+import { shippingConfig, site, storeAreas } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -110,6 +110,8 @@ export default async function SlugPage({ params, searchParams }: Props) {
   const { page, sort } = parseListingParams(await searchParams);
   // Trang khu vực (shop-hoa-tuoi-…): 8 mẫu/trang = 2 hàng × 4 cột, đồng bộ với các khối sản phẩm trong phần mô tả
   const isArea = category.slug.startsWith("shop-hoa-tuoi-");
+  // Trang "gần đây": danh sách cửa hàng là nội dung chính -> hiện ngay dưới tiêu đề, không thu gọn
+  const descFirst = category.slug === "shop-hoa-tuoi-gan-day";
   // Trang khu vực, sắp "mới nhất": xếp xen kẽ theo loại (bó, giỏ, khai trương, lan…) để trang đầu đủ loại, chia buồn xếp sau
   const mixArea = isArea && sort === "newest";
   const [listing, guides, nearby] = await Promise.all([
@@ -123,13 +125,36 @@ export default async function SlugPage({ params, searchParams }: Props) {
   const group = mainMenu.find((g) => g.slug === slug || g.children.some((c) => c.slug === slug));
   const base = `/${category.slug}/`;
 
+  // Trang khu vực có cửa hàng thật: dữ liệu có cấu trúc Florist (địa chỉ, giờ mở cửa) cho tìm kiếm địa phương
+  const store = storeAreas[category.slug];
+  const storeLd = store
+    ? {
+        "@context": "https://schema.org",
+        "@type": "Florist",
+        name: `${site.name} – ${store.street}`,
+        url: `${site.url}${base}`,
+        image: `${site.url}/brand/banner2.webp`,
+        telephone: "+84" + site.phone.replace(/^0/, ""),
+        openingHours: "Mo-Su 06:00-21:00",
+        priceRange: "300.000₫ - 5.000.000₫",
+        address: { "@type": "PostalAddress", streetAddress: store.street, addressLocality: store.city, addressCountry: "VN" },
+        parentOrganization: { "@id": `${site.url}/#organization` },
+      }
+    : null;
+
   return (
     <div className="container-x py-8">
+      {storeLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(storeLd).replace(/</g, "\\u003c") }} />}
       <Breadcrumbs items={[...(group && group.slug !== slug ? [{ label: group.label, href: `/${group.slug}/` }] : []), { label: category.name }]} />
       <header className="mt-6 max-w-3xl">
         <h1 className="heading-display text-4xl sm:text-5xl">{category.name}</h1>
-        {category.description && <p className="mt-3 text-muted">{introText(category.description)}</p>}
+        {category.description && !descFirst && <p className="mt-3 text-muted">{introText(category.description)}</p>}
       </header>
+      {descFirst && category.description && (
+        <section aria-label="Danh sách cửa hàng" className="mt-6 max-w-3xl">
+          <CategoryDescription html={category.description} title={category.name} slug={category.slug} withProducts={false} />
+        </section>
+      )}
       {group && (
         <ChipScroller label="Danh mục liên quan">
           <ul className="flex gap-2">
@@ -197,7 +222,7 @@ export default async function SlugPage({ params, searchParams }: Props) {
           </ul>
         </section>
       )}
-      {category.description && plainText(category.description, 10000).length > 300 && (
+      {category.description && !descFirst && plainText(category.description, 10000).length > 300 && (
         <section aria-label={`Giới thiệu ${category.name}`} className="defer-render mx-auto mt-16 max-w-3xl border-t border-border pt-10">
           <ReadMore>
             {/* Trang khu vực: lưới phía trên đã đủ mẫu, bỏ các khối sản phẩm trong phần mô tả */}

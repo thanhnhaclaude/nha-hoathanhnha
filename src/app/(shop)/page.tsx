@@ -4,6 +4,7 @@ import { seoMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { ArrowRight, BadgeCheck, Camera, Gift, HandCoins, Flower2, Truck, Users, Wallet, Zap } from "lucide-react";
 import { HeroSlider } from "@/components/hero-slider";
+import { upcomingOccasion } from "@/lib/occasions";
 import { ProductCard } from "@/components/product-card";
 import { homeSections } from "@/lib/menu";
 import { ReadMore } from "@/components/read-more";
@@ -89,6 +90,7 @@ export default async function HomePage() {
   );
 
   const seoHtml = await seoHtmlPromise;
+  const occasion = upcomingOccasion();
 
   return (
     <>
@@ -103,6 +105,20 @@ export default async function HomePage() {
           Shop hoa tươi Thanh Nhã – đặt hoa online, giao hoa miễn phí
         </h1>
       </section>
+
+      {occasion && (
+        // Dịp sắp tới: link nội bộ từ trang chủ tới danh mục theo mùa đúng lúc khách bắt đầu tìm
+        <section aria-label="Dịp tặng hoa sắp tới" className="container-x mt-8">
+          <Link href={occasion.href} className="group flex items-center justify-between gap-4 rounded-2xl bg-brand-soft px-5 py-4 ring-1 ring-brand/20 transition hover:ring-brand">
+            <span>
+              <span className="block text-xs font-semibold uppercase tracking-wider text-brand-strong">Dịp sắp tới</span>
+              <span className="mt-0.5 block font-semibold">{occasion.label}</span>
+              <span className="block text-sm text-muted">{occasion.text}</span>
+            </span>
+            <ArrowRight className="size-5 shrink-0 text-brand-strong transition group-hover:translate-x-1" aria-hidden />
+          </Link>
+        </section>
+      )}
 
       <section aria-label="Ưu đãi dịch vụ" className="container-x mt-10">
         <ul className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">

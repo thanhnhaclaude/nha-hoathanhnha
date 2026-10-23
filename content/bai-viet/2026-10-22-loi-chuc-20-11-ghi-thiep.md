@@ -83,4 +83,4 @@ Lời chúc nhẹ nhàng hợp với [bó hoa hướng dương](/hoa-huong-duong
 - **Ghi rõ người tặng**, đặc biệt khi lớp có nhiều nhóm cùng tặng hoa.
 - **Kiểm tra chính tả tên thầy cô** trước khi gửi.
 
-Khi đặt hoa, bạn chỉ cần chọn mẫu, điền lời chúc và giờ giao; xem các bước trong [hướng dẫn đặt hàng](/huong-dan-dat-hang/). Chúc bạn tìm được lời chúc 20/11 ưng ý nhất cho người thầy, người cô của mình.
+Khi đặt hoa, bạn chỉ cần chọn mẫu trong mục [hoa tặng thầy cô 20/11](/ngay-nha-giao/), điền lời chúc và giờ giao; xem các bước trong [hướng dẫn đặt hàng](/huong-dan-dat-hang/). Chúc bạn tìm được lời chúc 20/11 ưng ý nhất cho người thầy, người cô của mình.

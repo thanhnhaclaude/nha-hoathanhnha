@@ -6,7 +6,7 @@
  * Địa chỉ cửa hàng lấy từ site.stores — thành phố không có cửa hàng thì không ghi địa chỉ. Chạy lặp lại an toàn.
  */
 import type { Connection } from "mysql2/promise";
-import { site } from "../site";
+import { site, storeAreas } from "../site";
 
 type CityPage = {
   slug: string;
@@ -80,6 +80,39 @@ const CITIES: CityPage[] = [
     nearby: "Nam Sách, Cẩm Giàng, Gia Lộc, Chí Linh, Kinh Môn",
     places: "Khu công nghiệp Đại An, Nam Sách, Bệnh viện Đa khoa tỉnh Hải Dương, Quảng trường Thống Nhất",
     note: "Kệ hoa khai trương cho cửa hàng, công ty ở các khu công nghiệp quanh Hải Dương được giao và dựng tận nơi.",
+  },
+  // Tuần 2 (2/11/2026): 4 quận TP.HCM có cửa hàng — nội dung riêng thay mô tả mẫu chung của website cũ
+  {
+    slug: "shop-hoa-tuoi-quan-1",
+    city: "Quận 1",
+    areas: "các phường Bến Nghé, Bến Thành, Đa Kao, Tân Định, Nguyễn Thái Bình, Phạm Ngũ Lão, Cầu Ông Lãnh, Cô Giang, Nguyễn Cư Trinh, Cầu Kho",
+    nearby: "Quận 3, Quận 4, Bình Thạnh, Phú Nhuận",
+    places: "văn phòng và khách sạn khu Đồng Khởi, Nguyễn Huệ, Lê Duẩn, Nhà hát Thành phố, Bệnh viện Nhi Đồng 2, các nhà hàng tiệc cưới trung tâm",
+    note: "Cửa hàng nằm ngay đường Hai Bà Trưng nên đơn trong Quận 1 thường được giao sớm nhất; đặt hoa gửi văn phòng, khách sạn chỉ cần ghi tên tòa nhà, tầng và người nhận.",
+  },
+  {
+    slug: "shop-hoa-tuoi-quan-go-vap",
+    city: "Quận Gò Vấp",
+    areas: "các phường 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 dọc các trục Quang Trung, Nguyễn Văn Lượng, Phan Văn Trị, Lê Đức Thọ, Nguyễn Oanh",
+    nearby: "Quận 12, Phú Nhuận, Bình Thạnh, Tân Bình",
+    places: "Bệnh viện Quân y 175, Công viên Văn hóa Gia Định, Đại học Công nghiệp TP.HCM, khu dân cư Cityland, các chợ Hạnh Thông Tây, Gò Vấp",
+    note: "Cửa hàng ở 229 Quang Trung, Phường 10 — giữa quận — nên các phường Gò Vấp đều trong bán kính giao nhanh; có thể ghé chọn hoa và nhận ngay.",
+  },
+  {
+    slug: "shop-hoa-tuoi-quan-12",
+    city: "Quận 12",
+    areas: "các phường Tân Thới Hiệp, Hiệp Thành, Tân Chánh Hiệp, Thới An, Thạnh Lộc, Thạnh Xuân, An Phú Đông, Đông Hưng Thuận, Tân Hưng Thuận, Trung Mỹ Tây, Tân Thới Nhất",
+    nearby: "Gò Vấp, Hóc Môn, Thủ Đức, Tân Bình",
+    places: "Công viên phần mềm Quang Trung, khu công nghiệp Tân Thới Hiệp, Bệnh viện Quận 12, chợ Hiệp Thành, các trường trên đường Lê Văn Khương",
+    note: "Cửa hàng ở 181 Thị Mười, Tân Thới Hiệp; doanh nghiệp ở Công viên phần mềm Quang Trung và khu công nghiệp thường đặt kệ hoa khai trương, hoa chúc mừng giao tận văn phòng.",
+  },
+  {
+    slug: "shop-hoa-tuoi-quan-thu-duc",
+    city: "Quận Thủ Đức",
+    areas: "các phường Hiệp Bình Chánh, Hiệp Bình Phước, Linh Đông, Linh Tây, Linh Chiểu, Linh Trung, Bình Thọ, Trường Thọ, Tam Bình, Tam Phú và khu Thảo Điền, An Phú, Phước Long, Tăng Nhơn Phú thuộc TP. Thủ Đức",
+    nearby: "Bình Thạnh, Quận 12, Dĩ An, Thuận An",
+    places: "Làng Đại học Quốc gia, Vinhomes Grand Park, Gigamall, Vincom Thủ Đức, khu biệt thự Thảo Điền, Bệnh viện Thủ Đức",
+    note: "Cửa hàng ở 61/5 Kha Vạn Cân, Hiệp Bình Chánh; hoa tốt nghiệp giao tận cổng các trường trong Làng Đại học vào mùa lễ nên đặt trước 1–2 ngày.",
   },
   // Tuần 1 (26/10/2026): trang tỉnh đang có thứ hạng trên Google nhưng mất khi chuyển website (trước đó chuyển hướng về trang chung)
   {
@@ -197,7 +230,8 @@ function storeAddress(prefix?: string) {
 }
 
 function html(c: CityPage) {
-  const addr = storeAddress(c.store);
+  const addr = storeAreas[c.slug]?.street ?? storeAddress(c.store);
+  const maps = addr ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${addr}, ${storeAreas[c.slug]?.city ?? c.city}`)}` : "";
   const phone = `<a href="tel:${site.phone}">${site.phoneDisplay}</a>`;
   return `<p>Hoa Thanh Nhã nhận đặt và giao hoa tươi tại ${c.city}: hoa sinh nhật, hoa khai trương, hoa chúc mừng, hoa chia buồn và lan hồ điệp. Mỗi đơn được chụp ảnh thật gửi bạn trước khi giao, kèm thiệp hoặc băng rôn ghi lời chúc miễn phí.</p>
 ${SECTIONS}
@@ -207,7 +241,7 @@ ${SECTIONS}
 ${
   addr
     ? `<h2>Cửa hàng hoa tại ${c.city}</h2>
-<p>Địa chỉ: <strong>${addr}</strong>. Bạn có thể ghé xem hoa trực tiếp, hoặc đặt trên website và gọi/Zalo ${phone} để được tư vấn mẫu.</p>`
+<p>Địa chỉ: <strong>${addr}</strong> (<a href="${maps}" rel="nofollow noopener" target="_blank">chỉ đường Google Maps</a>). Mở cửa 06:00–21:00 hằng ngày. Bạn có thể ghé xem hoa trực tiếp, hoặc đặt trên website và gọi/Zalo ${phone} để được tư vấn mẫu.</p>`
     : `<h2>Đặt hoa ${c.city} như thế nào?</h2>
 <p>Chọn mẫu trên website và đặt hàng, hoặc gọi/Zalo ${phone}. Shop xác nhận mẫu, thời gian giao và gửi ảnh hoa trước khi giao đến người nhận tại ${c.city}.</p>`
 }
@@ -300,7 +334,8 @@ export async function fillThinAreaPages(db: Connection): Promise<string[]> {
   for (const c of targets) {
     const thin = Number(c.total) < 8;
     // Trang thành phố/tỉnh tạo ở CITIES mà vẫn mang nguyên bộ mẫu TP.HCM (bản trước). Trang quận cũ đang có thứ hạng không đụng tới.
-    const copyOfHcm = CITIES.some((x) => x.slug === c.slug) && Number(c.total) >= 50 && Number(c.own) === 0;
+    // Trang quận cũ (shop-hoa-tuoi-quan-…) giữ danh sách mẫu đang có
+    const copyOfHcm = CITIES.some((x) => x.slug === c.slug) && !c.slug.startsWith("shop-hoa-tuoi-quan-") && Number(c.total) >= 50 && Number(c.own) === 0;
     if (!thin && !copyOfHcm) continue;
     if (!thin) {
       // đã là bộ mẫu bán chạy rồi thì thôi

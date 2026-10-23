@@ -15,6 +15,7 @@ import { fillThinAreaPages, syncCityPages } from "./city-pages";
 import { syncAreaMeta } from "./area-meta";
 import { syncSeasonalPages } from "./seasonal-pages";
 import { fillEmptyCategories } from "./category-fill";
+import { syncNearMePage } from "./near-me-page";
 
 export type MaintenanceResult = { at: string; ok: boolean; log: string[]; error?: string };
 
@@ -45,6 +46,7 @@ export async function runMaintenance() {
     result.log.push(...(await syncAreaMeta(db)));
     result.log.push(...(await syncSeasonalPages(db)));
     result.log.push(...(await fillEmptyCategories(db)));
+    result.log.push(...(await syncNearMePage(db)));
     result.ok = true;
   } catch (e) {
     result.error = (e as Error).message?.slice(0, 300) ?? String(e);

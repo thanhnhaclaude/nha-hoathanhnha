@@ -73,4 +73,4 @@ Ngày 20/11 là ngày cao điểm của các shop hoa. Để hoa đến đúng l
 
 **Có thể đặt hoa cho thầy cô ở tỉnh khác không?** Có. Thanh Nhã giao hoa tại TP.HCM, Hà Nội, Đà Nẵng và nhiều tỉnh thành; bạn chỉ cần ghi đúng địa chỉ trường và người nhận.
 
-Một bó hoa 20/11 đúng lúc, kèm vài dòng chân thành, là món quà thầy cô nhớ rất lâu. Chọn mẫu bạn thích và đặt sớm để Thanh Nhã chuẩn bị chu đáo nhất.
+Một bó hoa 20/11 đúng lúc, kèm vài dòng chân thành, là món quà thầy cô nhớ rất lâu. Xem toàn bộ mẫu trong mục [hoa tặng thầy cô 20/11](/ngay-nha-giao/) và đặt sớm để Thanh Nhã chuẩn bị chu đáo nhất.
