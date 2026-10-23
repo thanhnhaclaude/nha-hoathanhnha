@@ -7,7 +7,7 @@
  */
 import type { Connection } from "mysql2/promise";
 
-type Rule = { slug: string; from?: string[]; and?: string[]; text?: string[]; min?: number; max?: number; limit?: number; newest?: boolean };
+export type Rule = { slug: string; from?: string[]; and?: string[]; text?: string[]; min?: number; max?: number; limit?: number; newest?: boolean };
 
 const RULES: Rule[] = [
   // Đối tượng
@@ -50,7 +50,7 @@ const RULES: Rule[] = [
 
 const PRICE = "case when p.sale_price > 0 and p.sale_price < p.price then p.sale_price else p.price end";
 
-async function pick(db: Connection, r: Rule) {
+export async function pick(db: Connection, r: Rule) {
   const where: string[] = ["p.is_active = 1", `${PRICE} > 0`];
   const params: unknown[] = [];
   let joins = "";

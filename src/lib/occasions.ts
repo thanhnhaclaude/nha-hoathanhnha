@@ -7,9 +7,11 @@ type Occasion = { from: [number, number]; to: [number, number]; label: string; t
 const OCCASIONS: Occasion[] = [
   { from: [10, 1], to: [10, 20], label: "20/10 – Ngày Phụ nữ Việt Nam", text: "Bó hoa, giỏ hoa tông hồng tặng mẹ, vợ, người yêu", href: "/ngay-phu-nu-viet-nam-20-10/" },
   { from: [10, 21], to: [11, 20], label: "20/11 – Ngày Nhà giáo Việt Nam", text: "Hoa tặng thầy cô, ghi thiệp miễn phí, giao tận trường", href: "/ngay-nha-giao/" },
-  { from: [11, 21], to: [12, 25], label: "Giáng sinh", text: "Hoa tông đỏ cho mùa Noel, giao đúng tối 24/12", href: "/giang-sinh/" },
+  { from: [11, 21], to: [12, 10], label: "Giáng sinh", text: "Hoa tông đỏ cho mùa Noel, giao đúng tối 24/12", href: "/giang-sinh/" },
+  { from: [12, 11], to: [12, 22], label: "22/12 – Ngày Quân đội Nhân dân", text: "Giỏ hoa, kệ hoa tri ân chiến sĩ, cựu chiến binh", href: "/hoa-chuc-mung-22-thang-12/" },
+  { from: [12, 23], to: [12, 25], label: "Giáng sinh", text: "Hoa tông đỏ cho mùa Noel, giao đúng tối 24/12", href: "/giang-sinh/" },
   { from: [12, 26], to: [1, 31], label: "Hoa Tết", text: "Lan hồ điệp và giỏ hoa biếu Tết, đặt sớm giữ giá", href: "/hoa-tet/" },
-  { from: [2, 1], to: [2, 14], label: "Valentine 14/2", text: "Bó hồng, hoa tình yêu giao bất ngờ đúng ngày", href: "/hoa-tinh-yeu/" },
+  { from: [2, 1], to: [2, 14], label: "Valentine 14/2", text: "Bó hồng, hoa tình yêu giao bất ngờ đúng ngày", href: "/hoa-valentine/" },
   { from: [2, 15], to: [3, 8], label: "8/3 – Quốc tế Phụ nữ", text: "Hoa tông hồng tặng mẹ, vợ, đồng nghiệp nữ", href: "/ngay-quoc-te-phu-nu/" },
   { from: [4, 25], to: [5, 15], label: "Ngày của Mẹ", text: "Giỏ hoa, cẩm chướng, lan hồ điệp tặng mẹ", href: "/hoa-tang-me/" },
   { from: [5, 16], to: [7, 15], label: "Mùa tốt nghiệp", text: "Bó hoa tốt nghiệp giao tận trường đúng giờ lễ", href: "/hoa-mung-tot-nghiep/" },
