@@ -12,10 +12,14 @@ import { getCategoryBySlug, getHomeSeo, getProductsInCategory } from "@/lib/quer
 import { cleanHtml } from "@/lib/sanitize";
 import { site } from "@/lib/site";
 
-export const dynamic = "force-dynamic";
+// ISR thay cho force-dynamic: trang chủ dựng sẵn, làm mới mỗi 5 phút. Next gửi Cache-Control s-maxage nên CDN của
+// Hostinger (hcdn) được lưu trang -> người dùng không phải chờ máy chủ Node (TTFB thực tế trước đó ~2,7s, LCP 4,2s).
+// Không có cookie/giỏ hàng trong HTML (giỏ hàng đọc ở trình duyệt) nên dùng chung một bản cho mọi người.
+export const revalidate = 300;
 
 export function generateMetadata(): Promise<Metadata> {
-  return seoMetadata("/", { title: site.title, description: site.description });
+  // Lúc build trên Hostinger mà chưa kết nối được DB: vẫn build được với tiêu đề mặc định
+  return seoMetadata("/", { title: site.title, description: site.description }).catch(() => ({ title: site.title, description: site.description }));
 }
 
 const perks = [
@@ -78,7 +82,8 @@ function homeJsonLd() {
 }
 
 export default async function HomePage() {
-  const seoHtmlPromise = getHomeSeo();
+  // Lỗi DB (vd. lúc build chưa có kết nối) -> trang vẫn dựng được, lần làm mới sau (≤ 5 phút) sẽ có đủ dữ liệu
+  const seoHtmlPromise = getHomeSeo().catch(() => null);
   const sections = await Promise.all(
     homeSections.map(async (s) => {
       const category = await getCategoryBySlug(s.slug);
@@ -87,7 +92,7 @@ export default async function HomePage() {
       const { items } = await getProductsInCategory(category, { perPage: 4 });
       return { ...s, items };
     }),
-  );
+  ).catch(() => [] as null[]);
 
   const seoHtml = await seoHtmlPromise;
   const occasion = upcomingOccasion();
