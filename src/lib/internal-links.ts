@@ -213,12 +213,19 @@ export async function getGuidePosts(text: string, limit = 3, slug?: string) {
   const all = await getAllPostsLite();
   const linking = slug ? await getPostsLinkingTo(slug) : new Set<number>();
   const want = new Set(tokens(text));
-  return all
+  const picked = all
     .map((p) => ({ p, score: (linking.has(p.id) ? 100 : 0) + tokens(p.title).filter((w) => want.has(w)).length }))
     .filter((x) => x.score > 0)
     .sort((a, b) => b.score - a.score || b.p.publishedAt.getTime() - a.p.publishedAt.getTime())
     .slice(0, limit)
     .map((x) => x.p);
+  // Ít bài liên quan (vd. chỉ 1 bài) -> lưới 1 ô to lệch trang: bù bằng bài mới đăng để luôn đủ `limit` ô đều nhau
+  const ids = new Set(picked.map((p) => p.id));
+  for (const p of all) {
+    if (picked.length >= limit) break;
+    if (!ids.has(p.id)) picked.push(p);
+  }
+  return picked;
 }
 
 /** Các khu vực cùng thành phố (anh em) + trang thành phố (cha), cho trang "Shop hoa tươi quận …". */
