@@ -47,6 +47,8 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -90,26 +92,22 @@ body {
   @apply text-xs font-semibold uppercase tracking-[0.2em] text-brand-strong;
 }
 @utility heading-display {
-  @apply font-display font-semibold tracking-tight text-foreground;
+  /* Theo flowervsflorist.com: Playfair 700, giãn chữ -0.01em */
+  @apply font-display font-bold tracking-[-0.01em] text-foreground;
   text-wrap: balance;
 }
 
 /*
  * Nội dung bài viết / mô tả (HTML nhập từ WordPress hoặc soạn trong admin).
- * Dòng chữ ~65–75 ký tự, cỡ 16px (điện thoại) → 17px (máy tính), giãn dòng 1.8.
- * Tiêu đề mục dùng font nội dung (đọc dấu tiếng Việt rõ hơn ở cỡ nhỏ).
+ * Theo flowervsflorist.com: 17px, giãn dòng 1.8; H2/H3 dùng phông tiêu đề (Playfair 700) 28px / ~21px,
+ * H4–H6 giữ phông nội dung.
  */
 .prose-shop {
-  font-size: 1rem;
+  font-size: 1.0625rem;
   line-height: 1.8;
   color: var(--foreground);
   overflow-wrap: break-word;
   word-break: normal;
-}
-@media (min-width: 640px) {
-  .prose-shop {
-    font-size: 1.0625rem;
-  }
 }
 .prose-shop > :first-child {
   margin-top: 0;
@@ -128,14 +126,21 @@ body {
   color: var(--foreground);
   scroll-margin-top: 10rem;
 }
+.prose-shop h2,
+.prose-shop h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  text-wrap: balance;
+}
 .prose-shop h2 {
-  font-size: 1.5em;
+  font-size: 1.75rem;
   margin: 2em 0 0.7em;
   padding-bottom: 0.35em;
   border-bottom: 1px solid var(--border);
 }
 .prose-shop h3 {
-  font-size: 1.25em;
+  font-size: 1.3rem;
   margin: 1.7em 0 0.6em;
 }
 .prose-shop h4,

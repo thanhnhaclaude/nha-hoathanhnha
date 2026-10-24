@@ -22,7 +22,7 @@ export default async function ProductsAdmin({ searchParams }: PageProps<"/admin/
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center gap-3">
-        <h1 className="font-display text-4xl font-semibold">Sản phẩm</h1>
+        <h1 className="font-display text-4xl font-bold">Sản phẩm</h1>
         <span className="text-sm text-muted">{total} sản phẩm</span>
         <Link href="/admin/san-pham/moi" className="btn-primary ml-auto h-11">
           <Plus className="size-4" aria-hidden /> Thêm sản phẩm

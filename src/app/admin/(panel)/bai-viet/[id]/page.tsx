@@ -25,7 +25,7 @@ export default async function EditPost({ params, searchParams }: PageProps<"/adm
         <ArrowLeft className="size-4" aria-hidden /> Danh sách
       </Link>
       <div className="flex flex-wrap items-center gap-3">
-        <h1 className="font-display text-4xl font-semibold">{post.type === "post" ? "Sửa bài viết" : "Sửa trang"}</h1>
+        <h1 className="font-display text-4xl font-bold">{post.type === "post" ? "Sửa bài viết" : "Sửa trang"}</h1>
         <Link href={`/${post.slug}/`} target="_blank" className="inline-flex items-center gap-1 text-sm text-brand-strong hover:underline">
           Xem trên website <ExternalLink className="size-3.5" aria-hidden />
         </Link>

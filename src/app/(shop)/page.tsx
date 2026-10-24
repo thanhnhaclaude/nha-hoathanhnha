@@ -185,7 +185,7 @@ export default async function HomePage() {
                 className="mt-12 flex flex-col items-center justify-between gap-4 rounded-3xl bg-leaf px-6 py-8 text-white sm:flex-row sm:px-10"
               >
                 <span>
-                  <span className="block font-display text-2xl font-semibold sm:text-3xl">Cần tư vấn chọn hoa?</span>
+                  <span className="block font-display text-2xl font-bold sm:text-3xl">Cần tư vấn chọn hoa?</span>
                   <span className="mt-1 block text-sm text-white/80">Florist của Thanh Nhã hỗ trợ 24/7, lên mẫu theo ngân sách của bạn.</span>
                 </span>
                 <span className="btn bg-white text-leaf hover:bg-white/90">Gọi {site.phoneDisplay}</span>

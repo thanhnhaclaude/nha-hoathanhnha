@@ -25,7 +25,7 @@ export default async function Dashboard() {
 
   return (
     <div className="space-y-8">
-      <h1 className="font-display text-4xl font-semibold">Tổng quan</h1>
+      <h1 className="font-display text-4xl font-bold">Tổng quan</h1>
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {stats.map((s) => (
           <Link key={s.label} href={s.href} className="rounded-2xl bg-surface p-5 ring-1 ring-border hover:ring-brand">

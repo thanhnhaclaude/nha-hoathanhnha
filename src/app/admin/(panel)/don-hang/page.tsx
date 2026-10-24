@@ -33,7 +33,7 @@ export default async function OrdersPage({ searchParams }: PageProps<"/admin/don
 
   return (
     <div className="space-y-6">
-      <h1 className="font-display text-4xl font-semibold">Đơn hàng</h1>
+      <h1 className="font-display text-4xl font-bold">Đơn hàng</h1>
       <div className="flex flex-wrap items-center gap-2">
         <Link href="/admin/don-hang" className={`rounded-full px-4 py-2 text-sm ${!status ? "bg-foreground text-white" : "bg-surface ring-1 ring-border"}`}>
           Tất cả

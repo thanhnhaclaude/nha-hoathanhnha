@@ -15,7 +15,7 @@ export default async function CategoriesAdmin({ searchParams }: PageProps<"/admi
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center gap-3">
-        <h1 className="font-display text-4xl font-semibold">Danh mục & thẻ</h1>
+        <h1 className="font-display text-4xl font-bold">Danh mục & thẻ</h1>
       </div>
       <div className="flex flex-wrap gap-2">
         <Link href="/admin/danh-muc/?kind=product" className={tab(kind === "product")}>

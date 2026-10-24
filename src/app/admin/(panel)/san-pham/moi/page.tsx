@@ -10,7 +10,7 @@ export default async function NewProduct() {
       <Link href="/admin/san-pham" className="inline-flex items-center gap-1 text-sm text-muted hover:text-brand-strong">
         <ArrowLeft className="size-4" aria-hidden /> Danh sách sản phẩm
       </Link>
-      <h1 className="font-display text-4xl font-semibold">Thêm sản phẩm</h1>
+      <h1 className="font-display text-4xl font-bold">Thêm sản phẩm</h1>
       <ProductForm categories={categories} selected={[]} />
     </div>
   );

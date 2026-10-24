@@ -9,9 +9,9 @@ import "./globals.css";
 const display = Playfair_Display({
   variable: "--font-display",
   subsets: ["latin", "vietnamese"],
-  // Chỉ dùng 600 (heading-display, font-semibold). Không tải trước: tiêu đề hiện bằng phông dự phòng rồi đổi,
-  // để băng thông đầu trang dành cho ảnh banner/sản phẩm (tốc độ điện thoại)
-  weight: ["600"],
+  // Chỉ dùng 700 như flowervsflorist.com (heading-display, font-bold). Không tải trước: tiêu đề hiện bằng phông
+  // dự phòng rồi đổi, để băng thông đầu trang dành cho ảnh banner/sản phẩm (tốc độ điện thoại)
+  weight: ["700"],
   display: "swap",
   preload: false,
 });

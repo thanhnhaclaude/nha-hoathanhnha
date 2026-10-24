@@ -49,7 +49,7 @@ export default async function PostsAdmin({ searchParams }: PageProps<"/admin/bai
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center gap-3">
-        <h1 className="font-display text-4xl font-semibold">Bài viết & trang</h1>
+        <h1 className="font-display text-4xl font-bold">Bài viết & trang</h1>
         <span className="text-sm text-muted">{total} mục</span>
         <Link href={`/admin/bai-viet/moi/?type=${type}`} className="btn-primary ml-auto h-11">
           <Plus className="size-4" aria-hidden /> {type === "post" ? "Viết bài mới" : "Thêm trang"}

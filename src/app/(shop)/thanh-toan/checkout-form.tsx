@@ -94,7 +94,7 @@ export function CheckoutForm({ shipping, today }: { shipping: { fee: number; fre
     <form onSubmit={onSubmit} noValidate className="mt-8 grid gap-8 lg:grid-cols-[1fr_400px]">
       <div className="space-y-8">
         <fieldset className="rounded-3xl border border-border bg-surface p-6">
-          <legend className="px-2 font-display text-2xl font-semibold">Người đặt hoa</legend>
+          <legend className="px-2 font-display text-2xl font-bold">Người đặt hoa</legend>
           <div className="mt-2 grid gap-4 sm:grid-cols-2">
             <Field name="senderName" label="Họ và tên" errors={errors} required>
               <input {...inputProps("senderName")} autoComplete="name" required />
@@ -111,7 +111,7 @@ export function CheckoutForm({ shipping, today }: { shipping: { fee: number; fre
         </fieldset>
 
         <fieldset className="rounded-3xl border border-border bg-surface p-6">
-          <legend className="px-2 font-display text-2xl font-semibold">Người nhận & giao hoa</legend>
+          <legend className="px-2 font-display text-2xl font-bold">Người nhận & giao hoa</legend>
           <div className="mt-2 grid gap-4 sm:grid-cols-2">
             <Field name="recipientName" label="Tên người nhận" errors={errors} required>
               <input {...inputProps("recipientName")} required />
@@ -147,7 +147,7 @@ export function CheckoutForm({ shipping, today }: { shipping: { fee: number; fre
         </fieldset>
 
         <fieldset className="rounded-3xl border border-border bg-surface p-6">
-          <legend className="px-2 font-display text-2xl font-semibold">Lời nhắn (miễn phí)</legend>
+          <legend className="px-2 font-display text-2xl font-bold">Lời nhắn (miễn phí)</legend>
           <div className="mt-2 grid gap-4">
             <Field name="cardMessage" label="Nội dung thiệp" errors={errors}>
               <textarea {...inputProps("cardMessage")} rows={3} placeholder="Ví dụ: Chúc mừng sinh nhật em yêu!" />
@@ -162,7 +162,7 @@ export function CheckoutForm({ shipping, today }: { shipping: { fee: number; fre
         </fieldset>
 
         <fieldset className="rounded-3xl border border-border bg-surface p-6">
-          <legend className="px-2 font-display text-2xl font-semibold">Phương thức thanh toán</legend>
+          <legend className="px-2 font-display text-2xl font-bold">Phương thức thanh toán</legend>
           <div className="mt-2 grid gap-3 sm:grid-cols-2">
             {(
               [
@@ -188,7 +188,7 @@ export function CheckoutForm({ shipping, today }: { shipping: { fee: number; fre
       </div>
 
       <aside className="h-fit rounded-3xl border border-border bg-surface p-6 lg:sticky lg:top-44">
-        <h2 className="font-display text-2xl font-semibold">Đơn hàng của bạn</h2>
+        <h2 className="font-display text-2xl font-bold">Đơn hàng của bạn</h2>
         <ul className="mt-4 divide-y divide-border">
           {lines.map((l) => (
             <li key={l.id} className="flex gap-3 py-3">

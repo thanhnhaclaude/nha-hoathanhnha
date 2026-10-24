@@ -43,7 +43,7 @@ export function MobileMenu({ menu }: { menu: MenuGroup[] }) {
         }}
       >
         <div className="flex h-16 items-center justify-between border-b border-border px-4">
-          <span className="font-display text-xl font-semibold">Danh mục</span>
+          <span className="font-display text-xl font-bold">Danh mục</span>
           <button type="button" onClick={() => setOpen(false)} className="grid size-11 cursor-pointer place-items-center rounded-full hover:bg-surface-muted" aria-label="Đóng">
             <X className="size-5" aria-hidden />
           </button>

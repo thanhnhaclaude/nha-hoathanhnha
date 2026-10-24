@@ -187,7 +187,7 @@ export default async function SlugPage({ params, searchParams }: Props) {
       <Pagination base={base} page={page} pages={pages} sort={sort} />
       {(nearby.parent || nearby.children.length > 0) && (
         <section aria-labelledby="near-h" className="defer-render mt-14">
-          <h2 id="near-h" className="font-display text-2xl font-semibold">
+          <h2 id="near-h" className="font-display text-2xl font-bold">
             Giao hoa khu vực lân cận
           </h2>
           <ul className="mt-4 flex flex-wrap gap-2">
@@ -210,7 +210,7 @@ export default async function SlugPage({ params, searchParams }: Props) {
       )}
       {guides.length > 0 && (
         <section aria-labelledby="guide-h" className="defer-render mt-14">
-          <h2 id="guide-h" className="font-display text-2xl font-semibold">
+          <h2 id="guide-h" className="font-display text-2xl font-bold">
             Cẩm nang {category.name.toLocaleLowerCase("vi")}
           </h2>
           <ul className={`mt-6 grid gap-5 ${postGridCols(guides.length)}`}>
@@ -267,7 +267,7 @@ async function CategoryDescription({ html, title, slug, withProducts = true }: {
           // Nằm trong cột chữ: phần "Xem thêm" ẩn phần tràn nên không được rộng hơn cột
           <div key={i}>
             <div className="mb-3 flex items-baseline justify-between gap-4">
-              <h3 className="font-display text-xl font-semibold">{seg.label}</h3>
+              <h3 className="font-display text-xl font-bold">{seg.label}</h3>
               <Link href={canonicalPath(seg.category.slug)} className="shrink-0 text-sm font-semibold text-brand-strong hover:underline">
                 Xem tất cả →
               </Link>
@@ -505,7 +505,7 @@ function InfoView({ page }: { page: InfoPage }) {
       <div className="mt-8 space-y-8">
         {page.sections.map((s, i) => (
           <section key={s.heading ?? i}>
-            {s.heading && <h2 className="font-display text-2xl font-semibold">{s.heading}</h2>}
+            {s.heading && <h2 className="font-display text-2xl font-bold">{s.heading}</h2>}
             <div className="mt-3 space-y-2 leading-relaxed text-muted">
               {s.body.map((line) => (
                 <p key={line}>{line}</p>

@@ -46,7 +46,7 @@ export async function OrderView({ code, token, trackPurchase = false }: { code: 
         <section aria-labelledby="pay-h" className="mt-10 grid items-center gap-6 rounded-3xl border-2 border-brand bg-surface p-6 sm:grid-cols-[260px_1fr] sm:p-8">
           <Image src={qr} alt={`Mã VietQR thanh toán ${formatVND(order.total)} cho đơn ${order.code}`} width={260} height={300} unoptimized className="mx-auto rounded-2xl" />
           <div>
-            <h2 id="pay-h" className="font-display text-2xl font-semibold">
+            <h2 id="pay-h" className="font-display text-2xl font-bold">
               Quét mã để thanh toán
             </h2>
             <p className="mt-2 text-sm text-muted">Mở ứng dụng ngân hàng, chọn quét QR. Số tiền và nội dung đã được điền sẵn.</p>
@@ -71,7 +71,7 @@ export async function OrderView({ code, token, trackPurchase = false }: { code: 
 
       <section aria-labelledby="sum-h" className="mt-10 grid gap-6 md:grid-cols-2">
         <div className="rounded-3xl border border-border bg-surface p-6">
-          <h2 id="sum-h" className="font-display text-2xl font-semibold">
+          <h2 id="sum-h" className="font-display text-2xl font-bold">
             Chi tiết đơn
           </h2>
           <ul className="mt-4 divide-y divide-border">
@@ -96,7 +96,7 @@ export async function OrderView({ code, token, trackPurchase = false }: { code: 
           </dl>
         </div>
         <div className="rounded-3xl border border-border bg-surface p-6 text-sm">
-          <h2 className="font-display text-2xl font-semibold">Giao hoa</h2>
+          <h2 className="font-display text-2xl font-bold">Giao hoa</h2>
           <dl className="mt-4 space-y-3">
             {[
               ["Trạng thái", orderStatusLabel[order.status]],

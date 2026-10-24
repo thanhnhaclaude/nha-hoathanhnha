@@ -59,7 +59,7 @@ export function CartView() {
       </ul>
 
       <aside className="h-fit rounded-3xl border border-border bg-surface p-6 lg:sticky lg:top-44">
-        <h2 className="font-display text-2xl font-semibold">Tóm tắt</h2>
+        <h2 className="font-display text-2xl font-bold">Tóm tắt</h2>
         <dl className="mt-4 space-y-3 text-sm">
           <div className="flex justify-between">
             <dt className="text-muted">Tạm tính</dt>
