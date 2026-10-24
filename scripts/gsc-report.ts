@@ -169,12 +169,17 @@ async function main() {
 
   // 2) Index: bài viết đã tới ngày đăng (+ tùy chọn 200 URL đầu sitemap)
   let urls = articleUrls();
-  if (process.argv.includes("--index-all")) {
+  // --index-prefix=shop-hoa-tuoi- : chỉ kiểm tra URL sitemap có đường dẫn bắt đầu bằng tiền tố (vd. toàn bộ trang khu vực)
+  const prefix = process.argv.find((a) => a.startsWith("--index-prefix="))?.split("=")[1];
+  if (process.argv.includes("--index-all") || prefix) {
     const sm = await (await fetch(`${ORIGIN}/sitemap_index.xml`)).text();
+    const all: string[] = [];
     for (const s of [...sm.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1])) {
-      urls.push(...[...(await (await fetch(s)).text()).matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]));
+      all.push(...[...(await (await fetch(s)).text()).matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]));
     }
-    urls = [...new Set(urls)].slice(0, 200);
+    urls = prefix
+      ? [...new Set(all.filter((u) => new URL(u).pathname.startsWith(`/${prefix}`)))]
+      : [...new Set([...urls, ...all])].slice(0, 200);
   }
   const idx = [["URL", "Kết luận", "Trạng thái", "Lần thu thập gần nhất", "Google chọn canonical"]];
   if (urls.length) console.log(`\nKiểm tra index ${urls.length} URL:`);
