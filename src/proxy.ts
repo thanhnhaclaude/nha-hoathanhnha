@@ -35,6 +35,20 @@ export function proxy(request: NextRequest) {
   if (pathname.startsWith("/admin") && pathname !== "/admin/login" && !request.cookies.has("htn_admin")) {
     return NextResponse.redirect(new URL(LOGIN_PATH, request.url));
   }
+  // Tốc độ: trang danh mục/sản phẩm/bài viết ([slug]) phải dựng mới mỗi lượt (đọc ?page, ?sort) và Next trả no-store,
+  // nên CDN Hostinger (hcdn) không lưu được -> người dùng thật chờ máy chủ Node (TTFB ~2,7s). Nội dung các trang này
+  // giống nhau với mọi người (không đọc cookie), nên cho CDN lưu 5 phút. Bỏ qua trang cá nhân/giao dịch, admin,
+  // người đang đăng nhập admin và yêu cầu không phải GET. Áp dụng cả trang chủ (ISR) để thay "stale 1 năm" mặc định
+  // của Next bằng 10 phút: giá, bài mới hiển thị chậm tối đa ~15 phút kể cả khi CDN không tự làm mới.
+  if (
+    (request.method === "GET" || request.method === "HEAD") &&
+    !request.cookies.has("htn_admin") &&
+    !/^\/(admin|gio-hang|thanh-toan|don-hang|tai-khoan|tra-cuu-don-hang|tim-kiem|danh-sach|cua-hang)(\/|$)/.test(pathname)
+  ) {
+    const res = NextResponse.next();
+    res.headers.set("Cache-Control", "public, s-maxage=300, stale-while-revalidate=600");
+    return res;
+  }
   return NextResponse.next();
 }
 
