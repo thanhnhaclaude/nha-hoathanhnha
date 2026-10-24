@@ -36,7 +36,7 @@ const PAGES: PricePage[] = [
 <li>Ảnh thật của giỏ hoa gửi qua Zalo trước khi giao.</li>
 </ul>
 <h3>Chọn giỏ hoa theo ngân sách</h3>
-<p>Mẫu bên trên được xếp theo giá hiện tại. Nếu ngân sách của bạn thấp hơn giá mẫu rẻ nhất, hãy nhắn Zalo hoặc gọi ${PHONE} để shop báo mẫu phù hợp. Cần mẫu nổi bật hơn, xem <a href="/gio-hoa-khai-truong-300k/">giỏ hoa khai trương dưới 1 triệu</a>, <a href="/lang-hoa-khai-truong-500k/">lẵng hoa khai trương giá tốt</a> hoặc <a href="/ke-hoa-khai-truong/">kệ hoa khai trương</a>.</p>`,
+<p>Mẫu bên trên được xếp theo giá hiện tại. Nếu ngân sách của bạn thấp hơn giá mẫu rẻ nhất, hãy nhắn Zalo hoặc gọi ${PHONE} để shop báo mẫu phù hợp. Cần mẫu nổi bật hơn, xem <a href="/gio-hoa-khai-truong-300k/">giỏ hoa khai trương dưới 1 triệu</a>, <a href="/lang-hoa-khai-truong-500k/">lẵng hoa khai trương giá tốt</a> hoặc <a href="/ke-hoa-khai-truong/">kệ hoa khai trương</a>. Bảng giá đầy đủ kệ, giỏ và lan hồ điệp có ở trang <a href="/hoa-khai-truong/">hoa khai trương</a>.</p>`,
   },
   {
     slug: "gio-hoa-khai-truong-300k",
@@ -50,7 +50,7 @@ const PAGES: PricePage[] = [
 <h3>Vì sao chọn giỏ hoa thay vì kệ hoa?</h3>
 <p>Giỏ hoa đặt được trong nhà, trên quầy hoặc bàn làm việc, giữ được lâu sau ngày khai trương. Kệ hoa đứng ngoài cửa, nổi bật trong ngày lễ nhưng cần nhiều chỗ hơn. Nếu cửa hàng có mặt tiền rộng, xem thêm <a href="/ke-hoa-khai-truong/">kệ hoa khai trương</a>.</p>
 <h3>Đặt hoa thế nào?</h3>
-<p>Chọn mẫu và đặt trên website, hoặc gọi/Zalo ${PHONE}. Shop ghi băng rôn theo nội dung bạn gửi và chụp ảnh giỏ hoa trước khi giao. Mẫu rẻ hơn có trong <a href="/gio-hoa-khai-truong-200k/">giỏ hoa khai trương giá rẻ</a>.</p>`,
+<p>Chọn mẫu và đặt trên website, hoặc gọi/Zalo ${PHONE}. Shop ghi băng rôn theo nội dung bạn gửi và chụp ảnh giỏ hoa trước khi giao. Mẫu rẻ hơn có trong <a href="/gio-hoa-khai-truong-200k/">giỏ hoa khai trương giá rẻ</a>; xem tất cả mẫu và bảng giá tại <a href="/hoa-khai-truong/">hoa khai trương</a>.</p>`,
   },
   {
     slug: "lang-hoa-khai-truong-500k",

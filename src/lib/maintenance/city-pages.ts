@@ -123,6 +123,31 @@ const CITIES: CityPage[] = [
     places: "Làng Đại học Quốc gia, Vinhomes Grand Park, Gigamall, Vincom Thủ Đức, khu biệt thự Thảo Điền, Bệnh viện Thủ Đức",
     note: "Cửa hàng ở 61/5 Kha Vạn Cân, Hiệp Bình Chánh; hoa tốt nghiệp giao tận cổng các trường trong Làng Đại học vào mùa lễ nên đặt trước 1–2 ngày.",
   },
+  // Quý I/2027: quận TP.HCM nhiều lượt tìm còn dùng mô tả mẫu chung (Quận 7 1.700 lượt/tháng) — giữ danh sách mẫu đang có
+  {
+    slug: "shop-hoa-tuoi-quan-7",
+    city: "Quận 7",
+    areas: "các phường Tân Phong, Tân Phú, Tân Quy, Tân Kiểng, Tân Hưng, Bình Thuận, Phú Mỹ, Phú Thuận, Tân Thuận Đông, Tân Thuận Tây",
+    nearby: "Quận 4, Quận 8, Nhà Bè, Quận 1",
+    places: "khu đô thị Phú Mỹ Hưng, Crescent Mall, SECC, Bệnh viện FV, khu chế xuất Tân Thuận, Đại học Tôn Đức Thắng, RMIT",
+    note: "Giao hoa tới căn hộ ở Phú Mỹ Hưng, Sunrise City: ghi tên tòa nhà, block, số căn và số điện thoại người nhận; lễ tân có thể nhận thay khi người nhận vắng nhà.",
+  },
+  {
+    slug: "shop-hoa-tuoi-quan-3",
+    city: "Quận 3",
+    areas: "các phường Võ Thị Sáu, 1, 2, 3, 4, 5, 9, 10, 11, 12, 13, 14",
+    nearby: "Quận 1, Quận 10, Phú Nhuận, Tân Bình",
+    places: "Hồ Con Rùa, Nhà thờ Tân Định, chùa Vĩnh Nghiêm, Bệnh viện Bình Dân, các văn phòng dọc Nam Kỳ Khởi Nghĩa, Võ Văn Tần, Cách Mạng Tháng Tám",
+    note: "Quận 3 nằm sát Quận 1, gần cửa hàng ở 130 Hai Bà Trưng; gửi hoa tới văn phòng chỉ cần ghi tên tòa nhà, tầng và người nhận.",
+  },
+  {
+    slug: "shop-hoa-tuoi-quan-binh-thanh",
+    city: "Quận Bình Thạnh",
+    areas: "các phường 1, 2, 3, 5, 6, 7, 11, 12, 13, 14, 15, 17, 19, 21, 22, 24, 25, 26, 27, 28",
+    nearby: "Quận 1, Phú Nhuận, Gò Vấp, Thủ Đức",
+    places: "Landmark 81, Vinhomes Central Park, chợ Bà Chiểu, Bệnh viện Nhân dân Gia Định, Đại học Hutech, các căn hộ dọc Điện Biên Phủ, Xô Viết Nghệ Tĩnh",
+    note: "Giao hoa tới Vinhomes Central Park, Landmark 81: ghi tên tòa, số căn hộ và số điện thoại người nhận để shipper liên hệ khi tới sảnh.",
+  },
   // Tuần 4 (16/11/2026): quận/huyện Đà Nẵng — nội dung riêng thay mô tả mẫu chung (giữ danh sách mẫu đang có)
   {
     slug: "shop-hoa-tuoi-quan-hai-chau",

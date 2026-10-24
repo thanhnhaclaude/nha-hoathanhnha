@@ -134,6 +134,8 @@ export const mainMenu: MenuGroup[] = [
 /** Các khối sản phẩm trên trang chủ, theo thứ tự như website hiện tại. */
 export const homeSections = [
   { slug: "hoa-khai-truong", title: "Hoa khai trương", icon: "/brand/cat-khai-truong.webp" },
+  // Quý I/2027: "hoa sinh nhật" (19.000 lượt tìm) đang xếp trang chủ thay vì /hoa-sinh-nhat/ — thêm khối + link "Xem tất cả" về danh mục
+  { slug: "hoa-sinh-nhat", title: "Hoa sinh nhật", icon: "/brand/cat-sinh-nhat.webp" },
   { slug: "hoa-bo", title: "Hoa bó", icon: "/brand/cat-hoa-bo.webp" },
   { slug: "hoa-gio", title: "Hoa giỏ", icon: "/brand/cat-hoa-gio.webp" },
   { slug: "hoa-chia-buon", title: "Hoa chia buồn", icon: "/brand/cat-chia-buon.webp" },
