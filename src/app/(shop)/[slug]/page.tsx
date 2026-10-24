@@ -118,7 +118,7 @@ export default async function SlugPage({ params, searchParams }: Props) {
     mixArea
       ? getProductsInCategory(category, { page: 1, perPage: 240, sort }).then((r) => paginateMixed(r.items, page, 8))
       : getProductsInCategory(category, { page, sort, ...(isArea ? { perPage: 8 } : {}) }),
-    getGuidePosts(category.name, 3),
+    getGuidePosts(category.name, 3, category.slug),
     getNearbyAreas(category.id, category.parentId, category.slug),
   ]);
   const { items, total, pages } = listing;

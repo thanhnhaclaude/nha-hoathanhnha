@@ -1,7 +1,7 @@
 import { livePage } from "./published";
 import "server-only";
 import { cache } from "react";
-import { and, count, desc, eq } from "drizzle-orm";
+import { and, count, desc, eq, like } from "drizzle-orm";
 import { categories, db, pages, postCategories, productCategories, products } from "./db";
 import { infoPages } from "./info-pages";
 
@@ -196,11 +196,25 @@ export async function getRelatedPosts(text: string, { excludeId, limit = 6 }: { 
 }
 
 /** Bài viết theo chủ đề danh mục/sản phẩm (dùng cho trang danh mục và trang sản phẩm). */
-export async function getGuidePosts(text: string, limit = 3) {
+/** Bài đã đăng có liên kết viết tay tới /slug/ (bài vệ tinh của danh mục). */
+const getPostsLinkingTo = cache(async (slug: string) => {
+  const rows = await db
+    .select({ id: pages.id })
+    .from(pages)
+    .where(and(eq(pages.type, "post"), livePage(), like(pages.content, `%href="/${slug}/"%`)));
+  return new Set(rows.map((r) => r.id));
+});
+
+/**
+ * Bài cẩm nang cho trang danh mục/sản phẩm. Có `slug` (trang danh mục): bài vệ tinh liên kết về danh mục
+ * được ưu tiên trước (liên kết hai chiều danh mục ↔ bài), sau đó tới bài trùng từ trong tiêu đề.
+ */
+export async function getGuidePosts(text: string, limit = 3, slug?: string) {
   const all = await getAllPostsLite();
+  const linking = slug ? await getPostsLinkingTo(slug) : new Set<number>();
   const want = new Set(tokens(text));
   return all
-    .map((p) => ({ p, score: tokens(p.title).filter((w) => want.has(w)).length }))
+    .map((p) => ({ p, score: (linking.has(p.id) ? 100 : 0) + tokens(p.title).filter((w) => want.has(w)).length }))
     .filter((x) => x.score > 0)
     .sort((a, b) => b.score - a.score || b.p.publishedAt.getTime() - a.p.publishedAt.getTime())
     .slice(0, limit)
