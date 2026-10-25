@@ -1,0 +1,96 @@
+# Tự vá lỗ hổng npm (vd. Hostinger báo "Các phần phụ thuộc chưa được vá lỗi" như nodemailer 25/10/2026).
+# Mỗi sáng: quét npm audit các gói chạy trên web; có lỗ hổng thì npm audit fix (không nhảy phiên bản lớn),
+# kiểm tra npm ci + build + tsc; đạt thì commit thẳng vào main. Không tự vá được hoặc build lỗi -> mở Issue báo chủ shop.
+# Sau khi có commit mới, Hostinger cần tái triển khai (hoặc bật tự động triển khai khi có push).
+name: Tự vá lỗ hổng npm
+
+on:
+  schedule:
+    - cron: "0 1 * * *" # 08:00 giờ Việt Nam
+  workflow_dispatch: # chạy tay: tab Actions -> Tự vá lỗ hổng npm -> Run workflow
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: security-autofix
+  cancel-in-progress: false
+
+jobs:
+  autofix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20 # cùng bản Node trên Hostinger
+          cache: npm
+
+      - run: npm ci --no-audit --no-fund
+
+      - name: Quét lỗ hổng
+        id: audit
+        run: |
+          if npm audit --omit=dev --audit-level=low > audit-truoc.txt; then
+            echo "vuln=0" >> "$GITHUB_OUTPUT"
+          else
+            echo "vuln=1" >> "$GITHUB_OUTPUT"
+          fi
+          cat audit-truoc.txt
+
+      - name: Tự vá (npm audit fix, không nâng phiên bản lớn)
+        if: steps.audit.outputs.vuln == '1'
+        run: npm audit fix --omit=dev --no-fund || true
+
+      - name: Kiểm tra bản vá (npm ci, build, tsc)
+        if: steps.audit.outputs.vuln == '1'
+        id: verify
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+          npx tsc --noEmit
+          if npm audit --omit=dev --audit-level=low > audit-sau.txt; then
+            echo "clean=1" >> "$GITHUB_OUTPUT"
+          else
+            echo "clean=0" >> "$GITHUB_OUTPUT"
+          fi
+          cat audit-sau.txt
+
+      - name: Commit bản vá vào main
+        if: steps.audit.outputs.vuln == '1' && steps.verify.outcome == 'success'
+        run: |
+          if git diff --quiet -- package.json package-lock.json; then
+            echo "npm audit fix không thay đổi gì"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json package-lock.json
+          git commit -m "Bảo mật: tự vá lỗ hổng npm (npm audit fix)" -m "$(head -c 3000 audit-truoc.txt)"
+          git push
+
+      - name: Báo lỗ hổng cần xử lý tay
+        if: always() && steps.audit.outputs.vuln == '1' && (steps.verify.outcome != 'success' || steps.verify.outputs.clean != '1')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require("fs");
+            const read = (f) => (fs.existsSync(f) ? fs.readFileSync(f, "utf8").slice(0, 6000) : "");
+            const title = "Lỗ hổng npm cần xử lý tay";
+            const run = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const body = [
+              `Workflow tự vá chưa xử lý hết lỗ hổng (lần chạy: ${run}).`,
+              "Có thể bản vá cần nâng phiên bản lớn (npm audit fix --force) hoặc build bị lỗi sau khi vá.",
+              "",
+              "Kết quả quét sau khi vá:",
+              "```",
+              read("audit-sau.txt") || read("audit-truoc.txt"),
+              "```",
+            ].join("\n");
+            const { data: open } = await github.rest.issues.listForRepo({ ...context.repo, state: "open", per_page: 100 });
+            const existing = open.find((i) => i.title === title && !i.pull_request);
+            if (existing) await github.rest.issues.createComment({ ...context.repo, issue_number: existing.number, body });
+            else await github.rest.issues.create({ ...context.repo, title, body });
