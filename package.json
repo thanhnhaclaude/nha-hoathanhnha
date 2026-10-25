@@ -30,7 +30,7 @@
     "marked": "^18.1.1",
     "mysql2": "^3.24.6",
     "next": "16.4.2",
-    "nodemailer": "^10.1.2",
+    "nodemailer": "^10.2.1",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "sanitize-html": "^2.18.1",
