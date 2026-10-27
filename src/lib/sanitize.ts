@@ -31,6 +31,16 @@ function localizeHref(href: string) {
   return local.replace(/^(\/[^?#.]*[^/?#.])(?=[?#]|$)/, "$1/");
 }
 
+/** Nút của theme cũ (class "button", vd. khối "Hotline đặt hoa") -> nút bo tròn theo loại liên hệ (xem .prose-btn trong globals.css) */
+function buttonClass(attribs: Record<string, string>) {
+  if (!/\bbutton\b/.test(attribs.class ?? "")) return undefined;
+  const href = attribs.href ?? "";
+  if (href.startsWith("tel:")) return "prose-btn prose-btn-call";
+  if (/zalo\.me/i.test(href)) return "prose-btn prose-btn-zalo";
+  if (/m\.me|messenger/i.test(href)) return "prose-btn prose-btn-msg";
+  return "prose-btn";
+}
+
 /** So sánh tiêu đề: bỏ thẻ, emoji/ký hiệu, khoảng trắng, không phân biệt hoa thường. */
 function titleKey(s: string) {
   return sanitizeHtml(s, { allowedTags: [], allowedAttributes: {} })
@@ -84,13 +94,14 @@ export function cleanHtml(html: string | null | undefined, { normalize = true, i
       a: ["href", "title", "target", "rel"],
       img: ["src", "alt", "width", "height", "loading"],
     },
+    allowedClasses: { a: ["prose-btn", "prose-btn-call", "prose-btn-zalo", "prose-btn-msg"] },
     allowedSchemes: ["http", "https", "mailto", "tel"],
     transformTags: {
       // Link bị cắt cụt trong nội dung cũ (có "…") không mở được: giữ chữ, bỏ link
       a: (tagName, attribs) =>
         (attribs.href ?? "").includes("…") || /%E2%80%A6/i.test(attribs.href ?? "")
           ? { tagName: "span", attribs: {} }
-          : { tagName, attribs: { ...attribs, href: localizeHref(attribs.href ?? ""), rel: "noopener" } },
+          : { tagName, attribs: { ...attribs, href: localizeHref(attribs.href ?? ""), rel: "noopener", class: buttonClass(attribs) ?? "" } },
       img: (tagName, attribs) => {
         imgIndex++;
         const alt = attribs.alt?.trim() || (imgAlt ? (imgIndex === 1 ? imgAlt : `${imgAlt} – ảnh ${imgIndex}`) : "");
