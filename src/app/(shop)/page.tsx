@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { seoMetadata } from "@/lib/seo";
 import Link from "next/link";
-import { ArrowRight, BadgeCheck, Camera, Gift, HandCoins, Flower2, Truck, Users, Wallet, Zap } from "lucide-react";
-import { HeroSlider } from "@/components/hero-slider";
+import { ArrowRight, BadgeCheck, Camera, Clock, Gift, HandCoins, Flower2, Phone, Truck, Users, Wallet, Zap } from "lucide-react";
+import { ZaloIcon } from "@/components/icons";
 import { upcomingOccasion } from "@/lib/occasions";
 import { ProductCard } from "@/components/product-card";
 import { homeSections } from "@/lib/menu";
@@ -22,11 +22,36 @@ export function generateMetadata(): Promise<Metadata> {
   return seoMetadata("/", { title: site.title, description: site.description }).catch(() => ({ title: site.title, description: site.description }));
 }
 
-const perks = [
-  { icon: Zap, title: "Giao hoa hỏa tốc", text: "60 phút nội thành, 90 phút ngoại thành" },
-  { icon: Gift, title: "Miễn phí thiệp & băng rôn", text: "Ghi lời chúc theo yêu cầu của bạn" },
-  { icon: Truck, title: "Miễn phí giao hoa", text: "Đơn từ 500k (hoa bó, giỏ), 900k (kệ hoa)" },
-  { icon: Camera, title: "Chụp hình trước khi giao", text: "Báo ngay khi hoa đã đến tay người nhận" },
+// Cam kết khách lo nhất khi đặt hoa online: có đúng mẫu không, có kịp giờ không, có tốn thêm phí không
+const promises = [
+  { icon: Camera, text: "Gửi ảnh hoa thật trước khi giao" },
+  { icon: BadgeCheck, text: "Không đúng mẫu, không cần thanh toán" },
+  { icon: Gift, text: "Miễn phí thiệp, băng rôn ghi lời chúc" },
+];
+
+// Khách tìm hoa theo dịp tặng, không theo kiểu cắm: đưa thẳng tới đúng danh mục
+const occasions = [
+  { href: "/hoa-sinh-nhat/", title: "Sinh nhật", text: "Bó, giỏ hoa theo người nhận", icon: "/brand/cat-sinh-nhat.webp" },
+  { href: "/hoa-khai-truong/", title: "Khai trương", text: "Kệ, giỏ hoa in băng rôn miễn phí", icon: "/brand/cat-khai-truong.webp" },
+  { href: "/hoa-tinh-yeu/", title: "Tình yêu", text: "Hồng đỏ, hồng phấn, tulip", icon: "/brand/cat-tinh-yeu.webp" },
+  { href: "/hoa-chia-buon/", title: "Chia buồn", text: "Kệ, vòng hoa viếng giao gấp", icon: "/brand/cat-chia-buon.webp" },
+  { href: "/lan-ho-diep/", title: "Lan hồ điệp", text: "Quà biếu sang trọng, bền lâu", icon: "/brand/cat-lan-ho-diep.webp" },
+  { href: "/hoa-gio/", title: "Giỏ hoa", text: "Đặt bàn, không cần bình cắm", icon: "/brand/cat-hoa-gio.webp" },
+];
+
+const moreOccasions = [
+  { href: "/hoa-tang-me/", title: "Tặng mẹ" },
+  { href: "/hoa-tang-sep/", title: "Tặng sếp" },
+  { href: "/hoa-mung-tot-nghiep/", title: "Tốt nghiệp" },
+  { href: "/hoa-cuoi-cam-tay/", title: "Hoa cưới" },
+  { href: "/hoa-chuc-mung/", title: "Chúc mừng" },
+  { href: "/hoa-mung-tan-gia/", title: "Tân gia" },
+];
+
+const steps = [
+  { title: "Chọn mẫu và giờ giao", text: "Hơn 700 mẫu theo dịp, theo ngân sách. Giao hỏa tốc 60 phút nội thành." },
+  { title: "Ghi lời chúc", text: "Shop viết thiệp tay hoặc in băng rôn đúng nội dung bạn gửi, miễn phí." },
+  { title: "Nhận ảnh hoa thật", text: "Ảnh gửi qua Zalo trước khi giao. Báo lại ngay khi hoa đến tay người nhận." },
 ];
 
 const reasons = [
@@ -88,11 +113,17 @@ export default async function HomePage() {
     homeSections.map(async (s) => {
       const category = await getCategoryBySlug(s.slug);
       if (!category) return null;
-      // 4 mẫu/mục (1 hàng máy tính, 2 hàng điện thoại): ít phần tử hơn -> điện thoại dựng trang nhanh hơn (Lighthouse +2–3 điểm)
-      const { items } = await getProductsInCategory(category, { perPage: 4 });
+      const { items } = await getProductsInCategory(category, { perPage: 12 });
       return { ...s, items };
     }),
   ).catch(() => [] as null[]);
+  // 4 mẫu/mục (1 hàng máy tính, 2 hàng điện thoại), không lặp mẫu đã hiện ở mục trên (vd. Hoa sinh nhật và Hoa bó cùng mẫu mới nhất)
+  const shown = new Set<number>();
+  for (const s of sections) {
+    if (!s) continue;
+    s.items = s.items.filter((p) => !shown.has(p.id)).slice(0, 4);
+    s.items.forEach((p) => shown.add(p.id));
+  }
 
   const seoHtml = await seoHtmlPromise;
   const occasion = upcomingOccasion();
@@ -100,15 +131,72 @@ export default async function HomePage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd()).replace(/</g, "\\u003c") }} />
-      <div className="container-x pt-4 sm:pt-6">
-        <HeroSlider />
-      </div>
-
-      <section className="container-x mt-10 text-center">
-        <p className="eyebrow">Since 2012 · {site.tagline}</p>
-        <h1 className="heading-display mx-auto mt-3 max-w-3xl text-3xl leading-tight sm:text-5xl">
-          Shop hoa tươi Thanh Nhã – đặt hoa online, giao hoa miễn phí
-        </h1>
+      <section aria-labelledby="hero-h" className="container-x pt-4 sm:pt-6">
+        <div className="grid items-center gap-8 overflow-hidden rounded-[2rem] bg-gradient-to-br from-brand-soft via-surface to-leaf-soft p-6 sm:p-10 lg:grid-cols-[1.05fr_1fr] lg:gap-12 lg:p-12">
+          <div>
+            <p className="inline-flex items-center gap-2 rounded-full bg-surface px-3 py-1.5 text-xs font-semibold text-leaf ring-1 ring-leaf/15">
+              <Clock className="size-3.5" aria-hidden />
+              Mở cửa 06:00–21:00 · 13 cửa hàng toàn quốc
+            </p>
+            <h1 id="hero-h" className="mt-5">
+              <span className="eyebrow block">Shop hoa tươi Thanh Nhã · từ 2012</span>
+              <span className="heading-display mt-3 block text-4xl leading-[1.1] sm:text-5xl lg:text-6xl">
+                Hoa tươi giao tận tay <span className="text-brand-strong">trong 60 phút</span>
+              </span>
+            </h1>
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
+              Chọn mẫu, ghi lời chúc, nhận ảnh hoa thật trước khi giao. Miễn phí giao hoa cho đơn từ 500K.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              {/* Cam đậm thay cam logo: chữ trắng đạt tương phản 4.5:1 */}
+              <a href="#dip" className="btn-primary bg-brand-strong px-7 text-base hover:bg-brand-strong/90">
+                Chọn hoa theo dịp <ArrowRight className="size-4" aria-hidden />
+              </a>
+              <a href={`tel:${site.phone}`} className="btn-outline px-6 text-base">
+                <Phone className="size-4" aria-hidden /> {site.phoneDisplay}
+              </a>
+              <a href={site.zalo} target="_blank" rel="noopener" className="btn-outline px-4">
+                <ZaloIcon className="size-6" /> Zalo
+              </a>
+            </div>
+            <ul className="mt-8 grid gap-3 sm:grid-cols-3">
+              {promises.map(({ icon: Icon, text }) => (
+                <li key={text} className="flex items-start gap-2.5 text-sm font-medium leading-snug">
+                  <span className="grid size-8 shrink-0 place-items-center rounded-full bg-surface text-brand-strong ring-1 ring-border">
+                    <Icon className="size-4" aria-hidden />
+                  </span>
+                  {text}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="relative">
+            {/* Ảnh lớn nhất màn hình đầu (LCP): tải ngay, giải mã đồng bộ */}
+            <Image
+              src="/brand/hero-gio-hoa.webp"
+              alt="Giỏ hoa hồng phấn, cẩm tú cầu và cúc tana của Hoa Thanh Nhã"
+              width={880}
+              height={833}
+              preload
+              fetchPriority="high"
+              decoding="sync"
+              sizes="(min-width: 1024px) 560px, 92vw"
+              className="aspect-[880/833] w-full rounded-[1.75rem] object-cover shadow-[0_24px_60px_-28px_rgba(31,26,23,0.45)]"
+            />
+            <div className="absolute -bottom-4 left-4 flex items-center gap-3 rounded-2xl bg-surface px-4 py-3 shadow-lg ring-1 ring-border sm:left-6">
+              <span className="grid size-10 place-items-center rounded-full bg-brand text-white">
+                <Zap className="size-5" aria-hidden />
+              </span>
+              <span className="text-sm leading-tight">
+                <span className="block font-semibold">Giao hỏa tốc</span>
+                <span className="text-muted">60 phút nội thành</span>
+              </span>
+            </div>
+            <div className="absolute right-4 top-4 rounded-full bg-surface/95 px-3 py-1.5 text-xs font-semibold text-leaf shadow ring-1 ring-border">
+              Hoa nhập mới mỗi ngày
+            </div>
+          </div>
+        </div>
       </section>
 
       {occasion && (
@@ -125,38 +213,55 @@ export default async function HomePage() {
         </section>
       )}
 
-      <section aria-label="Ưu đãi dịch vụ" className="container-x mt-10">
-        <ul className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
-          {perks.map(({ icon: Icon, title, text }) => (
-            <li key={title} className="flex flex-col items-center gap-3 rounded-2xl border border-border bg-surface p-5 text-center sm:flex-row sm:text-left">
-              <span className="grid size-12 shrink-0 place-items-center rounded-full bg-brand-soft text-brand-strong">
-                <Icon className="size-5" aria-hidden />
-              </span>
-              <span>
-                <span className="block text-sm font-semibold">{title}</span>
-                <span className="mt-0.5 block text-xs leading-relaxed text-muted">{text}</span>
-              </span>
+      <section id="dip" aria-labelledby="dip-h" className="container-x mt-16 scroll-mt-40">
+        <div className="text-center">
+          <p className="eyebrow">Tìm nhanh</p>
+          <h2 id="dip-h" className="heading-display mt-2 text-3xl sm:text-4xl">
+            Bạn tặng hoa cho dịp nào?
+          </h2>
+        </div>
+        <ul className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
+          {occasions.map((o) => (
+            <li key={o.href}>
+              <Link
+                href={o.href}
+                className="group flex h-full flex-col items-center rounded-2xl bg-surface p-4 text-center ring-1 ring-border transition hover:-translate-y-0.5 hover:shadow-lg hover:ring-brand sm:p-5"
+              >
+                <Image src={o.icon} alt="" width={96} height={96} className="size-20 rounded-full object-cover sm:size-24" />
+                <span className="mt-3 font-display text-lg font-bold">{o.title}</span>
+                <span className="mt-1 text-xs leading-snug text-muted">{o.text}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <ul className="mt-5 flex flex-wrap justify-center gap-2">
+          {moreOccasions.map((o) => (
+            <li key={o.href}>
+              <Link href={o.href} className="inline-flex min-h-10 items-center rounded-full bg-surface px-4 text-sm font-medium ring-1 ring-border transition hover:text-brand-strong hover:ring-brand">
+                {o.title}
+              </Link>
             </li>
           ))}
         </ul>
       </section>
 
-      <section aria-labelledby="cat-heading" className="container-x mt-16">
-        <h2 id="cat-heading" className="heading-display text-center text-3xl sm:text-4xl">
-          Danh mục sản phẩm
-        </h2>
-        <ul className="mt-8 grid grid-cols-3 gap-4 sm:grid-cols-6">
-          {homeSections.map((s) => (
-            <li key={s.slug}>
-              <a href={`#${s.slug}`} className="group flex flex-col items-center gap-3 text-center">
-                <span className="grid size-20 place-items-center rounded-full bg-surface ring-1 ring-border transition-all duration-300 group-hover:ring-2 group-hover:ring-brand sm:size-24">
-                  <Image src={s.icon} alt="" width={64} height={64} className="size-12 object-contain sm:size-14" />
+      <section aria-labelledby="steps-h" className="container-x mt-16">
+        <div className="rounded-[2rem] bg-leaf px-6 py-10 text-white sm:px-10">
+          <h2 id="steps-h" className="font-display text-2xl font-bold sm:text-3xl">
+            Đặt hoa chỉ 3 bước, không cần tới cửa hàng
+          </h2>
+          <ol className="mt-8 grid gap-6 sm:grid-cols-3">
+            {steps.map((s, i) => (
+              <li key={s.title} className="flex gap-4">
+                <span className="grid size-10 shrink-0 place-items-center rounded-full bg-white font-display text-lg font-bold text-leaf">{i + 1}</span>
+                <span>
+                  <span className="block font-semibold">{s.title}</span>
+                  <span className="mt-1 block text-sm leading-relaxed text-white/80">{s.text}</span>
                 </span>
-                <span className="text-xs font-semibold uppercase tracking-wider sm:text-sm">{s.title}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
+              </li>
+            ))}
+          </ol>
+        </div>
       </section>
 
       {sections.map((s, i) =>
