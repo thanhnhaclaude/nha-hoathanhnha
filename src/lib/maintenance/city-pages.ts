@@ -738,7 +738,7 @@ const CITIES: CityPage[] = [
     areas: "Biên Hòa, Long Khánh, Trảng Bom, Long Thành, Nhơn Trạch, Vĩnh Cửu, Thống Nhất, Cẩm Mỹ, Xuân Lộc, Định Quán, Tân Phú",
     nearby: "Thủ Đức, Dĩ An, Bà Rịa",
     places: "các khu công nghiệp Biên Hòa, Amata, Nhơn Trạch, Long Thành, Bàu Xéo, Bệnh viện Đa khoa Đồng Nai, khu vực dự án sân bay Long Thành",
-    note: "Các cửa hàng ở Biên Hòa, Nhơn Trạch, Thống Nhất, Xuân Lộc, Định Quán nhận đơn cho toàn tỉnh; các khu xa như Tân Phú, Cẩm Mỹ nên đặt trước để shop hẹn giờ giao.",
+    note: "Các cửa hàng ở 150 Nguyễn Tất Thành, Biên Hòa, Nhơn Trạch, Thống Nhất, Xuân Lộc, Định Quán nhận đơn cho toàn tỉnh; các khu xa như Tân Phú, Cẩm Mỹ nên đặt trước để shop hẹn giờ giao.",
     districts: [
       "shop-hoa-tuoi-bien-hoa",
       "shop-hoa-tuoi-long-khanh",
