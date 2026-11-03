@@ -9,7 +9,7 @@
 - Font, cỡ chữ theo flowervsflorist.com (178abec).
 
 ## Việc cần làm tiếp
-- (chưa có)
+- [từ noi-dung] Thêm 6 cửa hàng shop đã xác nhận (3/11/2026) vào `site.stores` và `storeAreas` trong `src/lib/site.ts`, đổi "13 cửa hàng" trong `home-view.tsx` thành 19: 457 Đ. Nguyễn Kiệm, Phú Nhuận (`shop-hoa-tuoi-quan-phu-nhuan`); 71 Đ. Trần Đại Nghĩa, Bình Chánh (`shop-hoa-tuoi-huyen-binh-chanh`); Nhơn Trạch: 511 Đ. Hùng Vương (`shop-hoa-tuoi-nhon-trach`); Thống Nhất: 193 QL20 (`shop-hoa-tuoi-thong-nhat`); Xuân Lộc: 3741 QL1A (`shop-hoa-tuoi-xuan-loc`); Định Quán: 30 QL20 (`shop-hoa-tuoi-dinh-quan`). Cần Giờ chờ số nhà.
 
 ## Nhật ký
 - 2026-10-30 — Tạo sổ luồng từ CLAUDE.md và lịch sử commit — (commit này)

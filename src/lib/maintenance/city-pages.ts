@@ -162,7 +162,7 @@ const CITIES: CityPage[] = [
     areas: "tất cả các quận nội thành, TP. Thủ Đức và các huyện Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè, Cần Giờ",
     nearby: "Dĩ An, Thuận An, Biên Hòa, Long An",
     places: "sân bay Tân Sơn Nhất, các bệnh viện Chợ Rẫy, Từ Dũ, Nhân dân 115, khu văn phòng Quận 1, Phú Mỹ Hưng, Thủ Thiêm, Landmark 81",
-    note: "Bốn cửa hàng ở Quận 1 (130 Hai Bà Trưng), Gò Vấp (229 Quang Trung), Quận 12 (181 Thị Mười) và Thủ Đức (61/5 Kha Vạn Cân) nhận đơn cho toàn thành phố.",
+    note: "Các cửa hàng ở Quận 1 (130 Hai Bà Trưng), Gò Vấp (229 Quang Trung), Quận 12 (181 Thị Mười), Thủ Đức (61/5 Kha Vạn Cân), Phú Nhuận (457 Nguyễn Kiệm) và Bình Chánh (71 Trần Đại Nghĩa) nhận đơn cho toàn thành phố.",
     districts: [
       "shop-hoa-tuoi-quan-1",
       "shop-hoa-tuoi-quan-3",
@@ -286,7 +286,7 @@ const CITIES: CityPage[] = [
     areas: "các phường 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 13, 15, 17",
     nearby: "Quận 1, Quận 3, Bình Thạnh, Tân Bình, Gò Vấp",
     places: "chợ Phú Nhuận, các văn phòng và quán cà phê dọc Phan Xích Long, Phan Đăng Lưu, Nguyễn Văn Trỗi, Hoàng Văn Thụ",
-    note: "Phú Nhuận nằm giữa cửa hàng Quận 1 và Gò Vấp nên đơn trong quận thường được giao nhanh; ghi rõ số nhà, hẻm và số điện thoại người nhận.",
+    note: "Cửa hàng ở 457 Nguyễn Kiệm nên đơn trong quận thường được giao nhanh; ghi rõ số nhà, hẻm và số điện thoại người nhận.",
     province: "shop-hoa-tuoi-thanh-pho-ho-chi-minh",
   },
   {
@@ -304,7 +304,7 @@ const CITIES: CityPage[] = [
     areas: "thị trấn Tân Túc và các xã Vĩnh Lộc A, Vĩnh Lộc B, Bình Hưng, Phong Phú, An Phú Tây, Tân Kiên, Lê Minh Xuân, Bình Chánh, Đa Phước",
     nearby: "Quận 8, Bình Tân, Long An",
     places: "khu dân cư Trung Sơn, các khu công nghiệp Lê Minh Xuân, Vĩnh Lộc, chợ đầu mối Bình Điền",
-    note: "Các xã xa trung tâm như Đa Phước, Lê Minh Xuân nên đặt trước nửa ngày để shop hẹn giờ giao.",
+    note: "Cửa hàng ở 71 Trần Đại Nghĩa; các xã xa trung tâm như Đa Phước nên đặt trước nửa ngày để shop hẹn giờ giao.",
     province: "shop-hoa-tuoi-thanh-pho-ho-chi-minh",
   },
   {
@@ -548,7 +548,7 @@ const CITIES: CityPage[] = [
     areas: "các xã, thị trấn Hiệp Phước, Phú Hội, Long Tân, Phước Thiền, Phú Thạnh, Long Thọ, Phước An",
     nearby: "Long Thành, Biên Hòa, Thủ Đức",
     places: "các khu công nghiệp Nhơn Trạch 1 đến 6, văn phòng nhà máy, khu dân cư quanh trung tâm huyện",
-    note: "Doanh nghiệp trong khu công nghiệp Nhơn Trạch thường đặt kệ hoa khai trương và hoa chúc mừng đối tác: gửi tên công ty, cổng ra vào để giao đúng chỗ.",
+    note: "Cửa hàng ở 511 Hùng Vương. Doanh nghiệp trong khu công nghiệp Nhơn Trạch thường đặt kệ hoa khai trương và hoa chúc mừng đối tác: gửi tên công ty, cổng ra vào để giao đúng chỗ.",
   },
   {
     slug: "shop-hoa-tuoi-uong-bi",
@@ -738,7 +738,7 @@ const CITIES: CityPage[] = [
     areas: "Biên Hòa, Long Khánh, Trảng Bom, Long Thành, Nhơn Trạch, Vĩnh Cửu, Thống Nhất, Cẩm Mỹ, Xuân Lộc, Định Quán, Tân Phú",
     nearby: "Thủ Đức, Dĩ An, Bà Rịa",
     places: "các khu công nghiệp Biên Hòa, Amata, Nhơn Trạch, Long Thành, Bàu Xéo, Bệnh viện Đa khoa Đồng Nai, khu vực dự án sân bay Long Thành",
-    note: "Cửa hàng ở Biên Hòa nhận đơn cho toàn tỉnh; các khu xa như Tân Phú, Định Quán, Xuân Lộc nên đặt trước để shop hẹn giờ giao.",
+    note: "Các cửa hàng ở Biên Hòa, Nhơn Trạch, Thống Nhất, Xuân Lộc, Định Quán nhận đơn cho toàn tỉnh; các khu xa như Tân Phú, Cẩm Mỹ nên đặt trước để shop hẹn giờ giao.",
     districts: [
       "shop-hoa-tuoi-bien-hoa",
       "shop-hoa-tuoi-long-khanh",
@@ -795,7 +795,7 @@ const CITIES: CityPage[] = [
     areas: "các xã Dầu Giây, Gia Tân, Hưng Lộc, Quang Trung, Xuân Thiện, Bàu Hàm 2, Gia Kiệm",
     nearby: "Trảng Bom, Long Khánh, Định Quán",
     places: "ngã ba Dầu Giây, khu công nghiệp Dầu Giây, các giáo xứ Gia Kiệm, Gia Tân",
-    note: "Ngã ba Dầu Giây là điểm giao thuận tiện; nhà ở các xã xa nên ghi thêm mốc dễ tìm để giao nhanh.",
+    note: "Cửa hàng ở 193 Quốc lộ 20; ngã ba Dầu Giây là điểm giao thuận tiện; nhà ở các xã xa nên ghi thêm mốc dễ tìm để giao nhanh.",
     province: "shop-hoa-tuoi-dong-nai",
   },
   {
@@ -813,7 +813,7 @@ const CITIES: CityPage[] = [
     areas: "thị trấn Gia Ray và các xã Xuân Hiệp, Xuân Tâm, Xuân Hưng, Suối Cát, Xuân Trường, Xuân Định",
     nearby: "Long Khánh, Cẩm Mỹ, Định Quán",
     places: "núi Chứa Chan, chợ Gia Ray, Bệnh viện Đa khoa Xuân Lộc",
-    note: "Hoa chia buồn cho gia đình ở Xuân Lộc: báo shop địa chỉ tang lễ và nội dung băng tang ngay khi đặt để giao kịp.",
+    note: "Cửa hàng ở 3741 Quốc lộ 1A. Hoa chia buồn cho gia đình ở Xuân Lộc: báo shop địa chỉ tang lễ và nội dung băng tang ngay khi đặt để giao kịp.",
     province: "shop-hoa-tuoi-dong-nai",
   },
   {
@@ -822,7 +822,7 @@ const CITIES: CityPage[] = [
     areas: "thị trấn Định Quán và các xã Phú Lợi, Phú Ngọc, La Ngà, Gia Canh, Phú Vinh, Phú Tân",
     nearby: "Tân Phú, Xuân Lộc, Thống Nhất",
     places: "thắng cảnh Đá Ba Chồng, hồ Trị An phía La Ngà, chợ Định Quán dọc Quốc lộ 20",
-    note: "Định Quán nằm dọc Quốc lộ 20, cách Biên Hòa khá xa; đặt trước nửa ngày để shop hẹn giờ giao.",
+    note: "Cửa hàng ở 30 Quốc lộ 20; các xã xa trục đường chính nên đặt trước nửa ngày để shop hẹn giờ giao.",
     province: "shop-hoa-tuoi-dong-nai",
   },
   {

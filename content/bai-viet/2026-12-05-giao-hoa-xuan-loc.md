@@ -1,15 +1,17 @@
 ---
-title: Giao hoa Xuân Lộc: gửi hoa viếng và hoa chúc mừng ở Gia Ray
+title: Cửa hàng hoa Thanh Nhã Xuân Lộc: 3741 Quốc lộ 1A
 slug: giao-hoa-xuan-loc
-description: Giao hoa Xuân Lộc đến Gia Ray, Xuân Hiệp, Suối Cát: thông tin cần gửi cho hoa viếng, băng tang, hoa mừng và đơn đặt từ xa. Gọi 0396.72.73.74.
-keyword: giao hoa Xuân Lộc
+description: Cửa hàng hoa Thanh Nhã Xuân Lộc ở 3741 QL1A: thông tin cần gửi cho hoa viếng, băng tang, hoa mừng và đơn đặt từ xa. Gọi 0396.72.73.74.
+keyword: cửa hàng hoa Thanh Nhã Xuân Lộc
 publish: 2026-12-05 08:00
 category: tin-tuc
 image: /uploads/Hoa-chia-buon-CB026.webp
-tags: giao hoa Xuân Lộc, hoa chia buồn Đồng Nai, hoa Gia Ray, Hoa Thanh Nhã
+tags: cửa hàng hoa Xuân Lộc, giao hoa Xuân Lộc, hoa chia buồn Đồng Nai, hoa Gia Ray, Hoa Thanh Nhã
 ---
 
-Khi nhận tin buồn từ quê nhà mà không kịp về, gửi một kệ hoa viếng là cách nhiều người thay mặt mình đến chia sẻ với gia đình. Ở Xuân Lộc, điều quan trọng nhất là thời gian, vì tang lễ thường diễn ra tại nhà và lịch trình rất gấp. Bài viết hướng dẫn cách đặt **giao hoa Xuân Lộc** cho dịp viếng, và cả những dịp vui hơn như sinh nhật, mừng thọ.
+Khi nhận tin buồn từ quê nhà mà không kịp về, gửi một kệ hoa viếng là cách nhiều người thay mặt mình đến chia sẻ với gia đình. Ở Xuân Lộc, điều quan trọng nhất là thời gian, vì tang lễ thường diễn ra tại nhà và lịch trình rất gấp. **Cửa hàng hoa Thanh Nhã Xuân Lộc** ở 3741 Quốc lộ 1A nhận đơn cho dịp viếng, và cả những dịp vui hơn như sinh nhật, mừng thọ.
+
+**Địa chỉ:** 3741 QL1A, Xuân Lộc, Đồng Nai. **Hotline và Zalo:** [0396.72.73.74](tel:0396727374).
 
 ## Gửi hoa viếng: chuẩn bị những gì?
 
@@ -45,7 +47,7 @@ Không chỉ có đơn viếng, thị trấn Gia Ray và các xã Xuân Hiệp, 
 
 ## Thời gian giao
 
-Xuân Lộc giáp Long Khánh, Cẩm Mỹ và Định Quán, cách Biên Hòa khá xa. Vì vậy bạn nên đặt sớm, đặc biệt với kệ hoa cần xe chở lớn. Hoa Thanh Nhã phục vụ khu vực này theo hình thức giao tận nơi; cửa hàng gần nhất trong tỉnh ở 85 Hưng Đạo Vương, Biên Hòa. Thông tin chung có tại trang [shop hoa tươi Đồng Nai](/shop-hoa-tuoi-dong-nai/), còn các bước đặt nằm trong [hướng dẫn đặt hàng](/huong-dan-dat-hang/).
+Xuân Lộc giáp Long Khánh, Cẩm Mỹ và Định Quán, nhiều xã khá xa Quốc lộ 1A. Vì vậy bạn nên đặt sớm, đặc biệt với kệ hoa cần xe chở lớn. Thông tin chung có tại trang [shop hoa tươi Đồng Nai](/shop-hoa-tuoi-dong-nai/), còn các bước đặt nằm trong [hướng dẫn đặt hàng](/huong-dan-dat-hang/).
 
 ## Câu hỏi thường gặp
 

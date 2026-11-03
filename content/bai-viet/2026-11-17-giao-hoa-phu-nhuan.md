@@ -1,15 +1,17 @@
 ---
-title: Giao hoa Phú Nhuận: đặt hoa tới nhà, văn phòng, quán cà phê
+title: Cửa hàng hoa Thanh Nhã Phú Nhuận: 457 Nguyễn Kiệm
 slug: giao-hoa-phu-nhuan
-description: Giao hoa Phú Nhuận tận nhà và văn phòng: cách ghi địa chỉ hẻm, chọn mẫu tặng đồng nghiệp, người yêu, gửi ảnh trước khi giao. Gọi 0396.72.73.74.
-keyword: giao hoa Phú Nhuận
+description: Cửa hàng hoa Thanh Nhã Phú Nhuận ở 457 Nguyễn Kiệm: ghé chọn hoa hoặc đặt giao đến nhà, văn phòng, gửi ảnh trước khi giao. Gọi 0396.72.73.74.
+keyword: cửa hàng hoa Thanh Nhã Phú Nhuận
 publish: 2026-11-17 08:00
 category: tin-tuc
 image: /uploads/Hoa-bo-HB121.webp
-tags: giao hoa Phú Nhuận, đặt hoa Phú Nhuận, hoa tặng đồng nghiệp, Hoa Thanh Nhã
+tags: cửa hàng hoa Phú Nhuận, giao hoa Phú Nhuận, hoa tặng đồng nghiệp, Hoa Thanh Nhã
 ---
 
-Phú Nhuận nhỏ nhưng đông đúc, nhà trong hẻm nhiều và văn phòng chen giữa quán cà phê. Vì thế, dịch vụ **giao hoa Phú Nhuận** tốt không chỉ cần hoa đẹp mà còn phải tới đúng cửa, đúng lúc. Hoa Thanh Nhã nhận đơn giao đến các phường trong quận; bài viết chia sẻ cách đặt để hoa tới suôn sẻ, cùng gợi ý chọn mẫu theo người nhận.
+Phú Nhuận nhỏ nhưng đông đúc, nhà trong hẻm nhiều và văn phòng chen giữa quán cà phê. Vì thế, một đơn hoa tốt không chỉ cần hoa đẹp mà còn phải tới đúng cửa, đúng lúc. **Cửa hàng hoa Thanh Nhã Phú Nhuận** ở 457 Nguyễn Kiệm nhận khách ghé mua và giao đến các phường trong quận; bài viết chia sẻ cách đặt để hoa tới suôn sẻ, cùng gợi ý chọn mẫu theo người nhận.
+
+**Địa chỉ:** 457 Nguyễn Kiệm, Phú Nhuận, TP.HCM. **Hotline và Zalo:** [0396.72.73.74](tel:0396727374). Bạn nên gọi trước khi ghé để cửa hàng chuẩn bị sẵn mẫu đã chọn.
 
 ## Ghi địa chỉ thế nào để shipper không phải gọi nhiều lần?
 
@@ -33,7 +35,7 @@ Dù ở đâu, số điện thoại người nhận vẫn là thông tin quan tr
 
 ## Khu vực và thời gian giao
 
-Hoa Thanh Nhã nhận giao đến các phường 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 13, 15, 17 của Phú Nhuận, và các khu giáp ranh như Quận 1, Quận 3, Bình Thạnh, Tân Bình, Gò Vấp. Quận nằm giữa cửa hàng Quận 1 (130 Hai Bà Trưng) và cửa hàng Gò Vấp (229 Quang Trung), nên đơn thường giao được trong ngày. Giờ cụ thể tùy lượng đơn, bạn hãy gọi [0396.72.73.74](tel:0396727374) để được báo chính xác.
+Hoa Thanh Nhã nhận giao đến các phường 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 13, 15, 17 của Phú Nhuận, và các khu giáp ranh như Quận 1, Quận 3, Bình Thạnh, Tân Bình, Gò Vấp. Từ cửa hàng trên Nguyễn Kiệm, đơn trong quận thường giao được trong ngày. Giờ cụ thể tùy lượng đơn, bạn hãy gọi [0396.72.73.74](tel:0396727374) để được báo chính xác.
 
 Khung giờ cao điểm 17h–19h trên các trục Phan Đăng Lưu, Hoàng Văn Thụ thường kẹt xe. Nếu tặng vào buổi tối, bạn nên đặt hoa đến sớm hơn giờ hẹn một chút. Ngày lễ như 20/10 hay 8/3 cũng nên đặt trước vài ngày để giữ khung giờ mong muốn.
 
@@ -55,4 +57,4 @@ Chi tiết có tại [hướng dẫn đặt hàng](/huong-dan-dat-hang/).
 
 **Hoa có kèm thiệp không?** Có. Bạn gửi lời chúc khi đặt, nội dung sẽ được ghi lên thiệp và bạn kiểm tra lại qua ảnh.
 
-**Ở Phú Nhuận có ghé mua trực tiếp được không?** Hoa Thanh Nhã phục vụ khu vực này theo hình thức giao tận nơi. Muốn xem hoa trực tiếp, bạn có thể ghé cửa hàng Quận 1 hoặc Gò Vấp.
+**Có ghé mua trực tiếp được không?** Được. Bạn ghé 457 Nguyễn Kiệm để xem hoa tận mắt và nhận ngay nếu mẫu đó còn sẵn. Hoa theo yêu cầu riêng cần thêm thời gian cắm, nên hãy gọi trước.
