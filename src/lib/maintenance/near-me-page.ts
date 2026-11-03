@@ -1,6 +1,6 @@
 /**
  * Trang /shop-hoa-tuoi-gan-day/ (từ khóa "tiệm hoa gần đây" 21.600 lượt tìm/tháng, "shop hoa gần đây" 9.600):
- * thay mô tả chung của website cũ bằng danh sách 13 cửa hàng thật (site.stores) theo thành phố, mỗi cửa hàng có
+ * thay mô tả chung của website cũ bằng danh sách cửa hàng thật (site.stores) theo khu vực, mỗi cửa hàng có
  * link chỉ đường Google Maps và link tới trang khu vực. Nội dung quản lý tại đây, ghi lại mỗi lần khởi động.
  */
 import type { Connection } from "mysql2/promise";
@@ -37,7 +37,7 @@ function html() {
         .join("")}</ul>`,
     )
     .join("\n");
-  return `<p>Bạn đang tìm tiệm hoa, shop hoa tươi gần đây? Hoa Thanh Nhã có ${total} cửa hàng ở ${groups.length} thành phố, mở cửa 06:00–21:00 hằng ngày. Ghé cửa hàng gần nhất để chọn hoa trực tiếp, hoặc đặt online để shop giao tận nơi trong ngày và gửi ảnh hoa thật trước khi giao.</p>
+  return `<p>Bạn đang tìm tiệm hoa, shop hoa tươi gần đây? Hoa Thanh Nhã có ${total} cửa hàng ở ${groups.length} khu vực, mở cửa 06:00–21:00 hằng ngày. Ghé cửa hàng gần nhất để chọn hoa trực tiếp, hoặc đặt online để shop giao tận nơi trong ngày và gửi ảnh hoa thật trước khi giao.</p>
 <h2>Danh sách ${total} cửa hàng Hoa Thanh Nhã</h2>
 ${list}
 <h2>Không có cửa hàng gần bạn?</h2>

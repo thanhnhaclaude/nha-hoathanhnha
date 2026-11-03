@@ -25,6 +25,8 @@ export const site = {
         "181 Đ. Thị Mười, P. Tân Thới Hiệp, Quận 12",
         "130 Hai Bà Trưng, Bến Nghé, Quận 1",
         "61/5 Đ. Kha Vạn Cân, Hiệp Bình Chánh, Thủ Đức",
+        "457 Đ. Nguyễn Kiệm, Phú Nhuận",
+        "71 Đ. Trần Đại Nghĩa, Bình Chánh",
       ],
     },
     {
@@ -41,6 +43,11 @@ export const site = {
         "Nha Trang: 76 Lê Hồng Phong, Phước Tân",
         "Vũng Tàu: 120 Trương Công Định, Phường 8",
         "Biên Hòa: 85 Hưng Đạo Vương, Trung Dũng",
+        "Đồng Nai: 150 Nguyễn Tất Thành",
+        "Nhơn Trạch: 511 Đ. Hùng Vương",
+        "Thống Nhất: 193 QL20",
+        "Xuân Lộc: 3741 QL1A",
+        "Định Quán: 30 QL20",
       ],
     },
   ],
@@ -64,6 +71,12 @@ export const storeAreas: Record<string, { street: string; city: string }> = {
   "shop-hoa-tuoi-nha-trang": { street: "76 Lê Hồng Phong, Phước Tân", city: "Nha Trang" },
   "shop-hoa-tuoi-vung-tau": { street: "120 Trương Công Định, Phường 8", city: "Vũng Tàu" },
   "shop-hoa-tuoi-bien-hoa": { street: "85 Hưng Đạo Vương, Trung Dũng", city: "Biên Hòa" },
+  "shop-hoa-tuoi-quan-phu-nhuan": { street: "457 Đ. Nguyễn Kiệm, Phú Nhuận", city: "TP. Hồ Chí Minh" },
+  "shop-hoa-tuoi-huyen-binh-chanh": { street: "71 Đ. Trần Đại Nghĩa, Bình Chánh", city: "TP. Hồ Chí Minh" },
+  "shop-hoa-tuoi-nhon-trach": { street: "511 Đ. Hùng Vương", city: "Nhơn Trạch" },
+  "shop-hoa-tuoi-thong-nhat": { street: "193 QL20", city: "Thống Nhất" },
+  "shop-hoa-tuoi-xuan-loc": { street: "3741 QL1A", city: "Xuân Lộc" },
+  "shop-hoa-tuoi-dinh-quan": { street: "30 QL20", city: "Định Quán" },
 };
 
 /**

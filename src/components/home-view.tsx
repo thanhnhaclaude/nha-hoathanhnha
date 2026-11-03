@@ -102,7 +102,7 @@ function HeroSplit() {
         <div>
           <p className="inline-flex items-center gap-2 rounded-full bg-surface px-3 py-1.5 text-xs font-semibold text-leaf ring-1 ring-leaf/15">
             <Clock className="size-3.5" aria-hidden />
-            Mở cửa 06:00–21:00 · 13 cửa hàng toàn quốc
+            Mở cửa 06:00–21:00 · 20 cửa hàng toàn quốc
           </p>
           <h1 id="hero-h" className="mt-5">
             <span className="eyebrow block">Shop hoa tươi Thanh Nhã · từ 2012</span>

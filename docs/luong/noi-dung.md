@@ -14,11 +14,12 @@
 
 ## Việc cần làm tiếp
 - Kiểm tra `npm run content:check` trước mỗi lần push bài. Dump `deploy/database.sql` cũ hơn site thật nên báo lỗi giả với `/gio-hoa-tuoi/`, `/bo-hoa-tuoi/`, `/shop-hoa-tuoi-dong-nai/`: đối chiếu trên site thật.
-- Sau khi `site.stores` có cửa hàng mới: đổi số 13 và 4 cửa hàng trong `area-meta.ts`, `near-me-page.ts`, chữ "thành phố" ở trang gần đây, bài PR `content/pr/01-mang-luoi-13-cua-hang.md`.
-- Chờ shop gửi số nhà Cần Giờ để thêm vào bài; bài hiện chỉ ghi số điện thoại.
+- Cập nhật bài PR nháp `content/pr/01-mang-luoi-13-cua-hang.md` (vẫn ghi 13 cửa hàng) trước khi gửi báo.
+- Chờ shop gửi số nhà Cần Giờ để thêm vào bài, rồi đổi 20 thành 21 và 6 thành 7 trong `area-meta.ts`.
 - Đổi "Thị Mười" thành "Dương Thị Mười" trong `city-pages.ts`, `area-meta.ts` sau khi shop xác nhận tên đường.
 
 ## Nhật ký
+- 2026-11-03 — Đổi số cửa hàng trong `area-meta.ts`, `near-me-page.ts` sang 20 — (commit này)
 - 2026-11-03 — Thêm bài cửa hàng Đồng Nai (150 Nguyễn Tất Thành), hẹn 12/12/2026 — (commit này)
 - 2026-11-03 — Đổi 7 bài giao hoa và ghi chú khu vực sang dạng cửa hàng theo xác nhận của shop — (commit này)
 - 2026-11-03 — Thêm 11 bài chi nhánh và khu vực, dùng chung một số điện thoại — (commit này)

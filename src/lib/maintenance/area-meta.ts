@@ -80,13 +80,13 @@ const AREAS: { path: string; title: string; description: string; minFrom?: strin
   // Tuần 1 (26/10/2026): danh mục mức A/B
   {
     path: "/shop-hoa-tuoi-gan-day/",
-    title: "Tiệm Hoa Gần Đây – 13 Cửa Hàng, Giao Trong Ngày | Hoa Thanh Nhã",
-    description: `Tìm tiệm hoa, shop hoa tươi gần đây: 13 cửa hàng Hoa Thanh Nhã ở TP.HCM, Hà Nội, Đà Nẵng, Huế, Nha Trang, Vũng Tàu, Biên Hòa, Cần Thơ. Đặt online, giao trong ngày.`,
+    title: "Tiệm Hoa Gần Đây – 20 Cửa Hàng, Giao Trong Ngày | Hoa Thanh Nhã",
+    description: `Tìm tiệm hoa, shop hoa tươi gần đây: 20 cửa hàng Hoa Thanh Nhã ở TP.HCM, Hà Nội, Đà Nẵng, Huế, Nha Trang, Vũng Tàu, Đồng Nai, Cần Thơ. Đặt online, giao trong ngày.`,
   },
   {
     path: "/shop-hoa-tuoi-thanh-pho-ho-chi-minh/",
-    title: "Shop Hoa Tươi TPHCM – 4 Cửa Hàng, Giao Nhanh | Hoa Thanh Nhã",
-    description: `Shop hoa tươi TP.HCM với 4 cửa hàng: Quận 1, Gò Vấp, Quận 12, Thủ Đức. Hoa sinh nhật, khai trương, chia buồn giao trong ngày, gửi ảnh trước. Gọi ${P}.`,
+    title: "Shop Hoa Tươi TPHCM – 6 Cửa Hàng, Giao Nhanh | Hoa Thanh Nhã",
+    description: `Shop hoa tươi TP.HCM với 6 cửa hàng: Quận 1, Gò Vấp, Quận 12, Thủ Đức, Phú Nhuận, Bình Chánh. Hoa sinh nhật, khai trương giao trong ngày. Gọi ${P}.`,
   },
   {
     path: "/shop-hoa-tuoi-quan-10/",
