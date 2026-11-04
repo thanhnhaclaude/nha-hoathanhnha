@@ -19,6 +19,7 @@ import { syncNearMePage } from "./near-me-page";
 import { syncOccasionPages } from "./occasion-pages";
 import { syncCategoryCopy } from "./category-copy";
 import { syncMeaningLinks } from "./meaning-links";
+import { moveImportedPostsToBlog } from "./blog-category";
 
 export type MaintenanceResult = { at: string; ok: boolean; log: string[]; error?: string };
 
@@ -53,6 +54,7 @@ export async function runMaintenance() {
     result.log.push(...(await syncOccasionPages(db)));
     result.log.push(...(await syncCategoryCopy(db)));
     result.log.push(...(await syncMeaningLinks(db)));
+    result.log.push(...(await moveImportedPostsToBlog(db)));
     result.ok = true;
   } catch (e) {
     result.error = (e as Error).message?.slice(0, 300) ?? String(e);
