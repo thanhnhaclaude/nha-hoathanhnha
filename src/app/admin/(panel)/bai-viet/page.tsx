@@ -15,9 +15,6 @@ export default async function PostsAdmin({ searchParams }: PageProps<"/admin/bai
   // Bài hẹn giờ: đã bật "Đăng công khai" nhưng ngày đăng ở tương lai, website chưa hiện (xem src/lib/published.ts)
   const scheduled = sp.status === "scheduled";
   const page = Math.max(1, Number(sp.page) || 1);
-  // Trang khu vực là danh mục sản phẩm (giữ URL và lưới sản phẩm), chỉ liệt kê ở đây để dễ tìm
-  const areaView = sp.view === "khu-vuc";
-  const areaFilter = and(like(categories.slug, "shop-hoa-tuoi-%"), q ? or(like(categories.name, `%${q}%`), like(categories.slug, `%${q}%`)) : undefined);
 
   // Bản ghi ẩn chứa đoạn SEO trang chủ không hiển thị ở đây
   const filters: SQL[] = [eq(pages.type, type), ne(pages.slug, HOME_SEO_SLUG)];
@@ -28,7 +25,7 @@ export default async function PostsAdmin({ searchParams }: PageProps<"/admin/bai
 
   // So sánh cùng hệ: giờ Việt Nam hiện tại biểu diễn như UTC (giống cách published_at được đọc ra)
   const now = new Date(Date.now() + 7 * 3600_000);
-  const [rows, [{ total }], cats, [{ scheduledCount }], areas] = await Promise.all([
+  const [rows, [{ total }], cats, [{ scheduledCount }]] = await Promise.all([
     db
       .select({ id: pages.id, slug: pages.slug, title: pages.title, image: pages.image, isPublished: pages.isPublished, publishedAt: pages.publishedAt })
       .from(pages)
@@ -39,12 +36,16 @@ export default async function PostsAdmin({ searchParams }: PageProps<"/admin/bai
     db.select({ total: count() }).from(pages).where(where),
     db.select().from(postCategories).orderBy(postCategories.name),
     db.select({ scheduledCount: count() }).from(pages).where(and(eq(pages.type, "post"), eq(pages.isPublished, true), gt(pages.publishedAt, sql`NOW()`))),
-    db
-      .select({ id: categories.id, name: categories.name, slug: categories.slug, n: sql<number>`(select count(*) from ${productCategories} where ${productCategories.categoryId} = ${categories.id})` })
-      .from(categories)
-      .where(areaFilter)
-      .orderBy(categories.name),
   ]);
+  // Trang khu vực là danh mục sản phẩm (giữ URL và lưới sản phẩm), liệt kê chung trong Địa Điểm để dễ tìm
+  const areaView = cat != null && cats.find((c) => c.id === cat)?.slug === "dia-diem";
+  const areas = areaView
+    ? await db
+        .select({ id: categories.id, name: categories.name, slug: categories.slug, n: sql<number>`(select count(*) from ${productCategories} where ${productCategories.categoryId} = ${categories.id})` })
+        .from(categories)
+        .where(and(like(categories.slug, "shop-hoa-tuoi-%"), q ? or(like(categories.name, `%${q}%`), like(categories.slug, `%${q}%`)) : undefined))
+        .orderBy(categories.name)
+    : [];
   const list = rows;
   const pages_ = Math.max(1, Math.ceil(total / PER_PAGE));
   const qs = (extra: Record<string, string | number>) => {
@@ -58,7 +59,7 @@ export default async function PostsAdmin({ searchParams }: PageProps<"/admin/bai
     <div className="space-y-6">
       <div className="flex flex-wrap items-center gap-3">
         <h1 className="font-display text-4xl font-bold">Bài viết & trang</h1>
-        <span className="text-sm text-muted">{areaView ? areas.length : total} mục</span>
+        <span className="text-sm text-muted">{total + areas.length} mục</span>
         <Link href={`/admin/bai-viet/moi/?type=${type}`} className="btn-primary ml-auto h-11">
           <Plus className="size-4" aria-hidden /> {type === "post" ? "Viết bài mới" : "Thêm trang"}
         </Link>
@@ -70,7 +71,7 @@ export default async function PostsAdmin({ searchParams }: PageProps<"/admin/bai
       )}
 
       <div className="flex flex-wrap items-center gap-2">
-        <Link href="/admin/bai-viet/?type=post" className={tab(type === "post" && !cat && !scheduled && !areaView)}>
+        <Link href="/admin/bai-viet/?type=post" className={tab(type === "post" && !cat && !scheduled)}>
           Tất cả bài viết
         </Link>
         <Link href="/admin/bai-viet/?type=post&status=scheduled" className={tab(scheduled)}>
@@ -82,17 +83,12 @@ export default async function PostsAdmin({ searchParams }: PageProps<"/admin/bai
               {c.name}
             </Link>
           ))}
-        <Link href="/admin/bai-viet/?type=post&view=khu-vuc" className={tab(areaView)}>
-          Khu vực{!q ? ` (${areas.length})` : ""}
-        </Link>
         <Link href="/admin/bai-viet/?type=page" className={tab(type === "page")}>
           Trang thông tin
         </Link>
         <form className="ml-auto flex gap-2">
           <input type="hidden" name="type" value={type} />
-          {cat && <input type="hidden" name="cat" value={cat} />}
-          {areaView && <input type="hidden" name="view" value="khu-vuc" />}
-          <label htmlFor="bq" className="sr-only">
+          {cat && <input type="hidden" name="cat" value={cat} />}          <label htmlFor="bq" className="sr-only">
             Tìm bài viết
           </label>
           <input id="bq" name="q" defaultValue={q} placeholder="Tiêu đề, đường dẫn…" className="field h-10 w-56 py-0" />
@@ -100,45 +96,6 @@ export default async function PostsAdmin({ searchParams }: PageProps<"/admin/bai
         </form>
       </div>
 
-      {areaView ? (
-        <div className="overflow-x-auto rounded-2xl bg-surface ring-1 ring-border">
-          <table className="w-full text-left text-sm">
-            <thead className="border-b border-border bg-surface-muted text-xs uppercase text-muted">
-              <tr>
-                <th className="px-4 py-3">Trang khu vực</th>
-                <th className="px-4 py-3">Sản phẩm</th>
-                <th className="px-4 py-3" />
-              </tr>
-            </thead>
-            <tbody>
-              {areas.map((a) => (
-                <tr key={a.id} className="border-b border-border last:border-0 hover:bg-surface-muted/60">
-                  <td className="px-4 py-3">
-                    <span className="font-medium">{a.name}</span>
-                    <span className="block text-xs text-muted">/{a.slug}/</span>
-                  </td>
-                  <td className="px-4 py-3">{Number(a.n)}</td>
-                  <td className="whitespace-nowrap px-4 py-3 text-right">
-                    <Link href="/admin/danh-muc/?kind=post" className="mr-3 text-xs text-brand-strong hover:underline">
-                      Sửa
-                    </Link>
-                    <Link href={`/${a.slug}/`} target="_blank" className="inline-flex items-center gap-1 text-xs text-brand-strong hover:underline">
-                      Xem <ExternalLink className="size-3" aria-hidden />
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-              {areas.length === 0 && (
-                <tr>
-                  <td colSpan={3} className="px-4 py-12 text-center text-muted">
-                    Không có mục nào.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      ) : (
       <div className="overflow-x-auto rounded-2xl bg-surface ring-1 ring-border">
         <table className="w-full text-left text-sm">
           <thead className="border-b border-border bg-surface-muted text-xs uppercase text-muted">
@@ -196,9 +153,8 @@ export default async function PostsAdmin({ searchParams }: PageProps<"/admin/bai
           </tbody>
         </table>
       </div>
-      )}
 
-      {!areaView && pages_ > 1 && (
+      {pages_ > 1 && (
         <div className="flex items-center justify-between text-sm">
           <span className="text-muted">
             Trang {page}/{pages_}
@@ -216,6 +172,42 @@ export default async function PostsAdmin({ searchParams }: PageProps<"/admin/bai
             )}
           </div>
         </div>
+      )}
+
+      {areas.length > 0 && (
+        <>
+          <h2 className="text-lg font-semibold">Trang khu vực ({areas.length})</h2>
+          <div className="overflow-x-auto rounded-2xl bg-surface ring-1 ring-border">
+            <table className="w-full text-left text-sm">
+              <thead className="border-b border-border bg-surface-muted text-xs uppercase text-muted">
+                <tr>
+                  <th className="px-4 py-3">Trang khu vực</th>
+                  <th className="px-4 py-3">Sản phẩm</th>
+                  <th className="px-4 py-3" />
+                </tr>
+              </thead>
+              <tbody>
+                {areas.map((a) => (
+                  <tr key={a.id} className="border-b border-border last:border-0 hover:bg-surface-muted/60">
+                    <td className="px-4 py-3">
+                      <span className="font-medium">{a.name}</span>
+                      <span className="block text-xs text-muted">/{a.slug}/</span>
+                    </td>
+                    <td className="px-4 py-3">{Number(a.n)}</td>
+                    <td className="whitespace-nowrap px-4 py-3 text-right">
+                      <Link href="/admin/danh-muc/?kind=post" className="mr-3 text-xs text-brand-strong hover:underline">
+                        Sửa
+                      </Link>
+                      <Link href={`/${a.slug}/`} target="_blank" className="inline-flex items-center gap-1 text-xs text-brand-strong hover:underline">
+                        Xem <ExternalLink className="size-3" aria-hidden />
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
     </div>
   );

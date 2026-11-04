@@ -160,7 +160,7 @@ async function CategoryList({ kind }: { kind: "product" | "post" }) {
       ) : (
         <>
           {table(postRows.map((r) => ({ ...r, depth: 0 })), "post")}
-          <h2 className="text-lg font-semibold">Khu vực</h2>
+          <h2 className="text-lg font-semibold">Trang khu vực trong Địa Điểm</h2>
           <p className="text-sm text-muted">Trang khu vực giữ nguyên đường dẫn và lưới sản phẩm, được liệt kê trên trang Địa Điểm. Số bên phải là số sản phẩm.</p>
           {table(ordered.filter((r) => isArea(r.slug)), "product")}
         </>
