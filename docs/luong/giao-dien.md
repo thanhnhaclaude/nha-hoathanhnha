@@ -9,11 +9,11 @@
 - Font, cỡ chữ theo flowervsflorist.com (178abec).
 
 ## Việc cần làm tiếp
-- `security-autofix.yml` chỉ quét `--omit=dev`, còn Hostinger quét cả gói dev: lỗ hổng gói dev phải vá tay.
 - `npm run lint` còn 2 lỗi `react-hooks/purity` có từ trước (`post-form.tsx` và 1 chỗ khác), không chặn build.
 - Khi shop gửi số nhà Cần Giờ: thêm vào `site.stores`, `storeAreas` và đổi "20 cửa hàng" trong `home-view.tsx` thành 21.
 
 ## Nhật ký
+- 2026-11-04 — `security-autofix.yml` quét cả gói dev, thêm `.github/dependabot.yml` (hàng tuần, chờ 7 ngày, không tự gộp) — (commit này)
 - 2026-11-04 — Vá CVE-2026-118764: nâng eslint 10, ép minimatch ^11.0.4 (chỉ đồ nghề dev, web không dùng) — (commit này)
 - 2026-11-03 — Thêm 7 cửa hàng vào `site.ts`, trang chủ ghi 20 cửa hàng, chủ shop cho làm trong phiên Nội dung — (commit này)
 - 2026-10-30 — Tạo sổ luồng từ CLAUDE.md và lịch sử commit — (commit này)

@@ -1,0 +1,19 @@
+# Mỗi tuần gom bản nhỏ vào một PR; bản lớn thành PR riêng. Không tự gộp: chủ shop xem rồi mới đưa lên main.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "08:00"
+      timezone: Asia/Ho_Chi_Minh
+    # Chờ 7 ngày với bản mới phát hành, tránh dính gói độc vừa bị tung ra
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 5
+    groups:
+      ban-nho:
+        update-types:
+          - minor
+          - patch

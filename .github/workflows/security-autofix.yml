@@ -1,5 +1,5 @@
 # Tự vá lỗ hổng npm (vd. Hostinger báo "Các phần phụ thuộc chưa được vá lỗi" như nodemailer 25/10/2026).
-# Mỗi sáng: quét npm audit các gói chạy trên web; có lỗ hổng thì npm audit fix (không nhảy phiên bản lớn),
+# Mỗi sáng: quét npm audit cả gói dev (Hostinger quét cả gói dev); có lỗ hổng thì npm audit fix (không nhảy phiên bản lớn),
 # kiểm tra npm ci + build + tsc; đạt thì commit thẳng vào main. Không tự vá được hoặc build lỗi -> mở Issue báo chủ shop.
 # Sau khi có commit mới, Hostinger cần tái triển khai (hoặc bật tự động triển khai khi có push).
 name: Tự vá lỗ hổng npm
@@ -34,7 +34,7 @@ jobs:
       - name: Quét lỗ hổng
         id: audit
         run: |
-          if npm audit --omit=dev --audit-level=low > audit-truoc.txt; then
+          if npm audit --audit-level=low > audit-truoc.txt; then
             echo "vuln=0" >> "$GITHUB_OUTPUT"
           else
             echo "vuln=1" >> "$GITHUB_OUTPUT"
@@ -43,7 +43,7 @@ jobs:
 
       - name: Tự vá (npm audit fix, không nâng phiên bản lớn)
         if: steps.audit.outputs.vuln == '1'
-        run: npm audit fix --omit=dev --no-fund || true
+        run: npm audit fix --no-fund || true
 
       - name: Kiểm tra bản vá (npm ci, build, tsc)
         if: steps.audit.outputs.vuln == '1'
@@ -52,7 +52,7 @@ jobs:
           npm ci --no-audit --no-fund
           npm run build
           npx tsc --noEmit
-          if npm audit --omit=dev --audit-level=low > audit-sau.txt; then
+          if npm audit --audit-level=low > audit-sau.txt; then
             echo "clean=1" >> "$GITHUB_OUTPUT"
           else
             echo "clean=0" >> "$GITHUB_OUTPUT"
