@@ -19,6 +19,7 @@
 - Đổi "Thị Mười" thành "Dương Thị Mười" trong `city-pages.ts`, `area-meta.ts` sau khi shop xác nhận tên đường.
 
 ## Nhật ký
+- 2026-11-04 — Trang hệ thống đổi tiêu đề thành "Hệ thống shop hoa tươi", thêm ảnh đại diện — (commit này)
 - 2026-11-04 — Mọi trang khu vực thành mục trong danh mục Địa Điểm (`syncAreaPostEntries`), URL vẫn hiển thị trang khu vực; loại khỏi bài liên quan và post-sitemap — (commit này)
 - 2026-11-04 — Thêm địa chỉ shop từ danh sách hệ thống vào trang khu vực (`shop-addresses.ts`, `shop-address-block.ts`), chưa khai báo Florist cho các địa chỉ này — (commit này)
 - 2026-11-04 — Đổi tiêu đề trang hệ thống thành "Hệ thống shop của chúng tôi", URL giữ nguyên — (commit này)
