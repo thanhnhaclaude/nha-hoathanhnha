@@ -12,6 +12,16 @@ import { site } from "../site";
 const P = site.phoneDisplay;
 
 const AREAS: { path: string; title: string; description: string; minFrom?: string }[] = [
+  ...[
+    ["shop-hoa-tuoi-chau-thanh-tay-ninh", "Châu Thành Tây Ninh"],
+    ["shop-hoa-tuoi-tan-chau-tay-ninh", "Tân Châu Tây Ninh"],
+    ["shop-hoa-tuoi-tan-phu", "Tân Phú Đồng Nai"],
+    ["shop-hoa-tuoi-phan-rang", "Phan Rang"],
+  ].map(([slug, name]) => ({
+    path: `/${slug}/`,
+    title: `Shop Hoa Tươi ${name} – Giao Tận Nơi | Hoa Thanh Nhã`,
+    description: `Shop hoa tươi ${name}: hoa sinh nhật, khai trương, chia buồn, giao trong ngày, gửi ảnh trước khi giao, tặng thiệp. Gọi ${P}.`,
+  })),
   {
     path: "/shop-hoa-tuoi-quan-tan-phu/",
     title: "Shop Hoa Tươi Tân Phú – Giao Nhanh, Gửi Ảnh Trước | Hoa Thanh Nhã",
@@ -29,7 +39,7 @@ const AREAS: { path: string; title: string; description: string; minFrom?: strin
   },
   {
     path: "/shop-hoa-tuoi-quan-thanh-khe/",
-    title: "Shop Hoa Tươi Thanh Khê Đà Nẵng – Cửa Hàng Nguyễn Hoàng | Hoa Thanh Nhã",
+    title: "Shop Hoa Tươi Thanh Khê Đà Nẵng | Hoa Thanh Nhã",
     description: `Cửa hàng hoa tại 396 Nguyễn Hoàng, Thanh Khê, Đà Nẵng. Hoa sinh nhật, khai trương, chia buồn giao trong ngày, gửi ảnh trước. Gọi ${P}.`,
   },
   {
@@ -199,6 +209,33 @@ const AREAS: { path: string; title: string; description: string; minFrom?: strin
 ];
 
 const k = (n: number) => `${Math.round(n / 1000)}K`;
+
+/** Mô tả cũ của WordPress vô nghĩa (vd. "Xem thêm: …", "gio-trai-cay"). Bài viết sửa cả excerpt để thẻ bài hiển thị đúng. */
+const DESCRIPTIONS: Record<string, string> = {
+  "y-nghia-cua-hoa-tigon": "Tìm hiểu ý nghĩa của hoa tigon, đặc điểm loài hoa và gợi ý dịp nên tặng. Tham khảo thêm các mẫu hoa tươi tại Hoa Thanh Nhã.",
+  "y-nghia-cua-hoa-nguyet-que": "Tìm hiểu ý nghĩa của hoa nguyệt quế, đặc điểm loài hoa và gợi ý dịp nên tặng. Tham khảo thêm các mẫu hoa tươi tại Hoa Thanh Nhã.",
+  "y-nghia-cua-hoa-tulip": "Tìm hiểu ý nghĩa của hoa tulip, đặc điểm loài hoa và gợi ý dịp nên tặng. Tham khảo thêm các mẫu hoa tươi tại Hoa Thanh Nhã.",
+  "y-nghia-cua-hoa-hong-trang": "Tìm hiểu ý nghĩa của hoa hồng trắng, đặc điểm loài hoa và gợi ý dịp nên tặng. Tham khảo thêm các mẫu hoa tươi tại Hoa Thanh Nhã.",
+  "chinh-sach-hoan-tien-va-tra-hang": "Chính sách vận chuyển, hoàn tiền và trả hàng của Hoa Thanh Nhã: điều kiện áp dụng và cách liên hệ khi cần hỗ trợ đơn hoa.",
+  "huong-dan-dat-hang": "Hướng dẫn đặt hoa tại Hoa Thanh Nhã từng bước, từ chọn mẫu hoa đến gửi thông tin người nhận và hoàn tất đơn hàng.",
+  "quy-trinh-dien-hoa": "Quy trình điện hoa của Hoa Thanh Nhã: các bước từ lúc shop nhận đơn đến khi hoa được giao tới người nhận.",
+  "huong-dan-thanh-toan": "Hướng dẫn thanh toán khi đặt hoa tại Hoa Thanh Nhã: các hình thức thanh toán và cách xác nhận đơn hàng.",
+  "cau-hoi-thuong-gap": "Câu hỏi thường gặp khi đặt hoa tại Hoa Thanh Nhã: thanh toán, giao hoa, thiệp và các lưu ý khi đặt online.",
+  "cua-hang": "Tất cả mẫu hoa tươi tại Shop hoa Thanh Nhã: hoa bó, hoa giỏ, hoa khai trương, hoa chia buồn và lan hồ điệp, đặt online giao tận nơi.",
+  "tin-tuc": "Tin tức và chia sẻ từ Shop hoa tươi Thanh Nhã: cách chọn hoa theo dịp, bảng giá và kinh nghiệm đặt hoa.",
+  "gio-trai-cay": `Giỏ trái cây biếu tặng tại Hoa Thanh Nhã cho dịp thăm hỏi, chúc mừng, đặt online giao tận nơi. Gọi ${P}.`,
+};
+
+export async function syncDescriptions(db: Connection): Promise<string[]> {
+  for (const [slug, description] of Object.entries(DESCRIPTIONS)) {
+    await db.query("insert into seo_meta (path, description) values (?, ?) on duplicate key update description = values(description)", [`/${slug}/`, description]);
+    await db.query("update pages set excerpt = ? where slug = ? and type = 'post'", [description, slug]);
+  }
+  // Tên danh mục cũ là "gio-trai-cay" nên tiêu đề và H1 hiện nguyên chuỗi này
+  await db.query("update categories set name = 'Giỏ Trái Cây' where slug = 'gio-trai-cay'");
+  await db.query("update seo_meta set title = 'Giỏ Trái Cây Biếu Tặng | Hoa Thanh Nhã' where path = '/gio-trai-cay/'");
+  return [`✓ Mô tả tìm kiếm: sửa ${Object.keys(DESCRIPTIONS).length} trang`];
+}
 
 export async function syncAreaMeta(db: Connection): Promise<string[]> {
   const skipped: string[] = [];

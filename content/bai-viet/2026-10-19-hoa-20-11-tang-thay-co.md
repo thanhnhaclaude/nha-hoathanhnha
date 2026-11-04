@@ -1,5 +1,5 @@
 ---
-title: Hoa 20/11 tặng thầy cô: chọn mẫu ý nghĩa theo ngân sách
+title: Hoa 20/11 tặng thầy cô: chọn mẫu theo ngân sách
 slug: hoa-20-11-tang-thay-co
 description: Gợi ý hoa 20/11 tặng thầy cô theo ngân sách từ 250.000đ, ý nghĩa từng loài hoa, cách ghi thiệp và lưu ý giờ giao tận trường ngày Nhà giáo.
 keyword: hoa 20/11

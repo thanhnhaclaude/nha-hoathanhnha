@@ -1,5 +1,5 @@
 ---
-title: Lời chúc 20/11 ngắn gọn, ý nghĩa để ghi thiệp tặng thầy cô
+title: Lời chúc 20/11 ngắn gọn để ghi thiệp tặng thầy cô
 slug: loi-chuc-20-11-ghi-thiep
 description: Hơn 35 lời chúc 20/11 ngắn gọn để ghi thiệp tặng thầy cô: chia theo cấp học, lời của phụ huynh, học trò cũ, kèm cách trình bày thiệp đẹp.
 keyword: lời chúc 20/11

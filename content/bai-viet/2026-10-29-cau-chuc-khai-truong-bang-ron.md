@@ -1,5 +1,5 @@
 ---
-title: Câu chúc khai trương ghi băng rôn: 40 mẫu hay theo ngành
+title: Câu chúc khai trương ghi băng rôn: 40 mẫu theo ngành
 slug: cau-chuc-khai-truong-bang-ron
 description: Tổng hợp câu chúc khai trương ghi băng rôn ngắn gọn, dễ đọc: mẫu chung, theo ngành nghề, của bạn bè và đối tác, kèm cách ghi tên người tặng đúng.
 keyword: câu chúc khai trương

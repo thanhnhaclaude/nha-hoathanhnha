@@ -1,7 +1,7 @@
 import { livePage, notCategoryPage } from "./published";
 import "server-only";
-import { and, eq, isNotNull, max } from "drizzle-orm";
-import { categories, db, pages, postCategories, productCategories, products, seoMeta } from "./db";
+import { and, count, eq, isNotNull, max } from "drizzle-orm";
+import { categories, db, pageCategories, pages, postCategories, productCategories, products, seoMeta } from "./db";
 import { HOME_SEO_SLUG } from "./constants";
 import { site } from "./site";
 
@@ -22,6 +22,8 @@ async function oldEntries(name: SitemapName) {
     .where(and(eq(seoMeta.sitemap, name), isNotNull(seoMeta.position)));
   return new Map(rows.map((r) => [r.path, r]));
 }
+
+const PARENT_CATEGORIES = ["chu-de", "hoa-tuoi", "hoa-cuoi", "mau-sac", "qua-tang"];
 
 const newest = (a: Date | null, b: Date | null) => (a && b ? (a > b ? a : b) : (a ?? b));
 
@@ -51,9 +53,9 @@ export async function sitemapEntries(name: SitemapName): Promise<Entry[]> {
     return [{ path: "/cua-hang/", lastmod: newest }, ...items];
   }
   if (name === "category") {
-    const rows = await db.select({ slug: postCategories.slug }).from(postCategories);
-    // Rank Math không đưa danh mục rỗng vào sitemap -> chỉ giữ những danh mục có trong sitemap cũ hoặc có bài
-    const postCats = merge(old, rows.map((r) => ({ path: `/${r.slug}/`, updatedAt: null }))).filter((e) => old.has(e.path) || e.lastmod);
+    // Danh mục bài viết có bài (hoặc đã có trong sitemap cũ)
+    const rows = await db.select({ slug: postCategories.slug, n: count(pageCategories.pageId) }).from(postCategories).leftJoin(pageCategories, eq(pageCategories.categoryId, postCategories.id)).groupBy(postCategories.slug);
+    const postCats = merge(old, rows.filter((r) => r.n > 0 || old.has(`/${r.slug}/`)).map((r) => ({ path: `/${r.slug}/`, updatedAt: null })));
     // Danh mục sản phẩm đang có hàng (website cũ không khai báo trong sitemap): nối vào sau, lastmod = sản phẩm mới sửa nhất
     const productCats = await db
       .select({ slug: categories.slug, updatedAt: max(products.updatedAt) })
@@ -68,6 +70,8 @@ export async function sitemapEntries(name: SitemapName): Promise<Entry[]> {
         .map((c) => ({ path: `/${c.slug}/`, lastmod: c.updatedAt ? new Date(c.updatedAt) : null }))
         .filter((e) => !seen.has(e.path))
         .sort((a, b) => a.path.localeCompare(b.path)),
+      // Danh mục cha: sản phẩm gán ở danh mục con nên truy vấn trên không thấy, trang vẫn có mẫu và được index
+      ...PARENT_CATEGORIES.map((slug) => ({ path: `/${slug}/`, lastmod: null })).filter((e) => !seen.has(e.path)),
     ];
   }
   // page: trang chủ + các trang hệ thống + trang nội dung
@@ -75,8 +79,8 @@ export async function sitemapEntries(name: SitemapName): Promise<Entry[]> {
     .select({ slug: pages.slug, updatedAt: pages.updatedAt })
     .from(pages)
     .where(and(eq(pages.type, "page"), livePage()));
-  // Không đưa trang noindex (giỏ hàng, thanh toán, tài khoản, yêu thích) vào sitemap: tín hiệu mâu thuẫn với Google
-  const fixed = ["/", "/cua-hang/"].map((path) => ({ path, updatedAt: null }));
+  // /cua-hang/ đã ở product-sitemap. Không đưa trang noindex (giỏ hàng, thanh toán, tài khoản, yêu thích) vào sitemap: tín hiệu mâu thuẫn với Google
+  const fixed = ["/"].map((path) => ({ path, updatedAt: null }));
   return merge(old, [...fixed, ...rows.filter((r) => r.slug !== HOME_SEO_SLUG).map((r) => ({ path: `/${r.slug}/`, updatedAt: r.updatedAt }))]);
 }
 

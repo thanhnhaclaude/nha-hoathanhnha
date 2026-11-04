@@ -17,6 +17,7 @@ const columns = [
     links: [
       { label: "Câu hỏi thường gặp", href: "/cau-hoi-thuong-gap/" },
       { label: "Chính sách đổi/trả", href: "/huong-dan-doi-tra/" },
+      { label: "Chính sách hoàn tiền", href: "/chinh-sach-hoan-tien-va-tra-hang/" },
       { label: "Hướng dẫn đặt hàng", href: "/huong-dan-dat-hang/" },
       { label: "Hướng dẫn thanh toán", href: "/huong-dan-thanh-toan/" },
       { label: "Chính sách bảo mật", href: "/chinh-sach-bao-mat/" },

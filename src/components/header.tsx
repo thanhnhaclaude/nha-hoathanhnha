@@ -81,12 +81,15 @@ export function Header() {
         <ul className="container-x flex items-center justify-between">
           {mainMenu.map((group, i) => (
             <li key={group.slug} className="group relative">
-              <Link
-                href={`/${group.slug}/`}
-                className="relative flex h-12 items-center px-2 text-[13px] font-semibold uppercase tracking-wider text-foreground transition-colors after:absolute after:inset-x-2 after:bottom-2 after:h-0.5 after:origin-left after:scale-x-0 after:rounded-full after:bg-brand after:transition-transform after:duration-200 hover:text-brand-strong group-hover:after:scale-x-100 group-focus-within:after:scale-x-100 xl:px-3"
-              >
-                {group.label}
-              </Link>
+              {group.noPage ? (
+                <span tabIndex={0} className="relative flex h-12 items-center px-2 text-[13px] font-semibold uppercase tracking-wider text-foreground transition-colors after:absolute after:inset-x-2 after:bottom-2 after:h-0.5 after:origin-left after:scale-x-0 after:rounded-full after:bg-brand after:transition-transform after:duration-200 hover:text-brand-strong group-hover:after:scale-x-100 group-focus-within:after:scale-x-100 xl:px-3 cursor-default">
+                  {group.label}
+                </span>
+              ) : (
+                <Link href={`/${group.slug}/`} className="relative flex h-12 items-center px-2 text-[13px] font-semibold uppercase tracking-wider text-foreground transition-colors after:absolute after:inset-x-2 after:bottom-2 after:h-0.5 after:origin-left after:scale-x-0 after:rounded-full after:bg-brand after:transition-transform after:duration-200 hover:text-brand-strong group-hover:after:scale-x-100 group-focus-within:after:scale-x-100 xl:px-3">
+                  {group.label}
+                </Link>
+              )}
               <div className={`invisible absolute ${i >= mainMenu.length - 2 ? "right-0" : "left-0"} top-full z-50 w-64 translate-y-1 rounded-2xl border border-border bg-surface p-2 opacity-0 shadow-[0_18px_40px_-16px_rgba(31,26,23,0.3)] transition-all duration-200 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100`}>
                 <ul className="max-h-[70vh] overflow-auto">
                   {group.children.map((item) => (

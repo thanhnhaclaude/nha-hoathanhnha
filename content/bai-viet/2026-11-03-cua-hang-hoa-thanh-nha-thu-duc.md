@@ -1,5 +1,5 @@
 ---
-title: Cửa hàng hoa Thanh Nhã Thủ Đức: địa chỉ và cách đặt hoa
+title: Cửa hàng hoa Thanh Nhã Thủ Đức: 77 Lê Văn Chí
 slug: cua-hang-hoa-thanh-nha-thu-duc
 description: Cửa hàng hoa Thanh Nhã Thủ Đức ở 77 Lê Văn Chí, Linh Trung: hoa tốt nghiệp, sinh nhật, khai trương giao tận nơi. Hotline 0396.72.73.74.
 keyword: cửa hàng hoa Thanh Nhã Thủ Đức

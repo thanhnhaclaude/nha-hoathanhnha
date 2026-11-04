@@ -1,5 +1,5 @@
 ---
-title: Hoa sinh nhật tặng mẹ: chọn loài hoa, màu sắc và lời chúc ý nghĩa
+title: Hoa sinh nhật tặng mẹ: chọn hoa, màu sắc và lời chúc
 slug: hoa-sinh-nhat-tang-me
 description: Gợi ý hoa sinh nhật tặng mẹ theo tuổi và sở thích: cẩm chướng, lan hồ điệp, giỏ hoa tông hồng, kèm lời chúc ghi thiệp và cách đặt hoa giao tận nhà.
 keyword: hoa sinh nhật tặng mẹ

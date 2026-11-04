@@ -54,9 +54,13 @@ export function MobileMenu({ menu }: { menu: MenuGroup[] }) {
             return (
               <div key={g.slug} className="border-b border-border/70 last:border-0">
                 <div className="flex items-center">
-                  <Link href={`/${g.slug}/`} className="flex-1 px-3 py-3 text-sm font-semibold uppercase tracking-wider">
-                    {g.label}
-                  </Link>
+                  {g.noPage ? (
+                    <span className="flex-1 px-3 py-3 text-sm font-semibold uppercase tracking-wider">{g.label}</span>
+                  ) : (
+                    <Link href={`/${g.slug}/`} className="flex-1 px-3 py-3 text-sm font-semibold uppercase tracking-wider">
+                      {g.label}
+                    </Link>
+                  )}
                   <button
                     type="button"
                     onClick={() => setExpanded(isOpen ? null : g.slug)}

@@ -1,8 +1,13 @@
-export type MenuGroup = { label: string; slug: string; children: { label: string; slug: string }[] };
+/** noPage: nhóm không có sản phẩm riêng (trang noindex), chỉ mở danh sách con, không gắn link. */
+export type MenuGroup = { label: string; slug: string; noPage?: true; children: { label: string; slug: string }[] };
 
 const c = (label: string, slug: string) => ({ label, slug });
 
-/** Cấu trúc menu giữ nguyên như website hiện tại (đường dẫn /<slug>/ không đổi để giữ SEO). */
+/**
+ * Cấu trúc menu theo website cũ (đường dẫn /<slug>/ không đổi để giữ SEO). Danh mục chưa có mẫu (noindex) không đưa vào menu,
+ * URL vẫn còn; khi có sản phẩm thì thêm lại: bình hoa, hộp hoa, hộp mica, hoa thả bình, hoa tulip, sen đá, trang trí lễ đường,
+ * tự thiết kế, màu kết hợp, gấu bông, chocolate, nến thơm, bánh kem Brodard, bánh kem Tous Les Jours, hamper.
+ */
 export const mainMenu: MenuGroup[] = [
   {
     label: "Chủ đề",
@@ -29,6 +34,7 @@ export const mainMenu: MenuGroup[] = [
   {
     label: "Đối tượng",
     slug: "doi-tuong",
+    noPage: true,
     children: [
       c("Hoa Tặng Người Yêu", "hoa-tang-nguoi-yeu"),
       c("Hoa Tặng Bạn Bè", "hoa-tang-ban-be"),
@@ -45,13 +51,10 @@ export const mainMenu: MenuGroup[] = [
   {
     label: "Kiểu dáng",
     slug: "kieu-dang",
+    noPage: true,
     children: [
       c("Bó Hoa Tươi", "bo-hoa-tuoi"),
       c("Giỏ Hoa Tươi", "gio-hoa-tuoi"),
-      c("Bình Hoa Tươi", "binh-hoa-tuoi"),
-      c("Hộp Hoa Tươi", "hop-hoa-tuoi"),
-      c("Hộp Mica", "hop-mica"),
-      c("Hoa Thả Bình", "hoa-tha-binh"),
       c("Lẵng Hoa Chia Buồn", "lang-hoa-chia-buon"),
       c("Lẵng Hoa Khai Trương", "lang-hoa-khai-truong"),
     ],
@@ -64,12 +67,10 @@ export const mainMenu: MenuGroup[] = [
       c("Hoa Hướng Dương", "hoa-huong-duong"),
       c("Hoa Cúc Mẫu Đơn", "hoa-cuc-mau-don"),
       c("Hoa Đồng Tiền", "hoa-dong-tien"),
-      c("Hoa Tulip", "hoa-tulip"),
       c("Hoa Cát Tường", "hoa-cat-tuong"),
       c("Hoa Ly", "hoa-ly"),
       c("Cẩm Chướng", "cam-chuong"),
       c("Lan Hồ Điệp", "lan-ho-diep"),
-      c("Sen Đá", "sen-da"),
       c("Only Rose", "only-rose"),
       c("Baby Flower", "baby-flower"),
     ],
@@ -81,9 +82,7 @@ export const mainMenu: MenuGroup[] = [
       c("Hoa Cưới Cầm Tay", "hoa-cuoi-cam-tay"),
       c("Hoa Bàn Gia Tiên", "hoa-ban-gia-tien"),
       c("Hoa Bàn Gallery", "hoa-ban-gallery"),
-      c("Trang Trí Lễ Đường", "trang-tri-le-duong"),
       c("Xe Hoa", "xe-hoa"),
-      c("Tự Thiết Kế", "tu-thiet-ke"),
     ],
   },
   {
@@ -97,12 +96,12 @@ export const mainMenu: MenuGroup[] = [
       c("Màu Cam", "mau-cam"),
       c("Màu Xanh", "mau-xanh"),
       c("Màu Tím", "mau-tim"),
-      c("Màu Kết Hợp", "mau-ket-hop"),
     ],
   },
   {
     label: "Bộ sưu tập",
     slug: "bo-suu-tap",
+    noPage: true,
     children: [
       c("Hoa Cao Cấp", "hoa-cao-cap"),
       c("Hoa Sự Kiện", "hoa-su-kien"),
@@ -121,12 +120,6 @@ export const mainMenu: MenuGroup[] = [
     slug: "qua-tang",
     children: [
       c("Giỏ Trái Cây", "gio-trai-cay"),
-      c("Gấu Bông", "gau-bong"),
-      c("Chocolate", "chocolate"),
-      c("Nến Thơm", "nen-thom"),
-      c("Bánh Kem Brodard", "banh-kem-brodard"),
-      c("Bánh Kem Tous Les Jours", "banh-kem-tous-les-jours"),
-      c("Hamper", "hamper"),
     ],
   },
 ];

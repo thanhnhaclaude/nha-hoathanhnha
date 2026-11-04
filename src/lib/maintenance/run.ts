@@ -12,7 +12,7 @@ import { fixSeoTitleCodes } from "./seo-title-fix";
 import { applyProductVisibility } from "./product-visibility";
 import { syncPricePages } from "./price-pages";
 import { fillThinAreaPages, syncCityPages } from "./city-pages";
-import { syncAreaMeta } from "./area-meta";
+import { syncAreaMeta, syncDescriptions } from "./area-meta";
 import { syncSeasonalPages } from "./seasonal-pages";
 import { fillEmptyCategories } from "./category-fill";
 import { syncNearMePage } from "./near-me-page";
@@ -49,6 +49,7 @@ export async function runMaintenance() {
     result.log.push(...(await syncCityPages(db)));
     result.log.push(...(await fillThinAreaPages(db)));
     result.log.push(...(await syncAreaMeta(db)));
+    result.log.push(...(await syncDescriptions(db)));
     result.log.push(...(await syncSeasonalPages(db)));
     result.log.push(...(await fillEmptyCategories(db)));
     result.log.push(...(await syncNearMePage(db)));
