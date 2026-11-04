@@ -16,6 +16,7 @@ import { WishlistButton } from "@/components/wishlist";
 import Link from "next/link";
 import type { Page, PostCategory } from "@/lib/db/schema";
 import {
+  getAreaCategories,
   getCategoryBySlug,
   getCategoryByWooId,
   getPageBySlug,
@@ -299,7 +300,11 @@ function productGridCols(count: number) {
 }
 
 async function PostArchiveView({ category, page }: { category: PostCategory; page: number }) {
-  const [{ items, pages, total }, allCats] = await Promise.all([getPostsInCategory(category.id, { page }), getPostCategoriesWithCounts()]);
+  const [{ items, pages, total }, allCats, areas] = await Promise.all([
+    getPostsInCategory(category.id, { page }),
+    getPostCategoriesWithCounts(),
+    category.slug === "dia-diem" ? getAreaCategories() : [],
+  ]);
   const base = canonicalPath(category.slug);
   const link = (n: number) => (n === 1 ? base : `${base}?page=${n}`);
   return (
@@ -352,6 +357,20 @@ async function PostArchiveView({ category, page }: { category: PostCategory; pag
             </Link>
           )}
         </nav>
+      )}
+      {areas.length > 0 && (
+        <section className="mt-12">
+          <h2 className="heading-display text-2xl sm:text-3xl">Shop hoa tươi theo khu vực</h2>
+          <ul className="mt-6 grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2 lg:grid-cols-4">
+            {areas.map((a) => (
+              <li key={a.slug}>
+                <Link href={canonicalPath(a.slug)} className="block py-1 hover:text-brand-strong hover:underline">
+                  {a.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
       )}
     </div>
   );

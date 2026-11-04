@@ -39,16 +39,19 @@ export default async function CategoriesAdmin({ searchParams }: PageProps<"/admi
 }
 
 async function CategoryList({ kind }: { kind: "product" | "post" }) {
-  const rows =
-    kind === "product"
+  const rows = await db
+    .select({ id: categories.id, name: categories.name, slug: categories.slug, parentId: categories.parentId, description: categories.description, n: sql<number>`(select count(*) from ${productCategories} where ${productCategories.categoryId} = ${categories.id})` })
+    .from(categories)
+    .orderBy(categories.name);
+  const postRows =
+    kind === "post"
       ? await db
-          .select({ id: categories.id, name: categories.name, slug: categories.slug, parentId: categories.parentId, description: categories.description, n: sql<number>`(select count(*) from ${productCategories} where ${productCategories.categoryId} = ${categories.id})` })
-          .from(categories)
-          .orderBy(categories.name)
-      : await db
           .select({ id: postCategories.id, name: postCategories.name, slug: postCategories.slug, parentId: sql<number | null>`null`, description: postCategories.description, n: sql<number>`(select count(*) from ${pageCategories} where ${pageCategories.categoryId} = ${postCategories.id})` })
           .from(postCategories)
-          .orderBy(postCategories.name);
+          .orderBy(postCategories.name)
+      : [];
+  // Trang khu vực vẫn là danh mục sản phẩm (giữ lưới sản phẩm và URL), chỉ hiển thị ở tab Danh mục bài viết
+  const isArea = (slug: string) => slug === "khu-vuc" || slug.startsWith("shop-hoa-tuoi-");
   const roots = rows.filter((r) => r.parentId == null);
   const childrenOf = (id: number) => rows.filter((r) => r.parentId === id);
   const ordered = roots.flatMap((r) => [{ ...r, depth: 0 }, ...childrenOf(r.id).flatMap((c) => [{ ...c, depth: 1 }, ...childrenOf(c.id).map((g) => ({ ...g, depth: 2 }))])]);
@@ -64,6 +67,56 @@ async function CategoryList({ kind }: { kind: "product" | "post" }) {
           </option>
         ))}
     </select>
+  );
+  const table = (items: ((typeof rows)[number] & { depth: number })[], rowKind: "product" | "post") => (
+    <div className="overflow-x-auto rounded-2xl bg-surface ring-1 ring-border">
+      <table className="w-full text-left text-sm">
+        <thead className="border-b border-border bg-surface-muted text-xs uppercase text-muted">
+          <tr>
+            <th className="px-4 py-3">Tên</th>
+            <th className="px-4 py-3">{rowKind === "product" ? "Sản phẩm" : "Bài viết"}</th>
+            <th className="px-4 py-3" />
+          </tr>
+        </thead>
+        <tbody>
+          {items.map((r) => (
+            <tr key={r.id} className="border-b border-border align-top last:border-0">
+              <td className="px-4 py-3" style={{ paddingLeft: `${1 + r.depth * 1.5}rem` }}>
+                <details>
+                  <summary className="cursor-pointer">
+                    <span className="font-medium">{r.name}</span> <span className="text-xs text-muted">/{r.slug}/</span>
+                  </summary>
+                  <form action={saveCategory} className="mt-3 grid max-w-2xl gap-3">
+                    <input type="hidden" name="kind" value={rowKind} />
+                    <input type="hidden" name="tab" value={kind} />
+                    <input type="hidden" name="id" value={r.id} />
+                    <input name="name" defaultValue={r.name} required className="field" aria-label="Tên" />
+                    <input name="slug" defaultValue={r.slug} className="field" aria-label="Đường dẫn" />
+                    <p className="text-xs text-muted">Đổi đường dẫn của trang đã có thứ hạng sẽ làm mất thứ hạng của đường dẫn cũ.</p>
+                    {rowKind === "product" && parentSelect(r.parentId, r.id)}
+                    <textarea name="description" rows={6} defaultValue={r.description ?? ""} className="field font-mono text-xs" aria-label="Mô tả" />
+                    <button className="btn-primary h-10 min-h-0 w-fit">Lưu</button>
+                  </form>
+                </details>
+              </td>
+              <td className="px-4 py-3">{Number(r.n)}</td>
+              <td className="whitespace-nowrap px-4 py-3 text-right">
+                <Link href={`/${r.slug}/`} target="_blank" className="mr-3 inline-flex items-center gap-1 text-xs text-brand-strong hover:underline">
+                  Xem <ExternalLink className="size-3" aria-hidden />
+                </Link>
+                {Number(r.n) === 0 && (rowKind === "post" || childrenOf(r.id).length === 0) && (
+                  <form action={deleteCategory} className="inline">
+                    <input type="hidden" name="kind" value={rowKind} />
+                    <input type="hidden" name="id" value={r.id} />
+                    <button className="cursor-pointer text-xs text-danger hover:underline">Xóa</button>
+                  </form>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 
   return (
@@ -102,53 +155,16 @@ async function CategoryList({ kind }: { kind: "product" | "post" }) {
         </form>
       </details>
 
-      <div className="overflow-x-auto rounded-2xl bg-surface ring-1 ring-border">
-        <table className="w-full text-left text-sm">
-          <thead className="border-b border-border bg-surface-muted text-xs uppercase text-muted">
-            <tr>
-              <th className="px-4 py-3">Tên</th>
-              <th className="px-4 py-3">{kind === "product" ? "Sản phẩm" : "Bài viết"}</th>
-              <th className="px-4 py-3" />
-            </tr>
-          </thead>
-          <tbody>
-            {ordered.map((r) => (
-              <tr key={r.id} className="border-b border-border align-top last:border-0">
-                <td className="px-4 py-3" style={{ paddingLeft: `${1 + r.depth * 1.5}rem` }}>
-                  <details>
-                    <summary className="cursor-pointer">
-                      <span className="font-medium">{r.name}</span> <span className="text-xs text-muted">/{r.slug}/</span>
-                    </summary>
-                    <form action={saveCategory} className="mt-3 grid max-w-2xl gap-3">
-                      <input type="hidden" name="kind" value={kind} />
-                      <input type="hidden" name="id" value={r.id} />
-                      <input name="name" defaultValue={r.name} required className="field" aria-label="Tên" />
-                      <input name="slug" defaultValue={r.slug} className="field" aria-label="Đường dẫn" />
-                      <p className="text-xs text-muted">Đổi đường dẫn của trang đã có thứ hạng sẽ làm mất thứ hạng của đường dẫn cũ.</p>
-                      {kind === "product" && parentSelect(r.parentId, r.id)}
-                      <textarea name="description" rows={6} defaultValue={r.description ?? ""} className="field font-mono text-xs" aria-label="Mô tả" />
-                      <button className="btn-primary h-10 min-h-0 w-fit">Lưu</button>
-                    </form>
-                  </details>
-                </td>
-                <td className="px-4 py-3">{Number(r.n)}</td>
-                <td className="whitespace-nowrap px-4 py-3 text-right">
-                  <Link href={`/${r.slug}/`} target="_blank" className="mr-3 inline-flex items-center gap-1 text-xs text-brand-strong hover:underline">
-                    Xem <ExternalLink className="size-3" aria-hidden />
-                  </Link>
-                  {Number(r.n) === 0 && childrenOf(r.id).length === 0 && (
-                    <form action={deleteCategory} className="inline">
-                      <input type="hidden" name="kind" value={kind} />
-                      <input type="hidden" name="id" value={r.id} />
-                      <button className="cursor-pointer text-xs text-danger hover:underline">Xóa</button>
-                    </form>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {kind === "product" ? (
+        table(ordered.filter((r) => !isArea(r.slug)), "product")
+      ) : (
+        <>
+          {table(postRows.map((r) => ({ ...r, depth: 0 })), "post")}
+          <h2 className="text-lg font-semibold">Khu vực</h2>
+          <p className="text-sm text-muted">Trang khu vực giữ nguyên đường dẫn và lưới sản phẩm, được liệt kê trên trang Địa Điểm. Số bên phải là số sản phẩm.</p>
+          {table(ordered.filter((r) => isArea(r.slug)), "product")}
+        </>
+      )}
     </div>
   );
 }

@@ -53,7 +53,7 @@ export async function saveCategory(formData: FormData) {
     throw e;
   }
   revalidatePath("/", "layout");
-  redirect(back(v.kind, v.id ? `Đã lưu “${v.name}”` : `Đã thêm “${v.name}” — trang /${slug}/`));
+  redirect(back(String(formData.get("tab") ?? v.kind), v.id ? `Đã lưu “${v.name}”` : `Đã thêm “${v.name}” — trang /${slug}/`));
 }
 
 /** Xóa danh mục chỉ khi không còn sản phẩm / bài viết / danh mục con (tránh trang đang có thứ hạng bị 404) */

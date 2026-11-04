@@ -249,6 +249,16 @@ export async function getPostsInCategory(categoryId: number, { page = 1, perPage
   return { items: rows, total, pages: Math.max(1, Math.ceil(total / perPage)) };
 }
 
+/** Các trang khu vực đang có sản phẩm, liệt kê trên trang Địa Điểm. */
+export async function getAreaCategories() {
+  return db
+    .selectDistinct({ slug: categories.slug, name: categories.name })
+    .from(categories)
+    .innerJoin(productCategories, eq(productCategories.categoryId, categories.id))
+    .where(like(categories.slug, "shop-hoa-tuoi-%"))
+    .orderBy(categories.name);
+}
+
 export async function getAllProducts({ page = 1, perPage = 24, sort = "newest" as SortKey } = {}) {
   const where = eq(products.isActive, true);
   const [rows, [{ total }]] = await Promise.all([
