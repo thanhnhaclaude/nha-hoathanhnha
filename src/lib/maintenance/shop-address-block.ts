@@ -26,6 +26,34 @@ function block(name: string, addrs: string[]) {
   return `${OPEN}<h2>${esc(name)}</h2>\n<p>Địa chỉ: ${places}. Gọi hoặc nhắn Zalo ${phone} trước khi ghé để shop chuẩn bị sẵn mẫu, hoặc đặt online để giao tận nơi.</p>\n<p>${links}</p>\n${CLOSE}\n`;
 }
 
+/**
+ * Đưa mọi trang khu vực vào danh mục bài viết Địa Điểm: mỗi trang có một mục cùng đường dẫn, URL đó vẫn hiển thị
+ * trang khu vực kèm lưới sản phẩm (getVisibleCms trong [slug]/page.tsx). Ngày đăng cũ để xếp sau bài viết thật.
+ */
+export async function syncAreaPostEntries(db: Connection): Promise<string[]> {
+  const [[cat]] = (await db.query("select id from post_categories where slug = 'dia-diem'")) as [{ id: number }[], unknown];
+  if (!cat) return ["! Mục khu vực: không thấy danh mục dia-diem"];
+  const [ins] = (await db.query(
+    `insert ignore into pages (type, slug, title, content, image, is_published, published_at)
+     select 'post', c.slug, c.name, '',
+       (select json_unquote(json_extract(p.images, '$[0]')) from product_categories pc join products p on p.id = pc.product_id
+        where pc.category_id = c.id and p.is_active = 1 and json_length(p.images) > 0 order by p.id desc limit 1),
+       1, '2020-01-01 08:00:00'
+     from categories c where c.slug like 'shop-hoa-tuoi-%'
+       and exists (select 1 from product_categories pc where pc.category_id = c.id)`,
+  )) as [{ affectedRows: number }, unknown];
+  await db.query(
+    `update pages p join seo_meta m on m.path = concat('/', p.slug, '/')
+     set p.excerpt = m.description where p.type = 'post' and p.wp_id is null and p.content = '' and p.slug like 'shop-hoa-tuoi-%'`,
+  );
+  await db.query(
+    `insert ignore into page_categories (page_id, category_id)
+     select p.id, ? from pages p join categories c on c.slug = p.slug where p.type = 'post' and p.slug like 'shop-hoa-tuoi-%'`,
+    [cat.id],
+  );
+  return [`✓ Mục khu vực trong Địa Điểm: thêm ${ins.affectedRows}`];
+}
+
 export async function syncShopAddressBlocks(db: Connection): Promise<string[]> {
   let changed = 0;
   let missing = 0;

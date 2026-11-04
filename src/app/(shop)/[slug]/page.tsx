@@ -300,9 +300,7 @@ function productGridCols(count: number) {
 }
 
 async function PostArchiveView({ category, page }: { category: PostCategory; page: number }) {
-  const [{ items, pages, total }, postCats, areas] = await Promise.all([getPostsInCategory(category.id, { page }), getPostCategoriesWithCounts(), getAreaCategories()]);
-  // Trang khu vực là danh mục sản phẩm nhưng được tính chung vào Địa Điểm
-  const allCats = postCats.map((c) => (c.slug === "dia-diem" ? { ...c, count: c.count + areas.length } : c)).sort((a, b) => b.count - a.count);
+  const [{ items, pages, total }, allCats, areas] = await Promise.all([getPostsInCategory(category.id, { page }), getPostCategoriesWithCounts(), getAreaCategories()]);
   const showAreas = category.slug === "dia-diem" && page === 1;
   const base = canonicalPath(category.slug);
   const link = (n: number) => (n === 1 ? base : `${base}?page=${n}`);

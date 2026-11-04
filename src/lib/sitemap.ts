@@ -1,4 +1,4 @@
-import { livePage } from "./published";
+import { livePage, notCategoryPage } from "./published";
 import "server-only";
 import { and, eq, isNotNull, max } from "drizzle-orm";
 import { categories, db, pages, postCategories, productCategories, products, seoMeta } from "./db";
@@ -37,7 +37,7 @@ export async function sitemapEntries(name: SitemapName): Promise<Entry[]> {
     const rows = await db
       .select({ slug: pages.slug, updatedAt: pages.updatedAt })
       .from(pages)
-      .where(and(eq(pages.type, "post"), livePage()));
+      .where(and(eq(pages.type, "post"), livePage(), notCategoryPage()));
     return merge(old, rows.map((r) => ({ path: `/${r.slug}/`, updatedAt: r.updatedAt })));
   }
   if (name === "product") {

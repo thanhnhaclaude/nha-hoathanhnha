@@ -9,3 +9,8 @@ import { pages } from "./db/schema";
 export function livePage() {
   return and(eq(pages.isPublished, true), lte(pages.publishedAt, sql`NOW()`));
 }
+
+/** Bỏ mục trùng đường dẫn với danh mục sản phẩm (trang khu vực trong Địa Điểm): URL đó hiển thị danh mục, không phải bài. */
+export function notCategoryPage() {
+  return sql`${pages.slug} not in (select slug from categories)`;
+}

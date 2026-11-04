@@ -1,4 +1,4 @@
-import { livePage } from "./published";
+import { livePage, notCategoryPage } from "./published";
 import "server-only";
 import { cache } from "react";
 import { and, count, desc, eq, like } from "drizzle-orm";
@@ -146,7 +146,7 @@ const getAllPostsLite = cache(async (): Promise<PostLite[]> =>
   db
     .select({ id: pages.id, slug: pages.slug, title: pages.title, image: pages.image, publishedAt: pages.publishedAt })
     .from(pages)
-    .where(and(eq(pages.type, "post"), livePage()))
+    .where(and(eq(pages.type, "post"), livePage(), notCategoryPage()))
     .orderBy(desc(pages.publishedAt)),
 );
 

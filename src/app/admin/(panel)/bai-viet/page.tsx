@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { and, count, desc, eq, gt, inArray, like, ne, or, sql, type SQL } from "drizzle-orm";
 import { ExternalLink, Plus } from "lucide-react";
-import { categories, db, pageCategories, pages, postCategories, productCategories } from "@/lib/db";
+import { categories, db, pageCategories, pages, postCategories } from "@/lib/db";
 import { HOME_SEO_SLUG } from "@/lib/constants";
 
 const PER_PAGE = 40;
@@ -37,15 +37,7 @@ export default async function PostsAdmin({ searchParams }: PageProps<"/admin/bai
     db.select().from(postCategories).orderBy(postCategories.name),
     db.select({ scheduledCount: count() }).from(pages).where(and(eq(pages.type, "post"), eq(pages.isPublished, true), gt(pages.publishedAt, sql`NOW()`))),
   ]);
-  // Trang khu vực là danh mục sản phẩm (giữ URL và lưới sản phẩm), liệt kê chung trong Địa Điểm để dễ tìm
-  const areaView = cat != null && cats.find((c) => c.id === cat)?.slug === "dia-diem";
-  const areas = areaView
-    ? await db
-        .select({ id: categories.id, name: categories.name, slug: categories.slug, n: sql<number>`(select count(*) from ${productCategories} where ${productCategories.categoryId} = ${categories.id})` })
-        .from(categories)
-        .where(and(like(categories.slug, "shop-hoa-tuoi-%"), q ? or(like(categories.name, `%${q}%`), like(categories.slug, `%${q}%`)) : undefined))
-        .orderBy(categories.name)
-    : [];
+  const categorySlugs = new Set(rows.length ? (await db.select({ slug: categories.slug }).from(categories).where(inArray(categories.slug, rows.map((r) => r.slug)))).map((c) => c.slug) : []);
   const list = rows;
   const pages_ = Math.max(1, Math.ceil(total / PER_PAGE));
   const qs = (extra: Record<string, string | number>) => {
@@ -59,7 +51,7 @@ export default async function PostsAdmin({ searchParams }: PageProps<"/admin/bai
     <div className="space-y-6">
       <div className="flex flex-wrap items-center gap-3">
         <h1 className="font-display text-4xl font-bold">Bài viết & trang</h1>
-        <span className="text-sm text-muted">{total + areas.length} mục</span>
+        <span className="text-sm text-muted">{total} mục</span>
         <Link href={`/admin/bai-viet/moi/?type=${type}`} className="btn-primary ml-auto h-11">
           <Plus className="size-4" aria-hidden /> {type === "post" ? "Viết bài mới" : "Thêm trang"}
         </Link>
@@ -110,7 +102,8 @@ export default async function PostsAdmin({ searchParams }: PageProps<"/admin/bai
             {list.map((p) => (
               <tr key={p.id} className="border-b border-border last:border-0 hover:bg-surface-muted/60">
                 <td className="px-4 py-3">
-                  <Link href={`/admin/bai-viet/${p.id}/`} className="flex items-center gap-3">
+                  {/* Mục khu vực trùng URL danh mục: nội dung sửa ở Danh mục & thẻ */}
+                  <Link href={categorySlugs.has(p.slug) ? "/admin/danh-muc/?kind=post" : `/admin/bai-viet/${p.id}/`} className="flex items-center gap-3">
                     <span className="relative size-12 shrink-0 overflow-hidden rounded-lg bg-surface-muted">
                       {p.image && <Image src={p.image} alt="" fill sizes="48px" className="object-cover" />}
                     </span>
@@ -172,42 +165,6 @@ export default async function PostsAdmin({ searchParams }: PageProps<"/admin/bai
             )}
           </div>
         </div>
-      )}
-
-      {areas.length > 0 && (
-        <>
-          <h2 className="text-lg font-semibold">Trang khu vực ({areas.length})</h2>
-          <div className="overflow-x-auto rounded-2xl bg-surface ring-1 ring-border">
-            <table className="w-full text-left text-sm">
-              <thead className="border-b border-border bg-surface-muted text-xs uppercase text-muted">
-                <tr>
-                  <th className="px-4 py-3">Trang khu vực</th>
-                  <th className="px-4 py-3">Sản phẩm</th>
-                  <th className="px-4 py-3" />
-                </tr>
-              </thead>
-              <tbody>
-                {areas.map((a) => (
-                  <tr key={a.id} className="border-b border-border last:border-0 hover:bg-surface-muted/60">
-                    <td className="px-4 py-3">
-                      <span className="font-medium">{a.name}</span>
-                      <span className="block text-xs text-muted">/{a.slug}/</span>
-                    </td>
-                    <td className="px-4 py-3">{Number(a.n)}</td>
-                    <td className="whitespace-nowrap px-4 py-3 text-right">
-                      <Link href="/admin/danh-muc/?kind=post" className="mr-3 text-xs text-brand-strong hover:underline">
-                        Sửa
-                      </Link>
-                      <Link href={`/${a.slug}/`} target="_blank" className="inline-flex items-center gap-1 text-xs text-brand-strong hover:underline">
-                        Xem <ExternalLink className="size-3" aria-hidden />
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </>
       )}
     </div>
   );
