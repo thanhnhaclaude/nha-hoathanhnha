@@ -13,4 +13,6 @@
 - (đề xuất 30/10) Thêm workflow `site-health.yml` kiểm tra web 2 giờ/lần.
 
 ## Nhật ký
+- 2026-11-04 — Chuyển hướng 301 ảnh /wp-content/uploads/ về /uploads/ (401 URL từng có hiển thị đang 404) — (commit này)
+- 2026-11-04 — Sitemap lastmod theo lúc bài lên web; GitHub Actions gửi IndexNow URL mới 08:30 mỗi ngày — (commit này)
 - 2026-10-30 — Tạo sổ luồng từ CLAUDE.md và lịch sử commit — (commit này)

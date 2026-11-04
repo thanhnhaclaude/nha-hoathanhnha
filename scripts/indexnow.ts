@@ -3,6 +3,7 @@
  *
  *   npm run seo:indexnow                         # mọi URL trong https://hoathanhnha.com/sitemap_index.xml
  *   npm run seo:indexnow -- /hoa-20-11-tang-thay-co/ /gia-ke-hoa-khai-truong/   # chỉ vài URL (bài mới)
+ *   npm run seo:indexnow -- --recent             # URL trong sitemap có lastmod 26 giờ gần nhất (GitHub Actions chạy mỗi sáng)
  *
  * Khóa IndexNow là file public/<khóa>.txt (công khai theo thiết kế của giao thức, không phải mật khẩu).
  * Google KHÔNG dùng IndexNow: với Google, gửi sitemap trong Search Console và dùng "Kiểm tra URL".
@@ -10,17 +11,26 @@
 const KEY = "1077f66c7c9b4181925ae2f57700fd74";
 const ORIGIN = "https://hoathanhnha.com";
 
-async function sitemapUrls() {
+async function sitemapUrls(since?: number) {
   const locs = (xml: string) => [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
   const index = await (await fetch(`${ORIGIN}/sitemap_index.xml`)).text();
   const urls: string[] = [];
-  for (const sm of locs(index)) urls.push(...locs(await (await fetch(sm)).text()));
+  for (const sm of locs(index)) {
+    const xml = await (await fetch(sm)).text();
+    for (const [block] of xml.matchAll(/<url>[\s\S]*?<\/url>/g)) {
+      const lastmod = block.match(/<lastmod>([^<]+)<\/lastmod>/)?.[1];
+      if (!since || (lastmod && Date.parse(lastmod) >= since)) urls.push(...locs(block));
+    }
+  }
   return [...new Set(urls)];
 }
 
 async function main() {
-  const paths = process.argv.slice(2).filter((a) => a.startsWith("/"));
-  const urls = paths.length ? paths.map((p) => ORIGIN + p) : await sitemapUrls();
+  const args = process.argv.slice(2);
+  const paths = args.filter((a) => a.startsWith("/"));
+  const since = args.includes("--recent") ? Date.now() - 26 * 3600_000 : undefined;
+  const urls = paths.length ? paths.map((p) => ORIGIN + p) : await sitemapUrls(since);
+  if (!urls.length) return console.log("Không có URL mới.");
   // Kiểm tra file khóa đã có trên website (bắt buộc với IndexNow)
   const keyRes = await fetch(`${ORIGIN}/${KEY}.txt`);
   if (!keyRes.ok || (await keyRes.text()).trim() !== KEY) {

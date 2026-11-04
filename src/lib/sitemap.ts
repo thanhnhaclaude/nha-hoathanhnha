@@ -23,10 +23,12 @@ async function oldEntries(name: SitemapName) {
   return new Map(rows.map((r) => [r.path, r]));
 }
 
+const newest = (a: Date | null, b: Date | null) => (a && b ? (a > b ? a : b) : (a ?? b));
+
 /** Sắp xếp theo vị trí trong sitemap cũ; URL mới (không có trong sitemap cũ) xếp sau. */
 function merge(old: Map<string, { position: number | null; lastmod: Date | null }>, items: { path: string; updatedAt: Date | null }[]): Entry[] {
   return items
-    .map((i) => ({ path: i.path, lastmod: old.get(i.path)?.lastmod ?? i.updatedAt, pos: old.get(i.path)?.position ?? Number.MAX_SAFE_INTEGER }))
+    .map((i) => ({ path: i.path, lastmod: newest(old.get(i.path)?.lastmod ?? null, i.updatedAt), pos: old.get(i.path)?.position ?? Number.MAX_SAFE_INTEGER }))
     .sort((a, b) => a.pos - b.pos)
     .map(({ path, lastmod }) => ({ path, lastmod }));
 }
@@ -35,10 +37,11 @@ export async function sitemapEntries(name: SitemapName): Promise<Entry[]> {
   const old = await oldEntries(name);
   if (name === "post") {
     const rows = await db
-      .select({ slug: pages.slug, updatedAt: pages.updatedAt })
+      .select({ slug: pages.slug, updatedAt: pages.updatedAt, publishedAt: pages.publishedAt })
       .from(pages)
       .where(and(eq(pages.type, "post"), livePage(), notCategoryPage()));
-    return merge(old, rows.map((r) => ({ path: `/${r.slug}/`, updatedAt: r.updatedAt })));
+    // Bài hẹn giờ: lastmod là lúc bài lên web. published_at là giờ Việt Nam đọc như UTC nên trừ 7 giờ.
+    return merge(old, rows.map((r) => ({ path: `/${r.slug}/`, updatedAt: newest(r.updatedAt, new Date(r.publishedAt.getTime() - 7 * 3600_000)) })));
   }
   if (name === "product") {
     const rows = await db.select({ slug: products.slug, updatedAt: products.updatedAt }).from(products).where(eq(products.isActive, true));

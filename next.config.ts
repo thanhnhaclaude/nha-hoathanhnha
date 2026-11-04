@@ -24,6 +24,8 @@ const nextConfig: NextConfig = {
     return [
       // Phân trang kiểu WordPress: /hoa-bo/page/2/ -> /hoa-bo/?page=2
       { source: "/:slug/page/:n(\\d+)", destination: "/:slug/?page=:n", permanent: true },
+      // Ảnh WordPress cũ còn hiển thị trên Google Images (401 URL báo 404, Search Console 4/11/2026): file nay ở /uploads/
+      { source: "/wp-content/uploads/:file", destination: "/uploads/:file", permanent: true },
       // Block nội bộ của theme Flatsome (không có nội dung riêng)
       { source: "/blocks/:path*", destination: "/", permanent: true },
       // WordPress cũ: /sitemap.xml không tồn tại, sitemap chính là /sitemap_index.xml
