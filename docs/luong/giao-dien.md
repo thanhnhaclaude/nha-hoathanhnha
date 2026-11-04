@@ -13,6 +13,7 @@
 - Khi shop gửi số nhà Cần Giờ: thêm vào `site.stores`, `storeAreas` và đổi "20 cửa hàng" trong `home-view.tsx` thành 21.
 
 ## Nhật ký
+- 2026-11-04 — Thêm nút Khu vực vào Bài viết & trang (admin), quy tắc chủ shop xem localhost trước khi push — (commit này)
 - 2026-11-04 — Trang khu vực hiện ở tab Danh mục bài viết (admin) và trên /dia-diem/, vẫn là danh mục sản phẩm để giữ URL và lưới sản phẩm — (commit này)
 - 2026-11-04 — `security-autofix.yml` quét cả gói dev, thêm `.github/dependabot.yml` (hàng tuần, chờ 7 ngày, không tự gộp) — (commit này)
 - 2026-11-04 — Vá CVE-2026-118764: nâng eslint 10, ép minimatch ^11.0.4 (chỉ đồ nghề dev, web không dùng) — (commit này)
