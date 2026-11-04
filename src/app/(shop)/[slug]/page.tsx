@@ -300,11 +300,10 @@ function productGridCols(count: number) {
 }
 
 async function PostArchiveView({ category, page }: { category: PostCategory; page: number }) {
-  const [{ items, pages, total }, allCats, areas] = await Promise.all([
-    getPostsInCategory(category.id, { page }),
-    getPostCategoriesWithCounts(),
-    category.slug === "dia-diem" ? getAreaCategories() : [],
-  ]);
+  const [{ items, pages, total }, postCats, areas] = await Promise.all([getPostsInCategory(category.id, { page }), getPostCategoriesWithCounts(), getAreaCategories()]);
+  // Trang khu vực là danh mục sản phẩm nhưng được tính chung vào Địa Điểm
+  const allCats = postCats.map((c) => (c.slug === "dia-diem" ? { ...c, count: c.count + areas.length } : c)).sort((a, b) => b.count - a.count);
+  const showAreas = category.slug === "dia-diem" && page === 1;
   const base = canonicalPath(category.slug);
   const link = (n: number) => (n === 1 ? base : `${base}?page=${n}`);
   return (
@@ -328,6 +327,20 @@ async function PostArchiveView({ category, page }: { category: PostCategory; pag
             ))}
           </ul>
         </ChipScroller>
+      )}
+      {showAreas && areas.length > 0 && (
+        <section className="mt-8">
+          <h2 className="heading-display text-2xl sm:text-3xl">Shop hoa tươi theo khu vực ({areas.length})</h2>
+          <ul className="mt-6 grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2 lg:grid-cols-4">
+            {areas.map((a) => (
+              <li key={a.slug}>
+                <Link href={canonicalPath(a.slug)} className="block py-1 hover:text-brand-strong hover:underline">
+                  {a.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
       )}
       <p className="mt-6 text-sm text-muted">{total} bài viết</p>
       {items.length === 0 ? (
@@ -357,20 +370,6 @@ async function PostArchiveView({ category, page }: { category: PostCategory; pag
             </Link>
           )}
         </nav>
-      )}
-      {areas.length > 0 && (
-        <section className="mt-12">
-          <h2 className="heading-display text-2xl sm:text-3xl">Shop hoa tươi theo khu vực</h2>
-          <ul className="mt-6 grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2 lg:grid-cols-4">
-            {areas.map((a) => (
-              <li key={a.slug}>
-                <Link href={canonicalPath(a.slug)} className="block py-1 hover:text-brand-strong hover:underline">
-                  {a.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
       )}
     </div>
   );

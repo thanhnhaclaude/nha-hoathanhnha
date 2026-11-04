@@ -13,6 +13,7 @@
 - Khi shop gửi số nhà Cần Giờ: thêm vào `site.stores`, `storeAreas` và đổi "20 cửa hàng" trong `home-view.tsx` thành 21.
 
 ## Nhật ký
+- 2026-11-04 — Nút Địa Điểm tính cả trang khu vực, khối khu vực lên đầu /dia-diem/ — (commit này)
 - 2026-11-04 — Gộp Khu vực vào bộ lọc Địa Điểm (admin), xóa 2 danh mục trống tp-ho-chi-minh, da-nang và chuyển hướng 301 — (commit này)
 - 2026-11-04 — Thêm nút Khu vực vào Bài viết & trang (admin), quy tắc chủ shop xem localhost trước khi push — (commit này)
 - 2026-11-04 — Trang khu vực hiện ở tab Danh mục bài viết (admin) và trên /dia-diem/, vẫn là danh mục sản phẩm để giữ URL và lưới sản phẩm — (commit này)
