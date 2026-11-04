@@ -19,6 +19,8 @@
 - Đổi "Thị Mười" thành "Dương Thị Mười" trong `city-pages.ts`, `area-meta.ts` sau khi shop xác nhận tên đường.
 
 ## Nhật ký
+- 2026-11-04 — Thêm địa chỉ shop từ danh sách hệ thống vào trang khu vực (`shop-addresses.ts`, `shop-address-block.ts`), chưa khai báo Florist cho các địa chỉ này — (commit này)
+- 2026-11-04 — Đổi tiêu đề trang hệ thống thành "Hệ thống shop của chúng tôi", URL giữ nguyên — (commit này)
 - 2026-11-04 — Gom 12 bài cửa hàng và 11 bài địa điểm cũ vào danh mục Địa Điểm — (commit này)
 - 2026-11-04 — Chuyển bài blog nhập từ website cũ từ Địa Điểm sang Blog (`blog-category.ts`), giữ "Hệ thống cửa hàng" ở Địa Điểm, URL bài không đổi — (commit này)
 - 2026-11-03 — Đổi số cửa hàng trong `area-meta.ts`, `near-me-page.ts` sang 20 — (commit này)

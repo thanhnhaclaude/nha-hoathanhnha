@@ -41,6 +41,9 @@ export async function moveImportedPostsToBlog(db: Connection): Promise<string[]>
        and not exists (select 1 from (select page_id, category_id from page_categories) o where o.page_id = pc.page_id and o.category_id <> ?)`,
     [to, from, LOCATION, from],
   )) as [{ affectedRows: number }, unknown];
+  await db.query("update pages set title = 'Hệ thống shop của chúng tôi' where slug = 'he-thong-cua-hang-cua-chung-toi'");
+  await db.query("update seo_meta set title = replace(title, 'Hệ thống cửa hàng', 'Hệ thống shop') where path = '/he-thong-cua-hang-cua-chung-toi/'");
+
   // Danh mục thành phố đã gom vào Địa Điểm: xóa khi không còn bài, URL cũ chuyển hướng ở legacy-redirects.ts
   const [del] = (await db.query(
     `delete from post_categories where slug in ('tp-ho-chi-minh', 'da-nang')
