@@ -4,7 +4,7 @@ slug: cua-hang-hoa-thanh-nha-quan-12
 description: Cửa hàng hoa Thanh Nhã Quận 12 ở 181 Dương Thị Mười: kệ hoa khai trương, hoa chúc mừng giao đến văn phòng, khu công nghiệp. Gọi 0396.72.73.74.
 keyword: cửa hàng hoa Thanh Nhã Quận 12
 publish: 2026-11-10 08:00
-category: tin-tuc
+category: dia-diem
 image: /uploads/Hoa-Khai-Truong-KT045.webp
 tags: cửa hàng hoa Quận 12, shop hoa Quận 12, kệ hoa khai trương, Hoa Thanh Nhã
 ---

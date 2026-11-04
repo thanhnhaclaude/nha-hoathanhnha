@@ -4,7 +4,7 @@ slug: giao-hoa-can-gio
 description: Cửa hàng hoa Thanh Nhã Cần Giờ giao đến Cần Thạnh, Long Hòa và resort ven biển: nên đặt trước nửa ngày, chọn mẫu bền. Gọi 0396.72.73.74.
 keyword: cửa hàng hoa Thanh Nhã Cần Giờ
 publish: 2026-11-24 08:00
-category: tin-tuc
+category: dia-diem
 image: /uploads/Hoa-bo-HB153.webp
 tags: cửa hàng hoa Cần Giờ, giao hoa Cần Giờ, hoa kỷ niệm, Hoa Thanh Nhã
 ---

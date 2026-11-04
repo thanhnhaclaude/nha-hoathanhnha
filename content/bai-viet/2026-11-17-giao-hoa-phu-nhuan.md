@@ -4,7 +4,7 @@ slug: giao-hoa-phu-nhuan
 description: Cửa hàng hoa Thanh Nhã Phú Nhuận ở 457 Nguyễn Kiệm: ghé chọn hoa hoặc đặt giao đến nhà, văn phòng, gửi ảnh trước khi giao. Gọi 0396.72.73.74.
 keyword: cửa hàng hoa Thanh Nhã Phú Nhuận
 publish: 2026-11-17 08:00
-category: tin-tuc
+category: dia-diem
 image: /uploads/Hoa-bo-HB121.webp
 tags: cửa hàng hoa Phú Nhuận, giao hoa Phú Nhuận, hoa tặng đồng nghiệp, Hoa Thanh Nhã
 ---

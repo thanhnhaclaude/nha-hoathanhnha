@@ -4,7 +4,7 @@ slug: cua-hang-hoa-thanh-nha-thu-duc
 description: Cửa hàng hoa Thanh Nhã Thủ Đức ở 61/5 Kha Vạn Cân, Hiệp Bình Chánh: hoa tốt nghiệp, sinh nhật, khai trương giao tận nơi. Hotline 0396.72.73.74.
 keyword: cửa hàng hoa Thanh Nhã Thủ Đức
 publish: 2026-11-03 08:00
-category: tin-tuc
+category: dia-diem
 image: /uploads/Hoa-bo-HB162.webp
 tags: cửa hàng hoa Thủ Đức, shop hoa Thủ Đức, hoa tốt nghiệp, Hoa Thanh Nhã
 ---

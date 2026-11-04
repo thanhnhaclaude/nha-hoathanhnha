@@ -4,7 +4,7 @@ slug: giao-hoa-binh-chanh
 description: Cửa hàng hoa Thanh Nhã Bình Chánh ở 71 Trần Đại Nghĩa: giao đến Vĩnh Lộc, Tân Túc, khu công nghiệp, mẹo hẹn giờ cho xã xa. Gọi 0396.72.73.74.
 keyword: cửa hàng hoa Thanh Nhã Bình Chánh
 publish: 2026-11-21 08:00
-category: tin-tuc
+category: dia-diem
 image: /uploads/Hoa-Khai-Truong-KT045.webp
 tags: cửa hàng hoa Bình Chánh, giao hoa Bình Chánh, hoa khai trương, Hoa Thanh Nhã
 ---

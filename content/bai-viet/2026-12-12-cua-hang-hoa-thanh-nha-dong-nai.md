@@ -4,7 +4,7 @@ slug: cua-hang-hoa-thanh-nha-dong-nai
 description: Cửa hàng hoa Thanh Nhã Đồng Nai ở 150 Nguyễn Tất Thành, kèm danh sách các cửa hàng trong tỉnh và cách chọn nơi đặt hoa. Gọi 0396.72.73.74.
 keyword: cửa hàng hoa Thanh Nhã Đồng Nai
 publish: 2026-12-12 08:00
-category: tin-tuc
+category: dia-diem
 image: /uploads/Hoa-gio-HG098.webp
 tags: cửa hàng hoa Đồng Nai, shop hoa Đồng Nai, giao hoa Đồng Nai, Hoa Thanh Nhã
 ---

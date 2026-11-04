@@ -4,7 +4,7 @@ slug: giao-hoa-xuan-loc
 description: Cửa hàng hoa Thanh Nhã Xuân Lộc ở 3741 QL1A: thông tin cần gửi cho hoa viếng, băng tang, hoa mừng và đơn đặt từ xa. Gọi 0396.72.73.74.
 keyword: cửa hàng hoa Thanh Nhã Xuân Lộc
 publish: 2026-12-05 08:00
-category: tin-tuc
+category: dia-diem
 image: /uploads/Hoa-chia-buon-CB026.webp
 tags: cửa hàng hoa Xuân Lộc, giao hoa Xuân Lộc, hoa chia buồn Đồng Nai, hoa Gia Ray, Hoa Thanh Nhã
 ---

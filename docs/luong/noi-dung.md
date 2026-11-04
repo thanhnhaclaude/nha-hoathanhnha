@@ -19,6 +19,7 @@
 - Đổi "Thị Mười" thành "Dương Thị Mười" trong `city-pages.ts`, `area-meta.ts` sau khi shop xác nhận tên đường.
 
 ## Nhật ký
+- 2026-11-04 — Gom 12 bài cửa hàng và 11 bài địa điểm cũ vào danh mục Địa Điểm — (commit này)
 - 2026-11-04 — Chuyển bài blog nhập từ website cũ từ Địa Điểm sang Blog (`blog-category.ts`), giữ "Hệ thống cửa hàng" ở Địa Điểm, URL bài không đổi — (commit này)
 - 2026-11-03 — Đổi số cửa hàng trong `area-meta.ts`, `near-me-page.ts` sang 20 — (commit này)
 - 2026-11-03 — Thêm bài cửa hàng Đồng Nai (150 Nguyễn Tất Thành), hẹn 12/12/2026 — (commit này)

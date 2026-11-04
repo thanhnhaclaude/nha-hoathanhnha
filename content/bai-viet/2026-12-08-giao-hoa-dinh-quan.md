@@ -4,7 +4,7 @@ slug: giao-hoa-dinh-quan
 description: Cửa hàng hoa Thanh Nhã Định Quán ở 30 QL20: giao đến Phú Lợi, La Ngà, Phú Ngọc, chọn lan bền, hoa mừng thọ cho ba mẹ. Gọi 0396.72.73.74.
 keyword: cửa hàng hoa Thanh Nhã Định Quán
 publish: 2026-12-08 08:00
-category: tin-tuc
+category: dia-diem
 image: /uploads/Lan-ho-diep-LHD093.webp
 tags: cửa hàng hoa Định Quán, giao hoa Định Quán, gửi hoa về quê, lan hồ điệp, Hoa Thanh Nhã
 ---

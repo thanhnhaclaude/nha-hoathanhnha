@@ -4,7 +4,7 @@ slug: giao-hoa-thong-nhat-dong-nai
 description: Cửa hàng hoa Thanh Nhã Thống Nhất ở 193 QL20, Đồng Nai: hoa cưới cầm tay, hoa dâng lễ, giao đến Dầu Giây, Gia Kiệm, Gia Tân. Gọi 0396.72.73.74.
 keyword: cửa hàng hoa Thanh Nhã Thống Nhất
 publish: 2026-12-01 08:00
-category: tin-tuc
+category: dia-diem
 image: /uploads/Hoa-bo-HB148.webp
 tags: cửa hàng hoa Thống Nhất, giao hoa Thống Nhất, hoa Dầu Giây, hoa cưới cầm tay, Hoa Thanh Nhã
 ---

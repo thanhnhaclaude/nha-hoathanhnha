@@ -4,7 +4,7 @@ slug: cua-hang-hoa-thanh-nha-da-nang
 description: Cửa hàng hoa Thanh Nhã Đà Nẵng ở 396 Nguyễn Hoàng, Thanh Khê: ghé chọn hoa hoặc đặt từ xa, gửi ảnh trước khi giao. Hotline 0396.72.73.74.
 keyword: cửa hàng hoa Thanh Nhã Đà Nẵng
 publish: 2026-11-14 08:00
-category: tin-tuc
+category: dia-diem
 image: /uploads/Hoa-bo-HB165.webp
 tags: cửa hàng hoa Đà Nẵng, shop hoa Thanh Khê, gửi hoa về Đà Nẵng, Hoa Thanh Nhã
 ---

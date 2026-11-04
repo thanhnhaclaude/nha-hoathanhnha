@@ -4,7 +4,7 @@ slug: giao-hoa-nhon-trach
 description: Cửa hàng hoa Thanh Nhã Nhơn Trạch ở 511 Hùng Vương: kệ hoa giao khu công nghiệp, hoa gia đình, cách viết băng rôn đối tác. Gọi 0396.72.73.74.
 keyword: cửa hàng hoa Thanh Nhã Nhơn Trạch
 publish: 2026-11-28 08:00
-category: tin-tuc
+category: dia-diem
 image: /uploads/Hoa-Khai-Truong-KT045.webp
 tags: cửa hàng hoa Nhơn Trạch, giao hoa Nhơn Trạch, hoa khai trương Đồng Nai, kệ hoa khu công nghiệp, Hoa Thanh Nhã
 ---

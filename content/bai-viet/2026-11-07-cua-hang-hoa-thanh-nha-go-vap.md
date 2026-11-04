@@ -4,7 +4,7 @@ slug: cua-hang-hoa-thanh-nha-go-vap
 description: Cửa hàng hoa Thanh Nhã Gò Vấp ở 229 Quang Trung, Phường 10: ghé chọn hoa hoặc đặt giao tận nơi, hoa sinh nhật, hoa thăm bệnh. Gọi 0396.72.73.74.
 keyword: cửa hàng hoa Thanh Nhã Gò Vấp
 publish: 2026-11-07 08:00
-category: tin-tuc
+category: dia-diem
 image: /uploads/Hoa-gio-HG055.webp
 tags: cửa hàng hoa Gò Vấp, shop hoa Gò Vấp, hoa thăm bệnh, Hoa Thanh Nhã
 ---
