@@ -19,13 +19,13 @@ const AREAS: { path: string; title: string; description: string; minFrom?: strin
   },
   {
     path: "/shop-hoa-tuoi-quan-thu-duc/",
-    title: "Shop Hoa Tươi Thủ Đức – Cửa Hàng Kha Vạn Cân | Hoa Thanh Nhã",
-    description: `Cửa hàng hoa tại 61/5 Kha Vạn Cân, Hiệp Bình Chánh, Thủ Đức. Hoa sinh nhật, khai trương, chia buồn giao trong ngày, gửi ảnh trước. Gọi ${P}.`,
+    title: "Shop Hoa Tươi Thủ Đức – Cửa Hàng Lê Văn Chí | Hoa Thanh Nhã",
+    description: `Cửa hàng hoa tại 77 Lê Văn Chí, Linh Trung, Thủ Đức. Hoa sinh nhật, khai trương, chia buồn giao trong ngày, gửi ảnh trước. Gọi ${P}.`,
   },
   {
     path: "/shop-hoa-tuoi-quan-12/",
-    title: "Shop Hoa Tươi Quận 12 – Cửa Hàng Thị Mười | Hoa Thanh Nhã",
-    description: `Cửa hàng hoa tại 181 Thị Mười, Tân Thới Hiệp, Quận 12. Hoa sinh nhật, khai trương, chia buồn giá tốt, giao trong ngày, gửi ảnh trước. Gọi ${P}.`,
+    title: "Shop Hoa Tươi Quận 12 – Cửa Hàng Nguyễn Ảnh Thủ | Hoa Thanh Nhã",
+    description: `Cửa hàng hoa tại 150A Nguyễn Ảnh Thủ, Khu Phố 2, Quận 12. Hoa sinh nhật, khai trương, chia buồn giá tốt, giao trong ngày, gửi ảnh trước. Gọi ${P}.`,
   },
   {
     path: "/shop-hoa-tuoi-quan-thanh-khe/",
@@ -60,22 +60,22 @@ const AREAS: { path: string; title: string; description: string; minFrom?: strin
   {
     path: "/shop-hoa-tuoi-quan-1/",
     title: "Shop Hoa Tươi Quận 1 – Cửa Hàng Hai Bà Trưng | Hoa Thanh Nhã",
-    description: `Cửa hàng hoa tại 130 Hai Bà Trưng, Bến Nghé, Quận 1. Hoa sinh nhật, khai trương, chia buồn giao trong ngày, gửi ảnh trước. Gọi ${P}.`,
+    description: `Cửa hàng hoa tại 262 Hai Bà Trưng, Tân Định, Quận 1. Hoa sinh nhật, khai trương, chia buồn giao trong ngày, gửi ảnh trước. Gọi ${P}.`,
   },
   {
     path: "/shop-hoa-tuoi-quan-go-vap/",
-    title: "Shop Hoa Tươi Gò Vấp – Cửa Hàng Quang Trung | Hoa Thanh Nhã",
-    description: `Cửa hàng hoa tại 229 Quang Trung, Phường 10, Gò Vấp. Hoa sinh nhật, khai trương, chia buồn giao trong ngày, gửi ảnh trước. Gọi ${P}.`,
+    title: "Shop Hoa Tươi Gò Vấp – Cửa Hàng Nguyễn Kiệm | Hoa Thanh Nhã",
+    description: `Cửa hàng hoa tại 776/10 Nguyễn Kiệm, Phường 3, Gò Vấp. Hoa sinh nhật, khai trương, chia buồn giao trong ngày, gửi ảnh trước. Gọi ${P}.`,
   },
   {
     path: "/shop-hoa-tuoi-quan-cam-le/",
     title: "Shop Hoa Tươi Cẩm Lệ Đà Nẵng – Cửa Hàng Hòa Xuân | Hoa Thanh Nhã",
-    description: `Cửa hàng hoa tại 05 Trần Văn Cẩn, Hòa Xuân, Cẩm Lệ, Đà Nẵng. Hoa sinh nhật, khai trương, chia buồn giao trong ngày, gửi ảnh trước. Gọi ${P}.`,
+    description: `Cửa hàng hoa tại 24 Cẩm Chánh 4, Cẩm Lệ, Đà Nẵng. Hoa sinh nhật, khai trương, chia buồn giao trong ngày, gửi ảnh trước. Gọi ${P}.`,
   },
   {
     path: "/shop-hoa-tuoi-da-nang/",
     title: "Shop Hoa Tươi Đà Nẵng – 2 Cửa Hàng, Giao Nhanh | Hoa Thanh Nhã",
-    description: `Shop hoa tươi Đà Nẵng: cửa hàng 396 Nguyễn Hoàng (Thanh Khê) và 05 Trần Văn Cẩn (Cẩm Lệ). Hoa sinh nhật, khai trương, chia buồn giao trong ngày. Gọi ${P}.`,
+    description: `Shop hoa tươi Đà Nẵng: cửa hàng 396 Nguyễn Hoàng (Thanh Khê) và 24 Cẩm Chánh 4 (Cẩm Lệ). Hoa sinh nhật, khai trương, chia buồn giao trong ngày. Gọi ${P}.`,
   },
   // Tuần 1 (26/10/2026): danh mục mức A/B
   {

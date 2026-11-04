@@ -1,7 +1,7 @@
 ---
-title: Cửa hàng hoa Thanh Nhã Xuân Lộc: 3741 Quốc lộ 1A
+title: Cửa hàng hoa Thanh Nhã Xuân Lộc: 3745 Quốc lộ 1A
 slug: giao-hoa-xuan-loc
-description: Cửa hàng hoa Thanh Nhã Xuân Lộc ở 3741 QL1A: thông tin cần gửi cho hoa viếng, băng tang, hoa mừng và đơn đặt từ xa. Gọi 0396.72.73.74.
+description: Cửa hàng hoa Thanh Nhã Xuân Lộc ở 3745 QL1A: thông tin cần gửi cho hoa viếng, băng tang, hoa mừng và đơn đặt từ xa. Gọi 0396.72.73.74.
 keyword: cửa hàng hoa Thanh Nhã Xuân Lộc
 publish: 2026-12-05 08:00
 category: dia-diem
@@ -9,9 +9,9 @@ image: /uploads/Hoa-chia-buon-CB026.webp
 tags: cửa hàng hoa Xuân Lộc, giao hoa Xuân Lộc, hoa chia buồn Đồng Nai, hoa Gia Ray, Hoa Thanh Nhã
 ---
 
-Khi nhận tin buồn từ quê nhà mà không kịp về, gửi một kệ hoa viếng là cách nhiều người thay mặt mình đến chia sẻ với gia đình. Ở Xuân Lộc, điều quan trọng nhất là thời gian, vì tang lễ thường diễn ra tại nhà và lịch trình rất gấp. **Cửa hàng hoa Thanh Nhã Xuân Lộc** ở 3741 Quốc lộ 1A nhận đơn cho dịp viếng, và cả những dịp vui hơn như sinh nhật, mừng thọ.
+Khi nhận tin buồn từ quê nhà mà không kịp về, gửi một kệ hoa viếng là cách nhiều người thay mặt mình đến chia sẻ với gia đình. Ở Xuân Lộc, điều quan trọng nhất là thời gian, vì tang lễ thường diễn ra tại nhà và lịch trình rất gấp. **Cửa hàng hoa Thanh Nhã Xuân Lộc** ở 3745 Quốc lộ 1A nhận đơn cho dịp viếng, và cả những dịp vui hơn như sinh nhật, mừng thọ.
 
-**Địa chỉ:** 3741 QL1A, Xuân Lộc, Đồng Nai. **Hotline và Zalo:** [0396.72.73.74](tel:0396727374).
+**Địa chỉ:** 3745 QL1A, Bảo Hoà, Xuân Lộc, Đồng Nai. **Hotline và Zalo:** [0396.72.73.74](tel:0396727374).
 
 ## Gửi hoa viếng: chuẩn bị những gì?
 

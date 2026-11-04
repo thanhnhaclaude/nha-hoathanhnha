@@ -1,7 +1,7 @@
 ---
-title: Cửa hàng hoa Thanh Nhã Gò Vấp: 229 Quang Trung, Phường 10
+title: Cửa hàng hoa Thanh Nhã Gò Vấp: 776/10 Nguyễn Kiệm
 slug: cua-hang-hoa-thanh-nha-go-vap
-description: Cửa hàng hoa Thanh Nhã Gò Vấp ở 229 Quang Trung, Phường 10: ghé chọn hoa hoặc đặt giao tận nơi, hoa sinh nhật, hoa thăm bệnh. Gọi 0396.72.73.74.
+description: Cửa hàng hoa Thanh Nhã Gò Vấp ở 776/10 Nguyễn Kiệm, Phường 3: ghé chọn hoa hoặc đặt giao tận nơi, hoa sinh nhật, hoa thăm bệnh. Gọi 0396.72.73.74.
 keyword: cửa hàng hoa Thanh Nhã Gò Vấp
 publish: 2026-11-07 08:00
 category: dia-diem
@@ -9,16 +9,15 @@ image: /uploads/Hoa-gio-HG055.webp
 tags: cửa hàng hoa Gò Vấp, shop hoa Gò Vấp, hoa thăm bệnh, Hoa Thanh Nhã
 ---
 
-Nằm trên trục Quang Trung sầm uất, **cửa hàng hoa Thanh Nhã Gò Vấp** phục vụ cả khách ghé mua trực tiếp lẫn khách đặt giao tận nhà. Vị trí Phường 10 ở khoảng giữa quận nên việc đi lại tới phần lớn các phường đều khá thuận tiện. Dưới đây là thông tin liên hệ, các dịp khách Gò Vấp hay đặt hoa và vài mẹo để đơn được giao đúng ý.
+Nằm trên đường Nguyễn Kiệm, **cửa hàng hoa Thanh Nhã Gò Vấp** phục vụ cả khách ghé mua trực tiếp lẫn khách đặt giao tận nhà. Dưới đây là thông tin liên hệ, các dịp khách Gò Vấp hay đặt hoa và vài mẹo để đơn được giao đúng ý.
 
 ## Địa chỉ và liên hệ
 
-- **Địa chỉ:** 229 Đ. Quang Trung, Phường 10, Gò Vấp, TP.HCM
+- **Địa chỉ:** 776/10 Nguyễn Kiệm, Phường 3, Gò Vấp, TP.HCM
 - **Hotline và Zalo:** [0396.72.73.74](tel:0396727374)
-- **Đánh giá Google:** 4,7/5 từ 20 lượt (tháng 11/2026)
 - **Thông tin khu vực:** [shop hoa tươi Gò Vấp](/shop-hoa-tuoi-quan-go-vap/)
 
-Quang Trung đông xe vào giờ tan tầm, nên nếu bạn cần lấy hoa gấp trên đường đi làm về, hãy gọi trước để cửa hàng gói sẵn. Như vậy bạn chỉ dừng vài phút là nhận được hoa.
+Nguyễn Kiệm đông xe vào giờ tan tầm, nên nếu bạn cần lấy hoa gấp trên đường đi làm về, hãy gọi trước để cửa hàng gói sẵn. Như vậy bạn chỉ dừng vài phút là nhận được hoa.
 
 ## Ghé cửa hàng hay đặt giao?
 

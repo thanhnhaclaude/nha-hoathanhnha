@@ -1,7 +1,7 @@
 ---
 title: Cửa hàng hoa Thanh Nhã Thủ Đức: địa chỉ và cách đặt hoa
 slug: cua-hang-hoa-thanh-nha-thu-duc
-description: Cửa hàng hoa Thanh Nhã Thủ Đức ở 61/5 Kha Vạn Cân, Hiệp Bình Chánh: hoa tốt nghiệp, sinh nhật, khai trương giao tận nơi. Hotline 0396.72.73.74.
+description: Cửa hàng hoa Thanh Nhã Thủ Đức ở 77 Lê Văn Chí, Linh Trung: hoa tốt nghiệp, sinh nhật, khai trương giao tận nơi. Hotline 0396.72.73.74.
 keyword: cửa hàng hoa Thanh Nhã Thủ Đức
 publish: 2026-11-03 08:00
 category: dia-diem
@@ -9,15 +9,14 @@ image: /uploads/Hoa-bo-HB162.webp
 tags: cửa hàng hoa Thủ Đức, shop hoa Thủ Đức, hoa tốt nghiệp, Hoa Thanh Nhã
 ---
 
-Bạn ở Hiệp Bình Chánh, Linh Đông hay khu Làng Đại học và cần một bó hoa trong hôm nay? **Cửa hàng hoa Thanh Nhã Thủ Đức** nằm tại 61/5 Kha Vạn Cân, nhận đặt qua điện thoại, Zalo và website, đồng thời giao tận nơi trong khu vực. Bài viết này gom đủ thông tin cần biết: địa chỉ, khu vực giao, mẫu hoa hay được đặt và những lưu ý riêng của Thủ Đức.
+Bạn ở Hiệp Bình Chánh, Linh Đông hay khu Làng Đại học và cần một bó hoa trong hôm nay? **Cửa hàng hoa Thanh Nhã Thủ Đức** nằm tại 77 Lê Văn Chí, nhận đặt qua điện thoại, Zalo và website, đồng thời giao tận nơi trong khu vực. Bài viết này gom đủ thông tin cần biết: địa chỉ, khu vực giao, mẫu hoa hay được đặt và những lưu ý riêng của Thủ Đức.
 
 ## Thông tin cửa hàng
 
 | Thông tin | Chi tiết |
 | --- | --- |
-| Địa chỉ | 61/5 Đ. Kha Vạn Cân, Hiệp Bình Chánh, Thủ Đức, TP.HCM |
+| Địa chỉ | 77 Lê Văn Chí, Phường Linh Trung, Thủ Đức, TP.HCM |
 | Hotline và Zalo | [0396.72.73.74](tel:0396727374) |
-| Đánh giá Google | 4,8/5 từ 30 lượt (tháng 11/2026) |
 | Trang khu vực | [Shop hoa tươi Thủ Đức](/shop-hoa-tuoi-quan-thu-duc/) |
 
 Bạn nên gọi trước khi ghé để cửa hàng chuẩn bị sẵn mẫu đã chọn, nhất là với bó hoa theo yêu cầu riêng hoặc kệ hoa lớn.
@@ -36,7 +35,7 @@ Mỗi khu vực có nhu cầu riêng, và Thủ Đức nổi bật ở ba nhóm 
 
 ## Khu vực giao hoa từ cửa hàng
 
-Từ Kha Vạn Cân, cửa hàng nhận giao đến các phường Hiệp Bình Chánh, Hiệp Bình Phước, Linh Đông, Linh Tây, Linh Chiểu, Linh Trung, Bình Thọ, Trường Thọ, Tam Bình, Tam Phú, cùng khu Thảo Điền, An Phú, Phước Long, Tăng Nhơn Phú. Khách ở Bình Thạnh, Quận 12, Dĩ An và Thuận An cũng có thể đặt, nhưng nên gọi hỏi giờ giao cụ thể.
+Từ Lê Văn Chí, cửa hàng nhận giao đến các phường Hiệp Bình Chánh, Hiệp Bình Phước, Linh Đông, Linh Tây, Linh Chiểu, Linh Trung, Bình Thọ, Trường Thọ, Tam Bình, Tam Phú, cùng khu Thảo Điền, An Phú, Phước Long, Tăng Nhơn Phú. Khách ở Bình Thạnh, Quận 12, Dĩ An và Thuận An cũng có thể đặt, nhưng nên gọi hỏi giờ giao cụ thể.
 
 Những điểm hay được giao gồm Bệnh viện Thủ Đức, các trường trong Làng Đại học, khu căn hộ và văn phòng. Khi gửi đến bệnh viện, bạn cần cho biết khoa, số phòng và số điện thoại người nhận vì nhiều khoa hạn chế người ra vào.
 

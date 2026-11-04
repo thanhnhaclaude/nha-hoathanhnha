@@ -41,14 +41,7 @@ export async function moveImportedPostsToBlog(db: Connection): Promise<string[]>
        and not exists (select 1 from (select page_id, category_id from page_categories) o where o.page_id = pc.page_id and o.category_id <> ?)`,
     [to, from, LOCATION, from],
   )) as [{ affectedRows: number }, unknown];
-  // Trang bài viết không tự hiện ảnh đại diện nên chèn thêm ảnh vào đầu nội dung trang này
-  const hero = "/uploads/Hoa-bo-HB165.webp";
-  await db.query(
-    `update pages set title = 'Hệ thống shop hoa tươi', image = ?,
-       content = if(content like ?, content, concat(?, content))
-     where slug = 'he-thong-cua-hang-cua-chung-toi'`,
-    [hero, `%${hero}%`, `<p><img src="${hero}" alt="Bó hoa tươi của hệ thống shop hoa tươi Hoa Thanh Nhã" /></p>\n`],
-  );
+  await db.query("update pages set title = 'Hệ thống shop hoa tươi', image = '/uploads/Hoa-bo-HB165.webp' where slug = 'he-thong-cua-hang-cua-chung-toi'");
   await db.query(
     "update seo_meta set title = replace(replace(title, 'Hệ thống cửa hàng của chúng tôi', 'Hệ thống shop hoa tươi'), 'Hệ thống shop của chúng tôi', 'Hệ thống shop hoa tươi') where path = '/he-thong-cua-hang-cua-chung-toi/'",
   );

@@ -20,7 +20,7 @@ import { syncOccasionPages } from "./occasion-pages";
 import { syncCategoryCopy } from "./category-copy";
 import { syncMeaningLinks } from "./meaning-links";
 import { moveImportedPostsToBlog } from "./blog-category";
-import { syncAreaPostEntries, syncShopAddressBlocks } from "./shop-address-block";
+import { syncAreaPostEntries, syncShopAddressBlocks, syncSystemPage } from "./shop-address-block";
 
 export type MaintenanceResult = { at: string; ok: boolean; log: string[]; error?: string };
 
@@ -58,6 +58,7 @@ export async function runMaintenance() {
     result.log.push(...(await moveImportedPostsToBlog(db)));
     result.log.push(...(await syncShopAddressBlocks(db)));
     result.log.push(...(await syncAreaPostEntries(db)));
+    result.log.push(...(await syncSystemPage(db)));
     result.ok = true;
   } catch (e) {
     result.error = (e as Error).message?.slice(0, 300) ?? String(e);

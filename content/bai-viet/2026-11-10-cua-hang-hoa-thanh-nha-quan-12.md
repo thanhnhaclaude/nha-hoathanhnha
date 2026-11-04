@@ -1,7 +1,7 @@
 ---
-title: Cửa hàng hoa Thanh Nhã Quận 12: 181 Dương Thị Mười
+title: Cửa hàng hoa Thanh Nhã Quận 12: 150A Nguyễn Ảnh Thủ
 slug: cua-hang-hoa-thanh-nha-quan-12
-description: Cửa hàng hoa Thanh Nhã Quận 12 ở 181 Dương Thị Mười: kệ hoa khai trương, hoa chúc mừng giao đến văn phòng, khu công nghiệp. Gọi 0396.72.73.74.
+description: Cửa hàng hoa Thanh Nhã Quận 12 ở 150A Nguyễn Ảnh Thủ: kệ hoa khai trương, hoa chúc mừng giao đến văn phòng, khu công nghiệp. Gọi 0396.72.73.74.
 keyword: cửa hàng hoa Thanh Nhã Quận 12
 publish: 2026-11-10 08:00
 category: dia-diem
@@ -9,15 +9,14 @@ image: /uploads/Hoa-Khai-Truong-KT045.webp
 tags: cửa hàng hoa Quận 12, shop hoa Quận 12, kệ hoa khai trương, Hoa Thanh Nhã
 ---
 
-Quận 12 có nhiều doanh nghiệp, xưởng sản xuất và cửa hàng mới mở, nên ngoài hoa tặng người thân, nhu cầu hoa chúc mừng ở đây cũng rất lớn. **Cửa hàng hoa Thanh Nhã Quận 12** nằm tại 181 Dương Thị Mười, phường Tân Thới Hiệp, nhận đặt hoa cho cá nhân lẫn công ty. Nếu đây là lần đầu bạn đặt kệ hoa cho đối tác, những ghi chú bên dưới sẽ giúp tránh các lỗi thường gặp.
+Quận 12 có nhiều doanh nghiệp, xưởng sản xuất và cửa hàng mới mở, nên ngoài hoa tặng người thân, nhu cầu hoa chúc mừng ở đây cũng rất lớn. **Cửa hàng hoa Thanh Nhã Quận 12** nằm tại 150A Nguyễn Ảnh Thủ, Khu Phố 2, nhận đặt hoa cho cá nhân lẫn công ty. Nếu đây là lần đầu bạn đặt kệ hoa cho đối tác, những ghi chú bên dưới sẽ giúp tránh các lỗi thường gặp.
 
 ## Thông tin liên hệ
 
 | Hạng mục | Nội dung |
 | --- | --- |
-| Địa chỉ | 181 Dương Thị Mười, P. Tân Thới Hiệp, Quận 12, TP.HCM |
+| Địa chỉ | 150A Đ. Nguyễn Ảnh Thủ, Khu Phố 2, Quận 12, TP.HCM |
 | Hotline và Zalo | [0396.72.73.74](tel:0396727374) |
-| Đánh giá Google | 4,9/5 từ 29 lượt (tháng 11/2026) |
 | Trang khu vực | [Shop hoa tươi Quận 12](/shop-hoa-tuoi-quan-12/) |
 
 ## Đặt kệ hoa cho công ty: cần chuẩn bị gì?
@@ -38,7 +37,7 @@ Về ngân sách, [bảng giá kệ hoa khai trương](/gia-ke-hoa-khai-truong/)
 
 Không chỉ có đơn công ty, nhiều khách quanh Hiệp Thành, Thới An và Thạnh Xuân đặt hoa sinh nhật, kỷ niệm ngày cưới hay hoa tặng mẹ. Bạn có thể ghé xem hoa tại cửa hàng, hoặc chọn [hoa sinh nhật](/hoa-sinh-nhat/) trên website rồi nhắn mã mẫu qua Zalo. Các con hẻm ở Quận 12 khá nhiều, nên bạn hãy ghi thêm mốc dễ nhận biết như chợ Hiệp Thành hoặc tên trường gần nhà.
 
-## Khu vực giao từ Dương Thị Mười
+## Khu vực giao từ Nguyễn Ảnh Thủ
 
 Cửa hàng nhận giao đến các phường Tân Thới Hiệp, Hiệp Thành, Tân Chánh Hiệp, Thới An, Thạnh Lộc, Thạnh Xuân, An Phú Đông, Đông Hưng Thuận, Tân Hưng Thuận, Trung Mỹ Tây và Tân Thới Nhất. Khách ở Gò Vấp, Hóc Môn, Thủ Đức hoặc Tân Bình cũng đặt được, thời gian giao tùy địa chỉ và khung giờ.
 

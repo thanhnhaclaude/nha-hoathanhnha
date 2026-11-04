@@ -11,7 +11,7 @@ tags: cửa hàng hoa Phú Nhuận, giao hoa Phú Nhuận, hoa tặng đồng ng
 
 Phú Nhuận nhỏ nhưng đông đúc, nhà trong hẻm nhiều và văn phòng chen giữa quán cà phê. Vì thế, một đơn hoa tốt không chỉ cần hoa đẹp mà còn phải tới đúng cửa, đúng lúc. **Cửa hàng hoa Thanh Nhã Phú Nhuận** ở 457 Nguyễn Kiệm nhận khách ghé mua và giao đến các phường trong quận; bài viết chia sẻ cách đặt để hoa tới suôn sẻ, cùng gợi ý chọn mẫu theo người nhận.
 
-**Địa chỉ:** 457 Nguyễn Kiệm, Phú Nhuận, TP.HCM. **Hotline và Zalo:** [0396.72.73.74](tel:0396727374). Bạn nên gọi trước khi ghé để cửa hàng chuẩn bị sẵn mẫu đã chọn.
+**Địa chỉ:** 457 Nguyễn Kiệm, Phường 9, Phú Nhuận, TP.HCM. **Hotline và Zalo:** [0396.72.73.74](tel:0396727374). Bạn nên gọi trước khi ghé để cửa hàng chuẩn bị sẵn mẫu đã chọn.
 
 ## Ghi địa chỉ thế nào để shipper không phải gọi nhiều lần?
 

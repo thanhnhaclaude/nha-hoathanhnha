@@ -106,7 +106,7 @@ const CITIES: CityPage[] = [
     areas: "các phường 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 dọc các trục Quang Trung, Nguyễn Văn Lượng, Phan Văn Trị, Lê Đức Thọ, Nguyễn Oanh",
     nearby: "Quận 12, Phú Nhuận, Bình Thạnh, Tân Bình",
     places: "Bệnh viện Quân y 175, Công viên Văn hóa Gia Định, Đại học Công nghiệp TP.HCM, khu dân cư Cityland, các chợ Hạnh Thông Tây, Gò Vấp",
-    note: "Cửa hàng ở 229 Quang Trung, Phường 10 — giữa quận — nên các phường Gò Vấp đều trong bán kính giao nhanh; có thể ghé chọn hoa và nhận ngay.",
+    note: "Cửa hàng ở 776/10 Nguyễn Kiệm, Phường 3 nên các phường Gò Vấp đều trong bán kính giao nhanh; có thể ghé chọn hoa và nhận ngay.",
     province: "shop-hoa-tuoi-thanh-pho-ho-chi-minh",
   },
   {
@@ -115,7 +115,7 @@ const CITIES: CityPage[] = [
     areas: "các phường Tân Thới Hiệp, Hiệp Thành, Tân Chánh Hiệp, Thới An, Thạnh Lộc, Thạnh Xuân, An Phú Đông, Đông Hưng Thuận, Tân Hưng Thuận, Trung Mỹ Tây, Tân Thới Nhất",
     nearby: "Gò Vấp, Hóc Môn, Thủ Đức, Tân Bình",
     places: "Công viên phần mềm Quang Trung, khu công nghiệp Tân Thới Hiệp, Bệnh viện Quận 12, chợ Hiệp Thành, các trường trên đường Lê Văn Khương",
-    note: "Cửa hàng ở 181 Thị Mười, Tân Thới Hiệp; doanh nghiệp ở Công viên phần mềm Quang Trung và khu công nghiệp thường đặt kệ hoa khai trương, hoa chúc mừng giao tận văn phòng.",
+    note: "Cửa hàng ở 150A Nguyễn Ảnh Thủ, Khu Phố 2; doanh nghiệp ở Công viên phần mềm Quang Trung và khu công nghiệp thường đặt kệ hoa khai trương, hoa chúc mừng giao tận văn phòng.",
     province: "shop-hoa-tuoi-thanh-pho-ho-chi-minh",
   },
   {
@@ -124,7 +124,7 @@ const CITIES: CityPage[] = [
     areas: "các phường Hiệp Bình Chánh, Hiệp Bình Phước, Linh Đông, Linh Tây, Linh Chiểu, Linh Trung, Bình Thọ, Trường Thọ, Tam Bình, Tam Phú và khu Thảo Điền, An Phú, Phước Long, Tăng Nhơn Phú thuộc TP. Thủ Đức",
     nearby: "Bình Thạnh, Quận 12, Dĩ An, Thuận An",
     places: "Làng Đại học Quốc gia, Vinhomes Grand Park, Gigamall, Vincom Thủ Đức, khu biệt thự Thảo Điền, Bệnh viện Thủ Đức",
-    note: "Cửa hàng ở 61/5 Kha Vạn Cân, Hiệp Bình Chánh; hoa tốt nghiệp giao tận cổng các trường trong Làng Đại học vào mùa lễ nên đặt trước 1–2 ngày.",
+    note: "Cửa hàng ở 77 Lê Văn Chí, Linh Trung; hoa tốt nghiệp giao tận cổng các trường trong Làng Đại học vào mùa lễ nên đặt trước 1–2 ngày.",
     province: "shop-hoa-tuoi-thanh-pho-ho-chi-minh",
   },
   // Quý I/2027: quận TP.HCM nhiều lượt tìm còn dùng mô tả mẫu chung (Quận 7 1.700 lượt/tháng) — giữ danh sách mẫu đang có
@@ -143,7 +143,7 @@ const CITIES: CityPage[] = [
     areas: "các phường Võ Thị Sáu, 1, 2, 3, 4, 5, 9, 10, 11, 12, 13, 14",
     nearby: "Quận 1, Quận 10, Phú Nhuận, Tân Bình",
     places: "Hồ Con Rùa, Nhà thờ Tân Định, chùa Vĩnh Nghiêm, Bệnh viện Bình Dân, các văn phòng dọc Nam Kỳ Khởi Nghĩa, Võ Văn Tần, Cách Mạng Tháng Tám",
-    note: "Quận 3 nằm sát Quận 1, gần cửa hàng ở 130 Hai Bà Trưng; gửi hoa tới văn phòng chỉ cần ghi tên tòa nhà, tầng và người nhận.",
+    note: "Quận 3 nằm sát Quận 1, gần cửa hàng ở 262 Hai Bà Trưng; gửi hoa tới văn phòng chỉ cần ghi tên tòa nhà, tầng và người nhận.",
     province: "shop-hoa-tuoi-thanh-pho-ho-chi-minh",
   },
   {
@@ -162,7 +162,7 @@ const CITIES: CityPage[] = [
     areas: "tất cả các quận nội thành, TP. Thủ Đức và các huyện Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè, Cần Giờ",
     nearby: "Dĩ An, Thuận An, Biên Hòa, Long An",
     places: "sân bay Tân Sơn Nhất, các bệnh viện Chợ Rẫy, Từ Dũ, Nhân dân 115, khu văn phòng Quận 1, Phú Mỹ Hưng, Thủ Thiêm, Landmark 81",
-    note: "Các cửa hàng ở Quận 1 (130 Hai Bà Trưng), Gò Vấp (229 Quang Trung), Quận 12 (181 Thị Mười), Thủ Đức (61/5 Kha Vạn Cân), Phú Nhuận (457 Nguyễn Kiệm) và Bình Chánh (71 Trần Đại Nghĩa) nhận đơn cho toàn thành phố.",
+    note: "Các cửa hàng ở Quận 1 (262 Hai Bà Trưng), Gò Vấp (776/10 Nguyễn Kiệm), Quận 12 (150A Nguyễn Ảnh Thủ), Thủ Đức (77 Lê Văn Chí), Phú Nhuận (457 Nguyễn Kiệm) và Bình Chánh (71 Trần Đại Nghĩa) nhận đơn cho toàn thành phố.",
     districts: [
       "shop-hoa-tuoi-quan-1",
       "shop-hoa-tuoi-quan-3",
@@ -214,7 +214,7 @@ const CITIES: CityPage[] = [
     areas: "các phường 1, 2, 3, 4, 6, 8, 9, 10, 13, 14, 15, 16, 18",
     nearby: "Quận 1, Quận 7, Quận 8",
     places: "Bến Nhà Rồng, khu Khánh Hội, các căn hộ dọc Bến Vân Đồn, chợ Xóm Chiếu, Đại học Nguyễn Tất Thành",
-    note: "Quận 4 nằm ngay bên kia cầu từ Quận 1, gần cửa hàng 130 Hai Bà Trưng; giao tới căn hộ ven sông nhớ ghi tên tòa và số căn.",
+    note: "Quận 4 nằm ngay bên kia cầu từ Quận 1, gần cửa hàng 262 Hai Bà Trưng; giao tới căn hộ ven sông nhớ ghi tên tòa và số căn.",
     province: "shop-hoa-tuoi-thanh-pho-ho-chi-minh",
   },
   {
@@ -313,7 +313,7 @@ const CITIES: CityPage[] = [
     areas: "thị trấn Hóc Môn và các xã Bà Điểm, Xuân Thới Đông, Xuân Thới Sơn, Tân Xuân, Trung Chánh, Tân Hiệp, Đông Thạnh, Thới Tam Thôn",
     nearby: "Quận 12, Củ Chi, Bình Tân",
     places: "chợ đầu mối Hóc Môn, ngã tư An Sương, bến xe An Sương, Bệnh viện Đa khoa khu vực Hóc Môn",
-    note: "Hóc Môn giáp Quận 12, gần cửa hàng 181 Thị Mười; khách có thể ghé chọn hoa hoặc đặt online để giao tận nơi.",
+    note: "Hóc Môn giáp Quận 12, gần cửa hàng 150A Nguyễn Ảnh Thủ; khách có thể ghé chọn hoa hoặc đặt online để giao tận nơi.",
     province: "shop-hoa-tuoi-thanh-pho-ho-chi-minh",
   },
   {
@@ -350,7 +350,7 @@ const CITIES: CityPage[] = [
     areas: "các quận Hoàn Kiếm, Ba Đình, Đống Đa, Hai Bà Trưng, Cầu Giấy, Thanh Xuân, Tây Hồ, Hoàng Mai, Long Biên, Nam Từ Liêm, Bắc Từ Liêm, Hà Đông",
     nearby: "Gia Lâm, Thanh Trì, Đông Anh, Hoài Đức",
     places: "các bệnh viện Bạch Mai, Việt Đức, các trường đại học khu Cầu Giấy, Hai Bà Trưng, tòa văn phòng dọc Duy Tân, Phạm Hùng, Lê Văn Lương",
-    note: "Hai cửa hàng ở 500 Lê Duẩn (Đống Đa) và 430 Cầu Giấy nhận đơn cho toàn thành phố; bạn có thể ghé chọn hoa hoặc đặt online để giao tận nơi.",
+    note: "Hai cửa hàng ở 12 Trần Quang Diệu (Đống Đa) và 96 ngõ 44 Trần Thái Tông (Cầu Giấy) nhận đơn cho toàn thành phố; bạn có thể ghé chọn hoa hoặc đặt online để giao tận nơi.",
     districts: [
       "shop-hoa-tuoi-quan-dong-da",
       "shop-hoa-tuoi-quan-cau-giay",
@@ -372,7 +372,7 @@ const CITIES: CityPage[] = [
     areas: "các phường Cát Linh, Văn Miếu, Quốc Tử Giám, Láng Thượng, Láng Hạ, Ô Chợ Dừa, Văn Chương, Hàng Bột, Khâm Thiên, Thổ Quan, Nam Đồng, Trung Phụng, Quang Trung, Trung Liệt, Phương Liên, Thịnh Quang, Trung Tự, Kim Liên, Phương Mai, Ngã Tư Sở, Khương Thượng",
     nearby: "Ba Đình, Hai Bà Trưng, Thanh Xuân, Cầu Giấy",
     places: "Văn Miếu – Quốc Tử Giám, Bệnh viện Bạch Mai, Đại học Y Hà Nội, Đại học Thủy lợi, các văn phòng dọc Láng Hạ, Tây Sơn",
-    note: "Cửa hàng ở 500 Lê Duẩn, gần Bệnh viện Bạch Mai: thăm người thân điều trị có thể ghé lấy giỏ hoa ngay, hoặc gửi tên khoa, số phòng để shop giao.",
+    note: "Cửa hàng ở 12 Trần Quang Diệu, Chợ Dừa: thăm người thân ở Bệnh viện Bạch Mai có thể gửi tên khoa, số phòng để shop giao.",
     province: "shop-hoa-tuoi-ha-noi",
   },
   {
@@ -381,7 +381,7 @@ const CITIES: CityPage[] = [
     areas: "các phường Dịch Vọng, Dịch Vọng Hậu, Mai Dịch, Nghĩa Đô, Nghĩa Tân, Quan Hoa, Trung Hòa, Yên Hòa",
     nearby: "Ba Đình, Đống Đa, Thanh Xuân, Nam Từ Liêm",
     places: "Đại học Quốc gia Hà Nội, Đại học Sư phạm Hà Nội, công viên Cầu Giấy, các tòa văn phòng dọc Duy Tân, Trần Thái Tông",
-    note: "Cửa hàng ở 430 Cầu Giấy; mùa tốt nghiệp ở các trường đại học trong quận nên đặt hoa trước 1–2 ngày và ghi rõ cổng trường.",
+    note: "Cửa hàng ở 96 ngõ 44 Trần Thái Tông; mùa tốt nghiệp ở các trường đại học trong quận nên đặt hoa trước 1–2 ngày và ghi rõ cổng trường.",
     province: "shop-hoa-tuoi-ha-noi",
   },
   {
@@ -497,7 +497,7 @@ const CITIES: CityPage[] = [
     areas: "các phường Hòa Xuân, Khuê Trung, Hòa Thọ Đông, Hòa Thọ Tây, Hòa An, Hòa Phát (Đà Nẵng)",
     nearby: "Hải Châu, Ngũ Hành Sơn, Hòa Vang",
     places: "khu đô thị Hòa Xuân, cầu Hòa Xuân, bến xe trung tâm Đà Nẵng, chợ Cẩm Lệ",
-    note: "Cửa hàng ở 05 Trần Văn Cẩn, Hòa Xuân — thuận tiện cho khu đô thị Hòa Xuân và phía nam thành phố.",
+    note: "Cửa hàng ở 24 Cẩm Chánh 4 — thuận tiện cho khách trong quận và phía nam thành phố.",
   },
   {
     slug: "shop-hoa-tuoi-quan-lien-chieu",
@@ -548,7 +548,7 @@ const CITIES: CityPage[] = [
     areas: "các xã, thị trấn Hiệp Phước, Phú Hội, Long Tân, Phước Thiền, Phú Thạnh, Long Thọ, Phước An",
     nearby: "Long Thành, Biên Hòa, Thủ Đức",
     places: "các khu công nghiệp Nhơn Trạch 1 đến 6, văn phòng nhà máy, khu dân cư quanh trung tâm huyện",
-    note: "Cửa hàng ở 511 Hùng Vương. Doanh nghiệp trong khu công nghiệp Nhơn Trạch thường đặt kệ hoa khai trương và hoa chúc mừng đối tác: gửi tên công ty, cổng ra vào để giao đúng chỗ.",
+    note: "Cửa hàng ở Hiệp Phước. Doanh nghiệp trong khu công nghiệp Nhơn Trạch thường đặt kệ hoa khai trương và hoa chúc mừng đối tác: gửi tên công ty, cổng ra vào để giao đúng chỗ.",
   },
   {
     slug: "shop-hoa-tuoi-uong-bi",
@@ -738,7 +738,7 @@ const CITIES: CityPage[] = [
     areas: "Biên Hòa, Long Khánh, Trảng Bom, Long Thành, Nhơn Trạch, Vĩnh Cửu, Thống Nhất, Cẩm Mỹ, Xuân Lộc, Định Quán, Tân Phú",
     nearby: "Thủ Đức, Dĩ An, Bà Rịa",
     places: "các khu công nghiệp Biên Hòa, Amata, Nhơn Trạch, Long Thành, Bàu Xéo, Bệnh viện Đa khoa Đồng Nai, khu vực dự án sân bay Long Thành",
-    note: "Các cửa hàng ở 150 Nguyễn Tất Thành, Biên Hòa, Nhơn Trạch, Thống Nhất, Xuân Lộc, Định Quán nhận đơn cho toàn tỉnh; các khu xa như Tân Phú, Cẩm Mỹ nên đặt trước để shop hẹn giờ giao.",
+    note: "Các cửa hàng ở Long Khánh, Biên Hòa, Nhơn Trạch, Thống Nhất, Xuân Lộc, Định Quán nhận đơn cho toàn tỉnh; các khu xa như Tân Phú, Cẩm Mỹ nên đặt trước để shop hẹn giờ giao.",
     districts: [
       "shop-hoa-tuoi-bien-hoa",
       "shop-hoa-tuoi-long-khanh",
@@ -795,7 +795,7 @@ const CITIES: CityPage[] = [
     areas: "các xã Dầu Giây, Gia Tân, Hưng Lộc, Quang Trung, Xuân Thiện, Bàu Hàm 2, Gia Kiệm",
     nearby: "Trảng Bom, Long Khánh, Định Quán",
     places: "ngã ba Dầu Giây, khu công nghiệp Dầu Giây, các giáo xứ Gia Kiệm, Gia Tân",
-    note: "Cửa hàng ở 193 Quốc lộ 20; ngã ba Dầu Giây là điểm giao thuận tiện; nhà ở các xã xa nên ghi thêm mốc dễ tìm để giao nhanh.",
+    note: "Cửa hàng ở Gia Tân 1; ngã ba Dầu Giây là điểm giao thuận tiện; nhà ở các xã xa nên ghi thêm mốc dễ tìm để giao nhanh.",
     province: "shop-hoa-tuoi-dong-nai",
   },
   {
@@ -813,7 +813,7 @@ const CITIES: CityPage[] = [
     areas: "thị trấn Gia Ray và các xã Xuân Hiệp, Xuân Tâm, Xuân Hưng, Suối Cát, Xuân Trường, Xuân Định",
     nearby: "Long Khánh, Cẩm Mỹ, Định Quán",
     places: "núi Chứa Chan, chợ Gia Ray, Bệnh viện Đa khoa Xuân Lộc",
-    note: "Cửa hàng ở 3741 Quốc lộ 1A. Hoa chia buồn cho gia đình ở Xuân Lộc: báo shop địa chỉ tang lễ và nội dung băng tang ngay khi đặt để giao kịp.",
+    note: "Cửa hàng ở 3745 Quốc lộ 1A. Hoa chia buồn cho gia đình ở Xuân Lộc: báo shop địa chỉ tang lễ và nội dung băng tang ngay khi đặt để giao kịp.",
     province: "shop-hoa-tuoi-dong-nai",
   },
   {
@@ -822,7 +822,7 @@ const CITIES: CityPage[] = [
     areas: "thị trấn Định Quán và các xã Phú Lợi, Phú Ngọc, La Ngà, Gia Canh, Phú Vinh, Phú Tân",
     nearby: "Tân Phú, Xuân Lộc, Thống Nhất",
     places: "thắng cảnh Đá Ba Chồng, hồ Trị An phía La Ngà, chợ Định Quán dọc Quốc lộ 20",
-    note: "Cửa hàng ở 30 Quốc lộ 20; các xã xa trục đường chính nên đặt trước nửa ngày để shop hẹn giờ giao.",
+    note: "Cửa hàng ở Định Quán; các xã xa trục đường chính nên đặt trước nửa ngày để shop hẹn giờ giao.",
     province: "shop-hoa-tuoi-dong-nai",
   },
   {

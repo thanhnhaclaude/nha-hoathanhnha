@@ -15,7 +15,7 @@ Con đi làm xa muốn gửi hoa về cho mẹ ở Đà Nẵng, hay bạn đang 
 
 **396 Đ. Nguyễn Hoàng, P. Bình Thuận, Thanh Khê, Đà Nẵng.** Hotline và Zalo: [0396.72.73.74](tel:0396727374). Trên Google, cửa hàng có 4,8/5 từ 19 lượt đánh giá (tháng 11/2026). Khách ở Thanh Khê có thể tìm thêm thông tin tại trang [shop hoa tươi Thanh Khê](/shop-hoa-tuoi-quan-thanh-khe/).
 
-Ngoài địa chỉ này, Hoa Thanh Nhã còn có cửa hàng ở 05 Trần Văn Cẩn, Hoà Xuân, Cẩm Lệ. Bạn gọi chung một số hotline, shop sẽ sắp xếp đơn theo địa chỉ người nhận.
+Ngoài địa chỉ này, Hoa Thanh Nhã còn có cửa hàng ở 24 Cẩm Chánh 4, Cẩm Lệ. Bạn gọi chung một số hotline, shop sẽ sắp xếp đơn theo địa chỉ người nhận.
 
 ## Gửi hoa về Đà Nẵng khi đang ở xa
 

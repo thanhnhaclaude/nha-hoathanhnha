@@ -9,7 +9,9 @@ image: /uploads/Hoa-bo-HB153.webp
 tags: cửa hàng hoa Cần Giờ, giao hoa Cần Giờ, hoa kỷ niệm, Hoa Thanh Nhã
 ---
 
-Một chuyến kỷ niệm ở resort biển Cần Giờ sẽ trọn vẹn hơn với bó hoa đặt sẵn trong phòng. Huyện trải dài từ phà Bình Khánh tới biển nên việc lên kế hoạch quan trọng không kém chọn mẫu. **Cửa hàng hoa Thanh Nhã Cần Giờ** nhận đơn qua số [0396.72.73.74](tel:0396727374); bạn gọi để được chỉ đường nếu muốn ghé. Bài viết dưới đây trả lời các câu hỏi thường gặp nhất trước khi đặt.
+Một chuyến kỷ niệm ở resort biển Cần Giờ sẽ trọn vẹn hơn với bó hoa đặt sẵn trong phòng. Huyện trải dài từ phà Bình Khánh tới biển nên việc lên kế hoạch quan trọng không kém chọn mẫu. **Cửa hàng hoa Thanh Nhã Cần Giờ** nhận đơn qua số [0396.72.73.74](tel:0396727374); bạn gọi để được chỉ đường nếu muốn ghé.
+
+**Địa chỉ:** CW3F+88M, Long Hoà, Cần Giờ, TP.HCM (mã Plus Code, dán vào Google Maps để tìm). Bài viết dưới đây trả lời các câu hỏi thường gặp nhất trước khi đặt.
 
 ## Nên đặt trước bao lâu?
 

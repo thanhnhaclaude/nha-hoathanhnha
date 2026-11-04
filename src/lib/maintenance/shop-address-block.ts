@@ -5,7 +5,7 @@
  */
 import type { Connection } from "mysql2/promise";
 import { site } from "../site";
-import { SHOP_ADDRESSES } from "./shop-addresses";
+import { SHOP_ADDRESSES, SHOP_LIST } from "./shop-addresses";
 
 const OPEN = "<!-- shop-dia-chi -->";
 const CLOSE = "<!-- /shop-dia-chi -->";
@@ -24,6 +24,27 @@ function block(name: string, addrs: string[]) {
     })
     .join(" · ");
   return `${OPEN}<h2>${esc(name)}</h2>\n<p>Địa chỉ: ${places}. Gọi hoặc nhắn Zalo ${phone} trước khi ghé để shop chuẩn bị sẵn mẫu, hoặc đặt online để giao tận nơi.</p>\n<p>${links}</p>\n${CLOSE}\n`;
+}
+
+/** Trang /he-thong-cua-hang-cua-chung-toi/: bảng tên Map, địa chỉ theo SHOP_LIST, sửa nội dung trang này ở shop-addresses.ts. */
+export async function syncSystemPage(db: Connection): Promise<string[]> {
+  const hero = "/uploads/Hoa-bo-HB165.webp";
+  let rows = "";
+  let prov = "";
+  for (const s of SHOP_LIST) {
+    if (s.prov !== prov) {
+      prov = s.prov;
+      rows += `<tr><td colspan="3"><strong>${esc(prov)}</strong></td></tr>\n`;
+    }
+    rows += `<tr><td>${esc(s.area)}</td><td><a href="/${s.page}/">${esc(s.name)}</a></td><td>${esc(s.addr)}</td></tr>\n`;
+  }
+  const content = `<p><img src="${hero}" alt="Bó hoa tươi của hệ thống shop hoa tươi Hoa Thanh Nhã" /></p>
+<table><thead><tr><th>Khu vực</th><th>Tên shop hoa</th><th>Địa chỉ</th></tr></thead><tbody>
+${rows}</tbody></table>`;
+  const excerpt = `Hệ thống shop hoa tươi Hoa Thanh Nhã: tên shop và địa chỉ tại TP.HCM, Hà Nội, Đà Nẵng, Tây Ninh, Đồng Nai và các tỉnh. Gọi ${site.phoneDisplay}.`;
+  await db.query("update pages set content = ?, excerpt = ? where slug = 'he-thong-cua-hang-cua-chung-toi'", [content, excerpt]);
+  await db.query("update seo_meta set description = ? where path = '/he-thong-cua-hang-cua-chung-toi/'", [excerpt]);
+  return [`✓ Trang hệ thống shop: ${SHOP_LIST.length} địa chỉ`];
 }
 
 /**
