@@ -37,6 +37,7 @@ import { addContextualLinksMany, bestCategoryFor, getGuidePosts, getNearbyAreas,
 import { ViewItemTracker } from "@/components/view-item-tracker";
 import { cleanHtml, introText, normalizeHeadings, plainText, removeDuplicateTitleHeading, splitCategoryShortcodes, splitProductBlocks } from "@/lib/sanitize";
 import { cityHubs, shippingConfig, site, storeAreas } from "@/lib/site";
+import { SHOP_ADDRESSES } from "@/lib/maintenance/shop-addresses";
 
 export const dynamic = "force-dynamic";
 
@@ -126,26 +127,30 @@ export default async function SlugPage({ params, searchParams }: Props) {
   const group = mainMenu.find((g) => g.slug === slug || g.children.some((c) => c.slug === slug));
   const base = `/${category.slug}/`;
 
-  // Trang khu vực có cửa hàng thật: dữ liệu có cấu trúc Florist (địa chỉ, giờ mở cửa) cho tìm kiếm địa phương
+  // Trang khu vực có cửa hàng thật: dữ liệu có cấu trúc Florist (địa chỉ, giờ mở cửa) cho tìm kiếm địa phương.
+  // Nguồn: storeAreas (cửa hàng cũ) và SHOP_ADDRESSES (shop xác nhận 5/11/2026 đều là mặt bằng thật); tên theo tên trên Maps.
   const store = storeAreas[category.slug];
-  const storeLd = store
-    ? {
-        "@context": "https://schema.org",
-        "@type": "Florist",
-        name: `${site.name} – ${store.street}`,
-        url: `${site.url}${base}`,
-        image: `${site.url}/brand/banner2.webp`,
-        telephone: "+84" + site.phone.replace(/^0/, ""),
-        openingHours: "Mo-Su 06:00-21:00",
-        priceRange: "300.000₫ - 5.000.000₫",
-        address: { "@type": "PostalAddress", streetAddress: store.street, addressLocality: store.city, addressCountry: "VN" },
-        parentOrganization: { "@id": `${site.url}/#organization` },
-      }
-    : null;
+  const shop = SHOP_ADDRESSES[category.slug];
+  const storeAddrs = shop ? shop.addrs : store ? [`${store.street}, ${store.city}`] : [];
+  const storeLds = storeAddrs.map((addr, i) => ({
+    "@context": "https://schema.org",
+    "@type": "Florist",
+    "@id": `${site.url}${base}#shop-${i + 1}`,
+    name: shop?.name ?? `${site.name} – ${store?.street}`,
+    url: `${site.url}${base}`,
+    image: `${site.url}/brand/banner2.webp`,
+    telephone: "+84" + site.phone.replace(/^0/, ""),
+    openingHours: "Mo-Su 06:00-21:00",
+    priceRange: "300.000₫ - 5.000.000₫",
+    address: { "@type": "PostalAddress", streetAddress: addr, addressCountry: "VN" },
+    parentOrganization: { "@id": `${site.url}/#organization` },
+  }));
 
   return (
     <div className="container-x py-8">
-      {storeLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(storeLd).replace(/</g, "\\u003c") }} />}
+      {storeLds.map((ld) => (
+        <script key={ld["@id"]} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld).replace(/</g, "\\u003c") }} />
+      ))}
       <Breadcrumbs items={[...(group && group.slug !== slug ? [{ label: group.label, href: `/${group.slug}/` }] : []), { label: category.name }]} />
       <header className="mt-6 max-w-3xl">
         <h1 className="heading-display text-4xl sm:text-5xl">{category.name}</h1>

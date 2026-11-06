@@ -210,9 +210,11 @@ const getPostsLinkingTo = cache(async (slug: string) => {
  * được ưu tiên trước (liên kết hai chiều danh mục ↔ bài), sau đó tới bài trùng từ trong tiêu đề.
  */
 export async function getGuidePosts(text: string, limit = 3, slug?: string) {
-  const all = await getAllPostsLite();
   const linking = slug ? await getPostsLinkingTo(slug) : new Set<number>();
   const want = new Set(tokens(text));
+  // Bài cửa hàng chỉ hiện ở trang khu vực mà bài đó trỏ tới, không chen vào trang quận khác vì trùng chữ "quận"
+  const storePost = (s: string) => /^(shop-hoa-thanh-nha-chi-nhanh-|cua-hang-hoa-thanh-nha-|giao-hoa-)/.test(s);
+  const all = (await getAllPostsLite()).filter((p) => !storePost(p.slug) || linking.has(p.id));
   const picked = all
     .map((p) => ({ p, score: (linking.has(p.id) ? 100 : 0) + tokens(p.title).filter((w) => want.has(w)).length }))
     .filter((x) => x.score > 0)

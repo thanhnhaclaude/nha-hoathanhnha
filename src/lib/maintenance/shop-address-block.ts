@@ -1,7 +1,7 @@
 /**
  * Thêm khối "Shop Hoa Tươi … – Hoa Thanh Nhã" kèm địa chỉ vào đầu mô tả trang khu vực (không đổi URL, tiêu đề, lưới sản phẩm).
  * Khối nằm giữa hai dấu chú thích nên chạy lại chỉ thay khối cũ. Chạy sau cùng vì syncCityPages ghi lại mô tả mỗi lần khởi động.
- * Chỉ hiển thị trên trang, không khai báo Florist: địa chỉ Florist chỉ lấy từ storeAreas trong site.ts.
+ * Dữ liệu Florist của trang khu vực lấy cùng SHOP_ADDRESSES (xem [slug]/page.tsx), shop xác nhận 5/11/2026 đều là mặt bằng thật.
  */
 import type { Connection } from "mysql2/promise";
 import { site } from "../site";
