@@ -22,6 +22,8 @@
 - Đổi "Thị Mười" thành "Dương Thị Mười" trong `city-pages.ts`, `area-meta.ts` sau khi shop xác nhận tên đường.
 
 ## Nhật ký
+- 2026-11-06 — Khối bài liên quan bỏ bài cửa hàng của khu vực khác (`getGuidePosts`) — (commit này)
+- 2026-11-06 — Thêm 15 bài cửa hàng P1 hẹn giờ 18/11–18/12/2026: Buôn Ma Thuột, Quận 8, Dĩ An, Vũng Tàu, Quận 10, Long Thành, Quận 4, Quận 7, Hóc Môn, Nhà Bè, Hội An, Quận 6, Hai Bà Trưng, Gò Dầu, Sóc Trăng — (commit này)
 - 2026-11-05 — Thêm 3 bài cửa hàng hẹn giờ: Quận 2 (11/11), Tân Phú (13/11), Quận 9 (15/11) — (commit này)
 - 2026-11-04 — Đổi tên Map và địa chỉ shop theo sheet Địa điểm trên site, 12 bài, ghi chú khu vực, trang hệ thống — (commit này)
 - 2026-11-04 — Trang hệ thống đổi tiêu đề thành "Hệ thống shop hoa tươi", thêm ảnh đại diện — (commit này)
