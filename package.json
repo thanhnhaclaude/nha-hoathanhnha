@@ -20,7 +20,8 @@
     "seo:ga4": "tsx scripts/ga4-report.ts",
     "seo:speed": "tsx scripts/pagespeed-report.ts",
     "content:fix-contact": "tsx scripts/fix-contact-info.ts",
-    "seo:indexnow": "tsx scripts/indexnow.ts"
+    "seo:indexnow": "tsx scripts/indexnow.ts",
+    "seo:watch": "tsx scripts/site-watch.ts"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

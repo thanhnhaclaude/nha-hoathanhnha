@@ -18,36 +18,12 @@
 import "dotenv/config";
 import fs from "node:fs";
 import path from "node:path";
-import { SignJWT, importPKCS8 } from "jose";
+import { accessToken } from "./gsc-auth";
 
-const KEY_FILE = process.env.GSC_KEY_FILE || "google-key.json";
 const SITE = process.env.GSC_SITE || "sc-domain:hoathanhnha.com";
 const ORIGIN = (process.env.NEXT_PUBLIC_SITE_URL_PRODUCTION || "https://hoathanhnha.com").replace(/\/$/, "");
 const KEYWORDS_FILE = path.join("content", "tu-khoa.txt");
 const ARTICLES_DIR = path.join("content", "bai-viet");
-
-async function accessToken() {
-  if (!fs.existsSync(KEY_FILE)) {
-    throw new Error(`Chưa có ${KEY_FILE}. Xem hướng dẫn cài đặt ở đầu file scripts/gsc-report.ts`);
-  }
-  const key = JSON.parse(fs.readFileSync(KEY_FILE, "utf8")) as { client_email: string; private_key: string };
-  const now = Math.floor(Date.now() / 1000);
-  const jwt = await new SignJWT({ scope: "https://www.googleapis.com/auth/webmasters.readonly" })
-    .setProtectedHeader({ alg: "RS256", typ: "JWT" })
-    .setIssuer(key.client_email)
-    .setAudience("https://oauth2.googleapis.com/token")
-    .setIssuedAt(now)
-    .setExpirationTime(now + 3600)
-    .sign(await importPKCS8(key.private_key, "RS256"));
-  const r = await fetch("https://oauth2.googleapis.com/token", {
-    method: "POST",
-    headers: { "content-type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({ grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer", assertion: jwt }),
-  });
-  const j = (await r.json()) as { access_token?: string; error_description?: string };
-  if (!j.access_token) throw new Error(`Không lấy được quyền truy cập: ${j.error_description ?? r.status}`);
-  return j.access_token;
-}
 
 async function api<T>(token: string, url: string, body: unknown): Promise<T> {
   const r = await fetch(url, { method: "POST", headers: { authorization: `Bearer ${token}`, "content-type": "application/json" }, body: JSON.stringify(body) });
