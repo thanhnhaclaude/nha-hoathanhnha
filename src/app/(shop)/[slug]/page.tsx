@@ -69,10 +69,16 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   if (info) return seoMetadata(path, { title: info.title, description: info.description });
   const found = await getProductBySlug(slug);
   if (found) {
-    const { product } = found;
+    const { product, categories } = found;
+    const text = plainText(product.shortDescription || product.description);
+    // ~500 sản phẩm nhập từ web cũ mở đầu bằng cùng đoạn "ƯU ĐÃI ĐẶC BIỆT…": mô tả trùng nhau trên Google, nên tự viết mô tả riêng
+    const generic = !text || /^ưu đãi đặc biệt/i.test(text);
+    const kind = categories.find((c) => !c.slug.startsWith("shop-hoa-tuoi-"))?.name;
     return seoMetadata(path, {
       title: product.name,
-      description: plainText(product.shortDescription || product.description) || site.description,
+      description: generic
+        ? `${product.name}${kind ? ` (${kind.toLocaleLowerCase("vi")})` : ""} giá ${formatVND(effectivePrice(product))}. Gửi ảnh thật trước khi giao, ghi thiệp hoặc băng rôn theo yêu cầu. Gọi ${site.phoneDisplay}.`
+        : text,
       openGraph: product.images.length ? { images: product.images.slice(0, 1) } : undefined,
     });
   }

@@ -90,8 +90,9 @@ const AREAS: { path: string; title: string; description: string; minFrom?: strin
   // Tuần 1 (26/10/2026): danh mục mức A/B
   {
     path: "/shop-hoa-tuoi-gan-day/",
-    title: "Tiệm Hoa Gần Đây – 20 Cửa Hàng, Giao Trong Ngày | Hoa Thanh Nhã",
-    description: `Tìm tiệm hoa, shop hoa tươi gần đây: 20 cửa hàng Hoa Thanh Nhã ở TP.HCM, Hà Nội, Đà Nẵng, Huế, Nha Trang, Vũng Tàu, Đồng Nai, Cần Thơ. Đặt online, giao trong ngày.`,
+    // 07/11/2026: vị trí 9 nhưng 0 nhấp, đổi tiêu đề và mô tả theo đúng truy vấn "shop hoa / tiệm hoa / hoa tươi gần đây"
+    title: "Shop Hoa Tươi Gần Đây: Tìm Tiệm Hoa Gần Bạn Nhất | Hoa Thanh Nhã",
+    description: `Shop hoa, tiệm hoa tươi gần đây: xem địa chỉ cửa hàng Hoa Thanh Nhã gần bạn ở TP.HCM, Hà Nội, Đà Nẵng và các tỉnh, chỉ đường Google Maps. Gọi ${P}.`,
   },
   {
     path: "/shop-hoa-tuoi-thanh-pho-ho-chi-minh/",
@@ -111,7 +112,7 @@ const AREAS: { path: string; title: string; description: string; minFrom?: strin
   {
     path: "/hoa-khai-truong/",
     minFrom: "gio-hoa-khai-truong",
-    title: "Hoa Khai Trương: Kệ, Giỏ, Lan Hồ Điệp Từ {min} | Hoa Thanh Nhã",
+    title: "Đặt Hoa Khai Trương: Kệ, Giỏ, Lan Hồ Điệp Từ {min} | Hoa Thanh Nhã",
     description: `Đặt hoa khai trương: kệ hoa, giỏ hoa từ {min}, lan hồ điệp. In băng rôn miễn phí, gửi ảnh trước, giao đúng giờ làm lễ. Gọi ${P}.`,
   },
   {

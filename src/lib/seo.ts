@@ -18,7 +18,11 @@ export async function seoMetadata(path: string, fallback: { title: string; descr
   const { title, description, noindex, ...rest } = fallback;
   const noIndex = row?.robots ? /noindex/i.test(row.robots) : noindex;
   // Bỏ mô tả mặc định vô nghĩa của WordPress (vd. "Sản phẩm Archive")
-  const oldDesc = row?.description && !/\barchive\b/i.test(row.description) ? row.description : null;
+  // …và mô tả chép y nguyên tiêu đề (vd. "Hoa Khai Trương - Biển Xanh - KT120") hoặc đoạn khuyến mãi chung của web cũ
+  const oldDesc =
+    row?.description && !/\barchive\b/i.test(row.description) && row.description.trim() !== row.title?.trim() && !/^ưu đãi đặc biệt/i.test(row.description.trim())
+      ? row.description
+      : null;
   const desc = shortDescription(oldDesc || description);
   // Tiêu đề cũ đã gồm " | Hoa Thanh Nhã" nên dùng nguyên văn
   const fullTitle = row?.title || `${title} | ${site.name}`;

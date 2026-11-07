@@ -3,6 +3,7 @@
  *
  *   npm run seo:gsc                 # thứ hạng từ khóa + kiểm tra index các bài trong content/bai-viet
  *   npm run seo:gsc -- --index-all  # kiểm tra index thêm 200 URL đầu trong sitemap (hạn mức 2.000 URL/ngày)
+ *   npm run seo:gsc -- --dump-queries  # lưu thêm mọi truy vấn 28 ngày vào reports/gsc-truy-van-<ngày>.csv
  *
  * Cài đặt một lần (khoảng 10 phút):
  *  1. https://console.cloud.google.com → tạo dự án → "APIs & Services" → bật "Google Search Console API".
@@ -107,6 +108,17 @@ async function main() {
   const tc = total(cur);
   const to = total(old);
   console.log(`Search Console ${SITE}: 28 ngày qua ${tc.c} lượt nhấp, ${tc.i} lượt hiển thị (kỳ trước ${to.c} / ${to.i})`);
+
+  // --dump-queries : lưu mọi truy vấn (28 ngày) để phân tích nhóm từ khóa ngoài danh sách theo dõi
+  if (process.argv.includes("--dump-queries")) {
+    const all = [["Truy vấn", "Vị trí TB", "Lượt nhấp", "Lượt hiển thị", "Trang nhiều hiển thị nhất"]];
+    for (const [q, e] of [...cur].sort((a, b) => b[1].impressions - a[1].impressions)) {
+      all.push([q, (e.posSum / Math.max(1, e.impressions)).toFixed(1), String(e.clicks), String(e.impressions), e.page]);
+    }
+    const f = path.join("reports", `gsc-truy-van-${stamp}.csv`);
+    fs.writeFileSync(f, "﻿" + all.map((l) => l.map(csv).join(",")).join("\n"));
+    console.log(`Đã lưu ${all.length - 1} truy vấn: ${f}`);
+  }
 
   const kws = targetKeywords();
   const lines = [["Từ khóa", "Vị trí TB", "Vị trí kỳ trước", "Thay đổi", "Lượt nhấp", "Lượt hiển thị", "CTR %", "Trang xếp hạng"]];

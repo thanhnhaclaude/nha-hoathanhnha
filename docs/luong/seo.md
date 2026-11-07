@@ -13,6 +13,7 @@
 - (đề xuất 30/10) Thêm workflow `site-health.yml` kiểm tra web 2 giờ/lần.
 
 ## Nhật ký
+- 2026-11-07 — Lộ trình dòng 20–21: tiêu đề /hoa-khai-truong/ thêm "Đặt", tiêu đề và mô tả /shop-hoa-tuoi-gan-day/ theo truy vấn "gần đây"; mô tả sản phẩm bỏ đoạn "ƯU ĐÃI ĐẶC BIỆT" lặp ở khoảng 500 trang (tự viết theo tên, loại, giá). Thêm `seo:gsc -- --dump-queries`. Mốc đo: GSC 07/11 (CB018 vị trí 4, 0 nhấp; gần đây vị trí 9), đo lại sau 3–4 tuần — (commit này)
 - 2026-11-06 — `npm run seo:watch` (scripts/site-watch.ts): báo bài lên web, index Google, web/CSDL lỗi, SSL, lỗ hổng npm; tác vụ hẹn giờ "hoathanhnha-theo-doi-web" trong app Claude chạy mỗi giờ và đẩy thông báo. Tách đăng nhập Google sang scripts/gsc-auth.ts — (commit này)
 - 2026-11-06 — `reports/don-vi-hanh-chinh-va-nhu-cau-2026-11-06.xlsx` (chỉ ở máy, reports/ bị gitignore): 3.321 xã/phường (34 tỉnh) và nhu cầu theo khu vực từ tab 4-K-ADS. Tên xã/phường mới gần như không có lượt tìm (cao nhất 17), nhu cầu vẫn theo tên cũ — (commit này)
 - 2026-11-06 — Florist schema cho mọi cửa hàng shop đã xác nhận; bài cửa hàng chỉ hiện ở đúng trang khu vực nó trỏ tới. Mốc đo: GSC 4/11 (`reports/gsc-tu-khoa-2026-11-04.csv`), đo lại sau 3–4 tuần — (commit này)
