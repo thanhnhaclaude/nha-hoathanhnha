@@ -99,9 +99,8 @@ export const cityHubs: Record<string, { city: string; stores: string[]; areas: {
   },
 };
 
+// Chủ shop chốt 8/11/2026: nội thành miễn phí, không theo giá trị đơn (biến SHIPPING_FEE, FREE_SHIPPING_THRESHOLD thôi dùng).
+// shortcut: form chỉ có ô địa chỉ tự do nên phí ngoại thành do shop báo khi xác nhận đơn, nâng cấp khi form có chọn quận/huyện.
 export function shippingConfig() {
-  return {
-    fee: Number(process.env.SHIPPING_FEE ?? 30000),
-    freeThreshold: Number(process.env.FREE_SHIPPING_THRESHOLD ?? 500000),
-  };
+  return { fee: 0, freeThreshold: 0 };
 }

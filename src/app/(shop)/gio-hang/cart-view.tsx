@@ -67,7 +67,7 @@ export function CartView() {
           </div>
           <div className="flex justify-between">
             <dt className="text-muted">Phí giao hoa</dt>
-            <dd>Tính ở bước tiếp theo</dd>
+            <dd>Miễn phí nội thành</dd>
           </div>
         </dl>
         <Link href="/thanh-toan/" className="btn-primary mt-6 h-12 w-full">

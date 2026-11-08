@@ -92,7 +92,7 @@ Băng rôn gồm hai dải: một dải ghi lời chúc, một dải ghi tên ng
 - **Gửi đúng tên công ty, chức danh** cần ghi trên băng rôn và kiểm tra chính tả.
 - **Nhờ shop gửi ảnh kệ hoa** tại nơi nhận để bạn yên tâm, đặc biệt khi bạn không thể đến dự.
 
-Đơn kệ hoa từ 900.000đ được miễn phí giao trong nội thành. Thanh Nhã chụp ảnh kệ trước khi giao; không đúng mẫu, bạn không cần thanh toán. Xem các bước tại [hướng dẫn đặt hàng](/huong-dan-dat-hang/) hoặc toàn bộ mẫu [hoa khai trương](/hoa-khai-truong/).
+Kệ hoa được miễn phí giao trong nội thành. Thanh Nhã chụp ảnh kệ trước khi giao; không đúng mẫu, bạn không cần thanh toán. Xem các bước tại [hướng dẫn đặt hàng](/huong-dan-dat-hang/) hoặc toàn bộ mẫu [hoa khai trương](/hoa-khai-truong/).
 
 ## Danh sách kiểm tra trước khi đặt kệ hoa
 

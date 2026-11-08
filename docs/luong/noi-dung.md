@@ -7,6 +7,7 @@
 - Thêm 12 bài cửa hàng hẹn giờ 3/11–12/12/2026: Thủ Đức, Gò Vấp, Quận 12, Đà Nẵng, Phú Nhuận, Bình Chánh, Cần Giờ, Nhơn Trạch, Thống Nhất, Xuân Lộc, Định Quán, Đồng Nai. 7 bài sau giữ slug `giao-hoa-*` vì đổi slug sẽ để lại bản cũ trong database tự đăng đúng hẹn.
 
 ## Quyết định đã chốt
+- Phí giao: nội thành miễn phí, không theo giá trị đơn; ngoại thành 50.000đ – 200.000đ tùy khoảng cách, shop báo khi xác nhận đơn (chủ shop chốt 8/11/2026).
 - Bài giá hoa linh lan hoãn tới khi shop xác nhận có hàng.
 - Trang khu vực phải có dữ liệu riêng, không nhân bản theo mẫu.
 - Mọi bài chi nhánh chỉ dùng một số 0396.72.73.74.
@@ -22,6 +23,7 @@
 - Đổi "Thị Mười" thành "Dương Thị Mười" trong `city-pages.ts`, `area-meta.ts` sau khi shop xác nhận tên đường.
 
 ## Nhật ký
+- 2026-11-08 — [từ giao-dien] Chữ phí giao về một chính sách: 30 mô tả sản phẩm, trang Quy định chuyển phát, bài cũ qua `maintenance/shipping-text.ts`; 2 bài blog, trang hoa khai trương — (commit này)
 - 2026-11-06 — Thêm 4 bài blog theo từ khóa có nhu cầu (Plan.xlsx): hoa cám ơn (21/11), hoa kỷ niệm ngày cưới (28/11), hoa chúc mừng 22/12 (12/12), hoa chúc mừng đại hội (27/3/2027) — (commit này)
 - 2026-11-06 — Khối bài liên quan bỏ bài cửa hàng của khu vực khác (`getGuidePosts`) — (commit này)
 - 2026-11-06 — Thêm 15 bài cửa hàng P1 hẹn giờ 18/11–18/12/2026: Buôn Ma Thuột, Quận 8, Dĩ An, Vũng Tàu, Quận 10, Long Thành, Quận 4, Quận 7, Hóc Môn, Nhà Bè, Hội An, Quận 6, Hai Bà Trưng, Gò Dầu, Sóc Trăng — (commit này)

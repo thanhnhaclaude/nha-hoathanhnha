@@ -18,6 +18,7 @@ import { fillEmptyCategories } from "./category-fill";
 import { syncNearMePage } from "./near-me-page";
 import { syncOccasionPages } from "./occasion-pages";
 import { syncCategoryCopy } from "./category-copy";
+import { syncShippingText } from "./shipping-text";
 import { syncMeaningLinks } from "./meaning-links";
 import { moveImportedPostsToBlog } from "./blog-category";
 import { syncAreaPostEntries, syncShopAddressBlocks, syncSystemPage } from "./shop-address-block";
@@ -55,6 +56,7 @@ export async function runMaintenance() {
     result.log.push(...(await syncNearMePage(db)));
     result.log.push(...(await syncOccasionPages(db)));
     result.log.push(...(await syncCategoryCopy(db)));
+    result.log.push(...(await syncShippingText(db)));
     result.log.push(...(await syncMeaningLinks(db)));
     result.log.push(...(await moveImportedPostsToBlog(db)));
     result.log.push(...(await syncShopAddressBlocks(db)));

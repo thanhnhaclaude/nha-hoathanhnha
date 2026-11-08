@@ -111,7 +111,7 @@ function HeroSplit() {
             </span>
           </h1>
           <p className="mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
-            Chọn mẫu, ghi lời chúc, nhận ảnh hoa thật trước khi giao. Miễn phí giao hoa cho đơn từ 500K.
+            Chọn mẫu, ghi lời chúc, nhận ảnh hoa thật trước khi giao. Miễn phí giao hoa nội thành.
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
             {/* Cam đậm thay cam logo: chữ trắng đạt tương phản 4.5:1 */}

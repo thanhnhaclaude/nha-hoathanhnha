@@ -68,7 +68,7 @@ ${table}
 <h3>Đặt hoa khai trương trước bao lâu?</h3>
 <p>Nên đặt trước ít nhất 1 ngày, sớm hơn vào các ngày đẹp đầu tháng vì nhiều nơi khai trương cùng lúc. Đơn gấp trong ngày hãy gọi ${phone} để shop kiểm tra mẫu còn hoa.</p>
 <h3>Giá đã gồm băng rôn và giao hàng chưa?</h3>
-<p>Giá đã gồm băng rôn in lời chúc. Phí giao tùy khu vực và giá trị đơn, hiển thị khi đặt hàng.</p>
+<p>Giá đã gồm băng rôn in lời chúc. Giao miễn phí trong nội thành; ngoại thành 50.000đ – 200.000đ tùy khoảng cách, shop báo phí khi xác nhận đơn.</p>
 <h3>Có giao hoa khai trương ở tỉnh khác không?</h3>
 <p>Có. Shop nhận giao tại nhiều tỉnh thành; xem trang khu vực của bạn trong mục <a href="/khu-vuc/">Khu vực</a>.</p>`;
 }

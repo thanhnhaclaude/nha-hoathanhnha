@@ -87,7 +87,7 @@ export async function OrderView({ code, token, trackPurchase = false }: { code: 
           <dl className="mt-3 space-y-2 border-t border-border pt-3 text-sm">
             <div className="flex justify-between">
               <dt className="text-muted">Phí giao hoa</dt>
-              <dd>{order.shippingFee ? formatVND(order.shippingFee) : "Miễn phí"}</dd>
+              <dd>{order.shippingFee ? formatVND(order.shippingFee) : "Miễn phí nội thành"}</dd>
             </div>
             <div className="flex justify-between text-base">
               <dt className="font-semibold">Tổng cộng</dt>

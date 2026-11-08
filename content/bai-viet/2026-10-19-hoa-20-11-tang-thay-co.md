@@ -63,7 +63,7 @@ Ngày 20/11 là ngày cao điểm của các shop hoa. Để hoa đến đúng l
 - **Báo trước nếu trường không cho người ngoài vào**: shop sẽ gửi ở phòng bảo vệ hoặc liên hệ người nhận ra cổng.
 - **Xem ảnh hoa trước khi giao**: Thanh Nhã chụp ảnh bó hoa gửi bạn trước khi giao, không đúng mẫu thì không cần thanh toán.
 
-Đơn hoa bó, giỏ hoa từ 500.000đ được miễn phí giao trong nội thành. Nội thành giao hỏa tốc trong khoảng 60 phút, ngoại thành khoảng 90 phút. Xem chi tiết tại [quy định chuyển phát](/quy-dinh-chuyen-phat/) và [hướng dẫn đặt hàng](/huong-dan-dat-hang/).
+Đơn hoa được miễn phí giao trong nội thành. Nội thành giao hỏa tốc trong khoảng 60 phút, ngoại thành khoảng 90 phút. Xem chi tiết tại [quy định chuyển phát](/quy-dinh-chuyen-phat/) và [hướng dẫn đặt hàng](/huong-dan-dat-hang/).
 
 ## Câu hỏi thường gặp
 

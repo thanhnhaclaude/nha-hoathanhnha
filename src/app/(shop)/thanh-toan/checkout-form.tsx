@@ -208,9 +208,9 @@ export function CheckoutForm({ shipping, today }: { shipping: { fee: number; fre
           </div>
           <div className="flex justify-between">
             <dt className="text-muted">Phí giao hoa</dt>
-            <dd>{shippingFee === 0 ? <span className="font-semibold text-leaf">Miễn phí</span> : formatVND(shippingFee)}</dd>
+            <dd>{shippingFee === 0 ? <span className="font-semibold text-leaf">Miễn phí nội thành</span> : formatVND(shippingFee)}</dd>
           </div>
-          {shippingFee > 0 && <p className="text-xs text-muted">Miễn phí giao hoa cho đơn từ {formatVND(shipping.freeThreshold)}.</p>}
+          <p className="text-xs text-muted">Ngoại thành: 50.000đ – 200.000đ tùy khoảng cách, shop báo phí khi xác nhận đơn.</p>
           <div className="flex justify-between border-t border-border pt-3 text-base">
             <dt className="font-semibold">Tổng cộng</dt>
             <dd className="text-xl font-semibold text-brand-strong">{formatVND(subtotal + shippingFee)}</dd>

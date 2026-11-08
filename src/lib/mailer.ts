@@ -64,7 +64,7 @@ function orderHtml(order: Order, items: OrderItem[], intro: string, link: string
 <h2 style="color:#b9480b;margin:0 0 8px">${esc(site.name)}</h2>
 <p>${intro}</p>
 <table style="width:100%;border-collapse:collapse;border-top:1px solid #eee;border-bottom:1px solid #eee">${rows}
-<tr><td style="padding:6px 0;color:#777">Phí giao hoa</td><td style="padding:6px 0;text-align:right">${order.shippingFee ? formatVND(order.shippingFee) : "Miễn phí"}</td></tr>
+<tr><td style="padding:6px 0;color:#777">Phí giao hoa</td><td style="padding:6px 0;text-align:right">${order.shippingFee ? formatVND(order.shippingFee) : "Miễn phí nội thành"}</td></tr>
 <tr><td style="padding:6px 0"><b>Tổng cộng</b></td><td style="padding:6px 0;text-align:right"><b>${formatVND(order.total)}</b></td></tr></table>
 <table style="width:100%;margin-top:12px;font-size:14px">${info
     .filter(([, v]) => v)
