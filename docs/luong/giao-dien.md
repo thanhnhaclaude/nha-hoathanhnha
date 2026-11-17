@@ -15,6 +15,7 @@
 - Khi shop gửi số nhà Cần Giờ: thêm vào `site.stores`, `storeAreas` và đổi "20 cửa hàng" trong `home-view.tsx` thành 21.
 
 ## Nhật ký
+- 2026-11-17 — Vá CVE-2026-119790: next 16.4.2 → 16.4.6; `security-autofix.yml` tự cài bản vá cho gói ghim cứng cùng phiên bản lớn (npm audit fix bỏ qua gói ghim cứng) — (commit này)
 - 2026-11-08 — Phí giao về "nội thành miễn phí" ở thanh toán, giỏ hàng, đơn hàng, email, dữ liệu Google, trang chủ; `SHIPPING_FEE`, `FREE_SHIPPING_THRESHOLD` thôi dùng — (commit này)
 - 2026-11-07 — [từ seo] Mô tả tìm kiếm trang sản phẩm: bỏ đoạn khuyến mãi chung của web cũ và mô tả chép y tiêu đề (`generateMetadata`, `seoMetadata`) — (commit này)
 - 2026-11-06 — [từ noi-dung] Trang khu vực khai báo Florist cho mọi địa chỉ trong `SHOP_ADDRESSES` (tên theo Maps), một khối cho mỗi địa chỉ — (commit này)

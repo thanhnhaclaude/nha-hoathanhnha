@@ -45,6 +45,27 @@ jobs:
         if: steps.audit.outputs.vuln == '1'
         run: npm audit fix --no-fund || true
 
+      # npm audit fix không đụng gói ghim cứng trong package.json (vd. "next": "16.4.2", Hostinger báo 17/11/2026):
+      # gói khai báo trực tiếp có bản vá cùng phiên bản lớn -> cài đúng bản vá, vẫn ghim cứng
+      - name: Tự vá gói ghim cứng (cùng phiên bản lớn)
+        if: steps.audit.outputs.vuln == '1'
+        run: |
+          npm audit --json > audit.json || true
+          node -e '
+            const a = require("./audit.json"), p = require("./package.json");
+            const direct = { ...p.dependencies, ...p.devDependencies };
+            const fixes = Object.values(a.vulnerabilities || {})
+              .map((v) => v.fixAvailable)
+              .filter((f) => f && typeof f === "object" && !f.isSemVerMajor && f.name in direct)
+              .map((f) => `${f.name}@${f.version}`);
+            console.log([...new Set(fixes)].join(" "));
+          ' > fixes.txt
+          cat fixes.txt
+          if [ -s fixes.txt ] && [ -n "$(tr -d '[:space:]' < fixes.txt)" ]; then
+            npm install --save-exact --no-fund --no-audit $(cat fixes.txt)
+          fi
+          rm -f audit.json fixes.txt
+
       - name: Kiểm tra bản vá (npm ci, build, tsc)
         if: steps.audit.outputs.vuln == '1'
         id: verify
